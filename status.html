@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title id="title"></title>
-$(if refresh-timeout)
-<meta http-equiv="refresh" content="$(refresh-timeout-secs)">
-$(endif)
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="theme-color" content="#d0d2d6" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/style_old.css">
-<link rel="stylesheet" href="css/bg.css">
-<link rel="stylesheet" href="css/vanzj.css">
-<script language="JavaScript">
-$(if advert-pending == 'yes')
-    var popup = '';
-    function focusAdvert() {
-	if (window.focus) popup.focus();
-    }
-    function openAdvert() {
-	popup = open('$(link-advert)', 'hotspot_advert', '');
-	setTimeout("focusAdvert()", 1000);
-    }
-$(endif)
-    function openLogout() {
-	if (window.name != 'hotspot_status') return true;
-        open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
-	window.close();
-	return false;
-    }
+    <title>Gov. KEN LUSAKA FREE Wi-Fi</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    $(if refresh-timeout)
+    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+    $(endif)
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <link rel="stylesheet" href="css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/bg.css">
+    <link rel="stylesheet" href="css/vanzj.css">
+    <script language="JavaScript">
+        $(if advert-pending == 'yes')
+            var popup = '';
+            function focusAdvert() {
+                if (window.focus) popup.focus();
+            }
+            function openAdvert() {
+                popup = open('$(link-advert)', 'hotspot_advert', '');
+                setTimeout("focusAdvert()", 1000);
+            }
+        $(endif)
+            function openLogout() {
+                if (window.name != 'hotspot_status') return true;
+                open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+                window.close();
+                return false;
+            }
 
-</script>
-
-
+    </script>
 </head>
 <body $(if advert-pending == 'yes')	onLoad="openAdvert()" $(endif) >
 
@@ -91,11 +92,11 @@ $(endif)
 <br>
 
 
-<a href="https://wa.me/+254793711418" style="color: lightgreen;" target="_blank"><b><img src="img/whatsapp2.png" width="16" height="16" > Chat us on WhatsApp</b></a>
+<a href="https://wa.me/+254723111920" style="color: lightgreen;" target="_blank"><b><img src="img/whatsapp2.png" width="16" height="16" > Chat us on WhatsApp</b></a>
             
     
 <script type="text/javascript">
-    document.getElementById('title').innerHTML = 'Matrix WIFI ' + " > status";
+    document.getElementById('title').innerHTML = 'M-Tech WIFI ' + " > status";
 //get vaidity
     var usr = document.getElementById('user').innerHTML
     //var url = "http://192.168.2.250/status/status.php?name=";

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Matrix WIFI Hotspot</title>
+        <title>Club Country - Muthiga Inn FREE Wi-Fi</title>
             <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
             <link rel="stylesheet" href="css/fontawesome-all.min.css" />
             <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -13,165 +13,80 @@
             <link rel="stylesheet" href="css/style.css"/>
     </head>
     <body>
-        <!--Mikrotik Script Start 1-->
-   <form name="sendin" action="$(link-login-only)" method="post">
-        <input type="hidden" name="username" />
-        <input type="hidden" name="password" />
-        <input type="hidden" name="dst" value="$(link-orig)" />
-        <input type="hidden" name="popup" value="true" />
-    </form>
-<!--Mikrotik Script stop 1-->
+        <!--Mikrotik Login Form Start -->
+        <form name="sendin" action="$(link-login-only)" method="post">
+             <input type="hidden" name="username" />
+             <input type="hidden" name="password" />
+             <input type="hidden" name="dst" value="$(link-orig)" />
+             <input type="hidden" name="popup" value="true" />
+         </form>
+        <!--Mikrotik Login Form End -->
 
         <div class="row text-center header">
-            <h4>Matrix WIFI Hotspot Login Page</h4>
+            <h4 class="header">Club Country - Muthiga Inn FREE Wi-Fi</h4>
         </div>
         
         <div class="demo">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-offset-3 col-md-6">   
-                $(if error)<div class="text-center text-danger" >$(error)</div>$(endif)                   
-                        <div class="tab" role="tabpanel">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs text-center" role="tablist">
-                                <li role="presentation" class="active"><a href="#mobilemoney" role="tab" data-toggle="tab">MPesa STK Push</a></li>
-                                <li role="presentation"><a href="#paybill" role="tab" data-toggle="tab">PayBill</a></li>
-                                <li role="presentation"><a href="#watchad" role="tab" data-toggle="tab">Free [Watch Ad]</a></li>
-                            </ul>
-                            <!-- Tab panes -->
-                            <div class="tab-content">   
-                                <div role="tabpanel" class="tab tab-pane fade in active" id="mobilemoney">
-                                        <ol>
-                                            <li>Enter Paying MPesa Phone Number</li>
-                                            <li>Select a Package Below</li>
-                                            <li>Use your Service PIN to authorize the transaction</li>
-                                            <li>Tap Connect if you have already paid</li>
-                                        </ol>
-                                    <div class="text-center">
-                                        <form id="stk" name="stk">
-                                            <div class="form-group">
-                                                <label for="phone">Paying Phone Number:</label>
-                                                <input type="number" class="form-control" id="phone" name="phone" placeholder="Phone No. e.g 07123456789" min="100000000" required />
-                                                <h6 class="text-center text-danger notice">Enter Valid Phone Number</h6>
-                                            </div>                                            
-                                            <input type="hidden" id="amount" name="amount" />
-                                            <button type="submit" class="btn btn-sm btn-danger btn-outline pull-left" onclick="setAmount(20)">
-                                                Pay<br />
-                                                20 bob<br />
-                                                <small>Get One Day</small>
-                                            </button>
-                                            <button type="submit" class="btn btn-sm btn-primary btn-outline" onclick="setAmount(120)">
-                                                Pay<br />
-                                                120 bob<br />
-                                                <small>Get One Week</small>
-                                            </button>
-                                            <button type="submit" class="btn btn-sm btn-success btn-outline pull-right" onclick="setAmount(500)">
-                                                Pay<br />
-                                                500 bob<br />
-                                                <small>Get One Month</small>
-                                            </button>
-                                        </form>
-                                        <br />
-                                        <button type="button" class="btn btn-success btn-block" onclick="connectDefault();" >Connect (If Already Paid)</button>
+                    <div class="col-md-offset-3 col-md-6">  
+                      
+                $(if error)<div class="text-center text-danger" >$(error)</div>$(endif)                
+                
+                        <h6 class="text-primary text-center">Enter Your Valid Phone Number Below and Enjoy Super Fast Free WIFI <br />
+                            Powered by Club Country - Muthiga Inn</h6>      
+                                       
+                        <input type="number" class="form-control" id="adphone" name="adphone" placeholder="Phone No. e.g 07123456789" />
+                        <h6 id="notice" class="text-center text-danger"></h6>
+                        <video width="100%" id="advideo" controls playsinline> </video>
+                        <h6 id="notice2" class="text-center text-default">Tap the Connect Button that will Appear Here after the Video has played</h6>
+                        <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect();" style="visibility: hidden" >Connect</button>
+                        <br />
+                    <!--Sliding Picture Start-->
+                        <div class="slidingImage">
+                            <div class="slider">
+                                <div class="slides">
+                                    <input type="radio" name="radio-btn" id="radio1">
+                                    <input type="radio" name="radio-btn" id="radio2">
+                                    <input type="radio" name="radio-btn" id="radio3">
+                                    <input type="radio" name="radio-btn" id="radio4">
+                                    <input type="radio" name="radio-btn" id="radio5">
+
+                                    <div class="slide first"><img id="img0" src="" alt=""></div>
+                                    <div class="slide"><img id="img1" src="" alt=""></div>
+                                    <div class="slide"><img id="img2" src="" alt=""></div>
+                                    <div class="slide"><img id="img3" src="" alt=""></div>
+                                    <div class="slide"><img id="img4" src="" alt=""></div>
+                                    <div class="navigation-auto">
+                                        <div class="auto-btn1"></div>
+                                        <div class="auto-btn2"></div>
+                                        <div class="auto-btn3"></div>
+                                        <div class="auto-btn4"></div>
+                                        <div class="auto-btn5"></div>
                                     </div>
                                 </div>
-                                
-                                <div role="tabpanel" class="tab tab-pane fade in" id="paybill">
-                                    <h5 class="text-center">
-                                        PayBill No: <b class="text-success">804463</b><br />
-                                        Account Number: <small>Your Phone No.</small>
-                                    </h5>
-                                    <h6>Step Guide</h6>   
-                                        <ol>
-                                            <li>Go to Mpesa menu</li>
-                                            <li>Select Payment Services</li>
-                                            <li>Click on Paybill</li>
-                                            <li>Enter business number as <b class="text-success">804463</b></li>
-                                            <li>Enter the account number as Your Phone No.</li>
-                                            <li>Enter the Package amount you want to subscribe to<br />
-                                                <table class="table table-bordered table-condensed text-center">
-                                                    <tr><th class="text-center">Package</th><th class="text-center">Amount</th></tr>
-                                                    <tr><td>Daily</td><td>20</td></tr>
-                                                    <tr><td>Weekly</td><td>120</td></tr>
-                                                    <tr><td>Monthly</td><td>500</td></tr>
-                                                </table>
-                                            </li>
-                                            <li>Enter your Mpesa Pin and Confirm the request</li>
-                                            <li>You will shortly receive an SMS from Mpesa to confirm the transaction</li>
-                                            <li>Enter the Phone Number you used above as account Number Below and Connect</li>
-                                        </ol>
-                                        <input type="number" class="form-control" id="account" name="account" placeholder="Phone No. e.g 07123456789" min="100000000" required />
-                                        <h6 class="text-center text-danger notice">Enter Valid Phone Number</h6>
-                                        <br />
-                                        <button type="button" class="btn btn-success btn-block" onclick="connect2();" >Connect (If Already Paid)</button>
-                                </div>   
-                                
-                                <div role="tabpanel" class="tab tab-pane fade in" id="watchad">  
-                                    <h6 class="text-primary text-center">Enjoy Super Fast Free WIFI for 30 Minutes Every Time you watch a short Ad</h6>      
-                                    <ol>
-                                        <li>Enter Your Valid Phone Number Below</li>
-                                        <li>Watch the Video Ad</li>
-                                        <li>Connect Button will appear after the Ad has played</li>
-                                    </ol>                   
-                                    <input type="number" class="form-control" id="adphone" name="adphone" placeholder="Phone No. e.g 07123456789" min="100000000" required />
-                                    <h6 id="notice3" class="text-center text-danger">Enter Valid Phone Number</h6>
-                                    <video width="100%" id="ad_video" controls playsinline>
-                                        <source src="ads/vid.mp4" type="video/mp4">
-                                    </video>
-                                    <h6 class="text-center text-success notice">Tap the Connect Button that will Appear Here after the Ad</h6>
-                                    <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect3();" style="visibility: hidden" >Connect</button>
-                                    <br />
-                                    <!--Sliding Picture Start-->
-                                    <div class="slidingImage">
-                                        <div class="slider">
-                                            <div class="slides">
-                                                <input type="radio" name="radio-btn" id="radio1">
-                                                <input type="radio" name="radio-btn" id="radio2">
-                                                <input type="radio" name="radio-btn" id="radio3">
-                                                <input type="radio" name="radio-btn" id="radio4">
-                                                <input type="radio" name="radio-btn" id="radio5">
-
-                                                <div class="slide first"><img src="ads/1.jpeg" alt="1.jpeg"></div>
-                                                <div class="slide"><img src="ads/2.jpeg" alt="2.jpeg"></div>
-                                                <div class="slide"><img src="ads/3.jpeg" alt="3.jpeg"></div>
-                                                <div class="slide"><img src="ads/4.jpeg" alt="4.jpeg"></div>
-                                                <div class="slide"><img src="ads/5.jpeg" alt="5.jpeg"></div>
-                                                <div class="navigation-auto">
-                                                    <div class="auto-btn1"></div>
-                                                    <div class="auto-btn2"></div>
-                                                    <div class="auto-btn3"></div>
-                                                    <div class="auto-btn4"></div>
-                                                    <div class="auto-btn5"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <script type="text/javascript">
-                                            var counter=1;
-                                            setInterval(function(){
-                                                document.getElementById('radio' + counter).checked =true;
-                                                counter++;
-                                                if (counter > 5){
-                                                    counter = 1;
-                                                    setInterval=1000;
-                                                }
-                                            },3000);
-                                        </script>
-                                    </div>
-                                    <!--Sliding Picture End-->      
-                                </div>    
-
                             </div>
+
+                            <script type="text/javascript">
+                                var counter=1;
+                                setInterval(function(){
+                                    document.getElementById('radio' + counter).checked =true;
+                                    counter++;
+                                    if (counter > 5){
+                                        counter = 1;
+                                        setInterval=1000;
+                                    }
+                                },3000);
+                            </script>
                         </div>
+                    <!--Sliding Picture End-->     
                     </div>
                     <hr />
                     <h5 class="text-center">For Support or Advertisement Queries</h5>
                         <ul class="list-unstyled text-center">
-                            <li><a href="https://wa.me/+254105565532" style="color: lightgreen;" target="_blank"><b><img src="img/whatsapp2.png" width="16" height="16" alt="whatsapp2.png" > Chat us on WhatsApp</b></a></li>
+                            <li>Call us on<a href="tel:0759697757">&nbsp;0759 69 77 57</a> / <a href="tel:0759697757">&nbsp;0759 69 77 57</a></li>
                             <br />
-                            <li>Or Call us on <a href="tel:0105565532">010 55 66 532</a> / <a href="tel:0759697757">0759 69 77 57</a></li>
-                            <br />
-                            <li class="text-muted"><a href="#">Terms and Conditions</a> apply</li>
+                            <li class="text-muted"><a href="terms.html">Terms and Conditions</a> apply</li>
                         </ul>
                 </div>
             </div>

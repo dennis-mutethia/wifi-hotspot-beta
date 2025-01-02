@@ -1,112 +1,76 @@
-$('.notice').html('');
-document.stk.phone.focus();
-document.stk.phone.value = sessionStorage.getItem("phone");
-
-document.stk.phone.onkeyup = function() {   
-    sessionStorage.setItem("phone",document.stk.phone.value);
-};
-
-function setAmount(amt){
-    document.stk.amount.value = amt;
-    sessionStorage.setItem("amount",amt);
-}
-
-function connect(){    
-    let phone = document.stk.phone.value.trim();
-    if(phone.length===10){
-        $('.notice').html('');
-        document.sendin.username.value = phone;
-        document.sendin.password.value = phone;
-        document.sendin.submit();
-    }else $('.notice').html('Enter Valid Phone Number');
-    
-    return false;
-}
-function connect2(){
-    let phone = $('#account').val();
-    if(phone.length===10){
-        $('.notice').html('');
-        document.sendin.username.value = phone;
-        document.sendin.password.value = phone;
-        document.sendin.submit();
-    }else $('.notice').html('Enter Valid Phone Number');
-
-    return false;
-}
-
-function connect3(){
-    let phone = $('#adphone').val();
-    if(phone.length===10){
-        $('.notice').html('');
-        document.sendin.username.value = phone;
-        document.sendin.password.value = phone;
-        document.sendin.submit();
-    }else $('.notice').html('Enter Valid Phone Number');
-    
-    return false;
-}
-
-function sendPush(phone, amount, pushed){
-    let url = 'http://multiplespacetechnologies.com/admin/kanyonton/push.php';
-    $.post(url,
-    {
-        phone: '254' + phone,
-        amount: amount,        
-        account: phone
-    },
-    function(data, status){
-        sessionStorage.setItem("pushed", pushed);
-        connect();
-    });
-}
-
-var submit = function(event) {
-    event.preventDefault();
-    phone = sessionStorage.getItem("phone").slice(-9)
-    amount = sessionStorage.getItem("amount")
-    sendPush(phone, amount, 1)
-};
-
-function connectDefault(){
-    let phone = sessionStorage.getItem("phone").slice(-9)
-    let amount = sessionStorage.getItem("amount") !==null ? sessionStorage.getItem("amount") : 20;
-
-    if(!sessionStorage.getItem("pushed")) 
-        connect();
-    else
-        sendPush(phone, amount, 0)
-}
-
-var form = document.getElementById("stk");
-form.addEventListener("submit", submit, true);
-
-var ad_video = document.getElementById("ad_video");
-ad_video.addEventListener("click", () => {
-  ad_video.play();
-}, { once: true });
-document.getElementById("watchad").addEventListener("click", () => {
-  ad_video.play();
-}, { once: true });
-ad_video.onended = function() {
-    document.getElementById("adconnectbutton").style.visibility = 'visible';
-    document.getElementById("notice2").style.visibility = 'hidden';
-};
-
+var base = 'http://185.203.117.51';
+var site = 'nairobi';
+var station = 'muthiga_inn';
+var videoCount = 3;
+var imageCount = 10;
+var account = 0;
 var adphone = document.getElementById("adphone");
 var notice = document.getElementById("notice");
+var notice2 = document.getElementById("notice2");
+var adconnect = document.getElementById("adconnectbutton");
+var advideo = document.getElementById("advideo");
+var source = document.createElement('source');
+advideo.appendChild(source);
+setVideo();
+setImages();
+
+//adconnect.style.visibility = 'visible';
+document.onclick = function() { 
+    advideo.play();    
+};
+
+function setVideo(){
+    let max = videoCount - 1;
+    let pos = Math.floor(Math.random() * (max + 1));
+    let src = 'content/vid_'+pos+'.mp4';
+    source.setAttribute('src', src);
+    source.setAttribute('type', 'video/mp4');
+    advideo.load();
+    setTimeout(function(){
+        adconnect.style.visibility = 'visible';
+        notice2.style.visibility = 'hidden';
+        connect();
+    }, 30000);    
+}
+
+function setImages(){
+    let max = imageCount - 5;
+    let i = Math.floor(Math.random() * (max + 1));
+    
+    for(let j=0;j<5;j++){
+        let src = 'content/img_'+(i+j)+'.jpg';        
+        document.getElementById("img"+j).src = src;
+        document.getElementById("img"+j).alt = src;
+    }    
+}
+
+function connect(){
+    let phone = adphone.value.trim();
+    if(phone.length===10){
+       // phone = Math.floor(Math.random() * 1000);// '0759697757';
+       // let account = '254'+phone.slice(-9);
+        // let account = Math.floor(Math.random() * 1000);
+        document.sendin.username.value = account;
+        document.sendin.password.value = account;
+        setTimeout(function(){
+            document.sendin.submit();
+        }, 2000);
+    }else notice.innerHTML = ('Enter Valid Phone Number');
+    return false;
+}
+
 adphone.onkeyup = function() {
     let phone = adphone.value.trim();
     if(phone.length===10){
         notice.innerHTML = ('');
-        let url = 'http://multiplespacetechnologies.com/admin/kanyonton/ad.php';
-        $.post(url,
-        {
-            phone: phone,
-            amount: 0,        
-            account: phone
+        let url = base+':8080/add';
+        $.post(url,{
+            phone: '254'+phone.slice(-9),
+            site: site,
+            station: station
         },
-        function(data, status){
-            
+        function(data, status){    
+            account = data;
         });
     }else notice.innerHTML = ('Enter Valid Phone Number');
 };
