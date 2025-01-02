@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title id="title"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="theme-color" content="#d0d2d6" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/loader-1.css">
+<link rel="stylesheet" href="css/style_old.css">
+<link rel="stylesheet" href="css/bg.css">
+$(if refresh-timeout)
+<script>
+	setTimeout(function(){
+	location.href = './status';
+	},3000)
+</script>
+$(endif)
+</head>
+<body>
+	    <audio autoplay>
+       <source src="audio/connected.mp3"> 
+    </audio>
+<div class="main">
+<br>
+<div class="container">
+   <div class="loader-wrapper" id="loader-1">
+        <div id="loader"></div>
+    </div>
+<br>
+
+
+You are connected to <br /><u><b id="dname"></b></u>
+<div><button class="button2" onclick="window.location='./status'"><i class="icon icon-ok">&#xe817;</i> Check Status</button></div>
+
+
+</div>
+<br>
+	<i style="color: white;">Powered by</i> <a href="https://multiplespacetechnologies.com" style="color: #c40c06;"><b>Multiple Space Technologies</b></a>
+</div>
+
+<script>
+    loaders = document.getElementsByClassName('loader-wrapper');
+    loaders[0].style.display = "inherit";
+
+    function change(self) {
+        for (var i = loaders.length - 1; i >= 0; i--) {
+            loaders[i].style.display = "none";
+        }
+        id = self.id;
+        loaders[id - 1].style.display = "inherit";
+    };
+</script>
+<script type="text/javascript">
+	document.getElementById('title').innerHTML = window.location.hostname + " > success";	
+    document.getElementById('dname').innerHTML = window.location.hostname;	
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="css/style_old.css" media="screen"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+  <title>User Signup</title>
+</head>
+
+    <script defer src="js/vanzj.js"></script>
+
+<body>
+
+<form name="signup" action="" method="post"
+    onsubmit="return checkSignupForm()">
+  <input type="hidden" name="signup" value="start" />
+
+<div id="cntr_container">  
+<table id="cntr_conttable">
+    <tr>
+      <td id="cntr_conttd">
+        <div id="cntr_continner">
+          <div class="shadow">
+            <div class="shadow-inner">
+              <div class="shadow-cnt">
+                
+                <table class="cntr_tbl">
+                  <tr>
+                    <td align="right">
+                      email
+                    </td>
+
+                    <td align="left">
+                      <input type="text" id="sf_email" name="email" 
+                             class="signup" value="$(email)" maxlength="100"
+                             autocorrect="off" autocapitalize="off">
+                    </td>
+                  </tr>
+                    
+                  <input type="hidden" name="password">
+                  <input type="hidden" name="buy_profile" value="1">
+                  <input type="hidden" name="login">
+                 
+                   <tr>                
+                    <td colspan="2" align="right">
+                      <input type="submit" name="btn_signup" id="btn_signup" value="Sign up">
+                    </td>
+                  </tr>
+
+                  <tr>                
+                    <td colspan="2" align="center">
+                      <p class="signuperror">$(error)</p>
+                    </td>
+                  </tr>
+                </table>          
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </td>
+    </tr>
+  </table>
+</div>
+</form>
+
+<script language="JavaScript">
+    var url = new URL(window.location.href);
+    var phone = url.searchParams.get("phone");
+    document.signup.login.value = document.signup.password.value = phone;
+
+  if (document.signup && document.signup.user) document.signup.user.focus();
+
+  function checkSignupForm() {
+    if (!checkEmail("sf_email")) return false;
+    document.signup.login.value = document.signup.email.value;
+    return true;
+  } 
+
+ // document.forms["signup"].submit();
+
+
+</script>
+
+</body>
+</html>

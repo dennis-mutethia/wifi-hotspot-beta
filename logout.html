@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title id="title"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="theme-color" content="#d0d2d6" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/style_old.css">
+<link rel="stylesheet" href="css/bg.css">
+<link rel="stylesheet" href="css/vanzj.css">
+</head>
+
+<body>
+    <audio autoplay>
+       <source src="audio/disconnected.mp3"> 
+    </audio>
+<script language="JavaScript">
+
+    function openLogin() {
+	if (window.name != 'hotspot_logout') return true;
+	open('$(link-login)', '_blank', '');
+	window.close();
+	return false;
+    }
+
+</script>
+
+<div class="main">
+    <!--img class="logoVanz" src="img/logo.png" alt="Vanz J Tutorials"/-->
+    
+<div class="container">
+    <!--p class="statusFont3"><b class="blinking2">Disconnected</b><br></p-->
+<table class="table2">
+    <br>
+    <tr><td align="right" style="width: 45%;">User <i class="icon icon-user-circle-o">&#xe80f;</i> </td><td>$(username)</td></tr>
+    <tr><td align="right" style="width: 45%;">IP Address  <i class="icon icon-sitemap">&#xf0e8;</i> </td><td>$(ip)</td></tr>
+    <tr><td align="right">MAC Address <i class="icon icon-barcode">&#xe814;</i>  </td><td>$(mac)</td></tr>
+    <tr><td align="right">Connected <i class="icon icon-exchange">&#xf0ec;</i> </td><td>$(uptime)</td></tr>
+    <tr><td align="right">Upload <i class="icon icon-upload">&#xf02f;</i> </td><td>$(bytes-in-nice)</td></tr>
+    <tr><td align="right">Download <i class="icon icon-download">&#xf02e;</i> </td><td>$(bytes-out-nice)</td></tr>
+$(if remain-bytes-total)
+    <tr><td align="right">Bytes Left <i class="icon icon-hourglass-2">&#xf252;</i> </td><td>$(remain-bytes-total-nice)</td></tr>
+$(endif)
+$(if session-time-left)
+    <tr><td align="right">Time Left <i class="icon icon-clock">&#xe807;</i> </td><td>$(session-time-left)</td></tr>
+$(endif)
+</table>
+<br>
+<form action="$(link-login)" name="login" onSubmit="return openLogin()">
+        <button class="button" type="submit"><i class="icon icon-login">&#xe80a;</i> Resume Time</button>
+</form>
+</div><br>
+    <i style="color: white;">Powered by</i> <a href="https://www.youtube.com/c/VanzJTutorials" style="color: #c40c06;"><b>Vanz J Tutorials</b><i class="icon icon-youtube-3">&#xf167;</i></a>
+</div>
+<script type="text/javascript">
+	document.getElementById('title').innerHTML = window.location.hostname + " > logout";
+</script>
+
+</body>
+</html>
