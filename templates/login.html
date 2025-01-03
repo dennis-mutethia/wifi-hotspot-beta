@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Club Country - Muthiga Inn FREE Wi-Fi</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vanzj.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<body>
+    <!--Mikrotik Login Form Start -->
+    <form name="sendin" action="{{ link_login_only }}" method="post">
+        <input type="hidden" name="username" value="{{ username }}" />
+        <input type="hidden" name="password" value="{{ password }}" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+    <!--Mikrotik Login Form End -->
+
+    <div class="row text-center header">
+        <h4 class="header">Club Country - Muthiga Inn FREE Wi-Fi</h4>
+    </div>
+
+    <div class="demo">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6">
+
+                    <!-- <iframe 
+                        width="100%" 
+                        id="advideo" 
+                        src="https://www.youtube.com/embed/ohQbPRuXHeg?autoplay=1&loop=1&playlist=ohQbPRuXHeg&controls=0&modestbranding=1" 
+                        frameborder="0" 
+                        allow="autoplay; encrypted-media" 
+                        allowfullscreen>
+                    </iframe> -->
+
+                    <video width="100%" id="advideo" src="{{ url_for('static', filename='content/' + video) }}"
+                        playsinline loop> </video>
+                    <h6 class="text-primary text-center">Enter Your Valid Phone Number Below and Enjoy Super Fast Free
+                        WIFI <br />
+                        Powered by Club Country - Muthiga Inn</h6>
+
+                    <input type="number" class="form-control" id="adphone" name="adphone" class="text-bold warning"
+                        placeholder="Phone No. e.g 07123456789" />
+                    <h6 id="notice" class="text-center text-danger"></h6>
+
+                    <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect();"
+                        disabled>Tap this Button after the Video has played</button>
+                    <br />
+
+                    <!--Sliding Picture Start-->
+                    <div class="slidingImage">
+                        <div class="slider">
+                            <div class="slides">
+                                <!-- Generate radio buttons -->
+                                {% for image in images %}
+                                <input type="radio" name="radio-btn" id="radio{{ loop.index }}">
+                                {% endfor %}
+
+                                <!-- Generate slides -->
+                                {% for image in images %}
+                                <div class="slide {{ 'first' if loop.index == 1 }}">
+                                    <img src="{{ url_for('static', filename='content/' + image) }}" alt="">
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Navigation auto -->
+                            <div class="navigation-auto">
+                                {% for image in images %}
+                                <div class="auto-btn{{ loop.index }}"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- JavaScript for Auto-Slide -->
+                        <script type="text/javascript">
+                            var totalSlides = {{ images| length }}; // Total number of images
+                            var counter = 1;
+
+                            setInterval(function () {
+                                // Select the radio button corresponding to the current slide
+                                document.getElementById('radio' + counter).checked = true;
+
+                                counter++;
+                                if (counter > totalSlides) {
+                                    counter = 1; // Reset to the first slide
+                                }
+                            }, 3000); // Adjust the timing as needed
+                        </script>
+                    </div>
+                    <!--Sliding Picture End-->
+
+                </div>
+                <hr />
+                <h5 class="text-center">For Support or Advertisement Queries</h5>
+                <ul class="list-unstyled text-center">
+                    <li>Call us on<a href="tel:0759697757">&nbsp;0759 69 77 57</a></li>
+                    <br />
+                    <li class="text-muted"><a href="{{ url_for('terms') }}">Terms and Conditions</a> apply</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/md5.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.12.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+        var base = 'http://185.203.117.51';
+        var site = 'nairobi';
+        var station = 'muthiga_inn';
+
+        $(document).ready(function () {
+            $('#adphone').focus();
+        });
+
+        document.onclick = function () {
+            // Play the video
+            const videoElement = document.getElementById('advideo');
+            if (videoElement) {
+                videoElement.play();
+            }
+
+            // Enable the button after 30 seconds
+            setTimeout(function () {
+                const connectButton = document.getElementById('adconnectbutton');
+                if (connectButton) {
+                    connectButton.innerHTML = 'Connect'
+                    connectButton.disabled = false; // Enable the button
+                    connect(); // Call the connect function
+                }
+            }, 30000);
+        };
+
+
+        function connect() {
+            let phone = $('#adphone').val().trim();
+            if (phone.length === 10) {
+                setTimeout(function () {
+                    document.sendin.submit();
+                }, 2000);
+            }
+            else $('#notice').html('Enter Valid Phone Number');
+
+            return false;
+        }
+
+        $('#adphone').on('keyup', function () {
+            let phone = $('#adphone').val().trim();
+            if (phone.length === 10) {
+                $('#notice').html('');
+                let url = base + ':8080/add';
+                $.post(url, {
+                    phone: '254' + phone.slice(-9),
+                    site: site,
+                    station: station
+                },
+                    function (data, status) {
+                        account = data;
+                    });
+            } else {
+                $('#notice').html('Enter Valid Phone Number');
+            }
+        });
+
+    </script>
+</body>
+
+</html>
