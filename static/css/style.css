@@ -1,35 +1,38 @@
-html{
+html {
     background-color: white;
 }
 
-.header{
+.header {
     background-color: red;
     color: white;
     position: sticky;
     top: 0;
-    z-index: 1000; /* Ensure it's on top of other content */
+    z-index: 1000;
+    /* Ensure it's on top of other content */
     display: flex;
-    justify-content: center; /* Center the content horizontally */
-    align-items: flex-end; /* Align text at the bottom */
-    height: 100px; /* Set height for the header */
+    justify-content: center;
+    /* Center the content horizontally */
+    align-items: flex-end;
+    /* Align text at the bottom */
+    height: 100px;
+    /* Set height for the header */
 }
 
 
-a:hover,a:focus{
+a:hover,
+a:focus {
     outline: none;
     text-decoration: none;
 }
 
-.tab{
-    
-}
+.tab {}
 
-.tab .nav-tabs li{
+.tab .nav-tabs li {
     margin-bottom: 0;
     display: block;
 }
 
-.tab .nav-tabs li a{
+.tab .nav-tabs li a {
     color: #222;
     background: #fff;
     border-radius: 0;
@@ -42,13 +45,13 @@ a:hover,a:focus{
 
 .tab .nav-tabs li.active a,
 .tab .nav-tabs li.active a:focus,
-.tab .nav-tabs li.active a:hover{
+.tab .nav-tabs li.active a:hover {
     border: none;
     color: #666;
 }
 
 .tab .nav-tabs li.active a:before,
-.tab .nav-tabs li a:before{
+.tab .nav-tabs li a:before {
     content: "";
     width: 100%;
     position: absolute;
@@ -60,18 +63,18 @@ a:hover,a:focus{
 }
 
 .tab .nav-tabs li.active a:before,
-.tab .nav-tabs li.active a:hover:before{
+.tab .nav-tabs li.active a:hover:before {
     top: -3px;
     opacity: 1;
 }
 
-.tab .nav-tabs li a:hover:before{
+.tab .nav-tabs li a:hover:before {
     top: -4px;
     opacity: 1;
 }
 
 .tab .nav-tabs li.active a:after,
-.tab .nav-tabs li a:after{
+.tab .nav-tabs li a:after {
     content: "";
     position: absolute;
     top: 2px;
@@ -83,12 +86,12 @@ a:hover,a:focus{
 }
 
 .tab .nav-tabs li.active a:after,
-.tab .nav-tabs li a:hover:after{
+.tab .nav-tabs li a:hover:after {
     top: -1px;
     opacity: 1;
 }
 
-.tab .tab-content{
+.tab .tab-content {
     font-size: 14px;
     color: #999;
     padding: 10px;
@@ -131,6 +134,6 @@ a:hover,a:focus{
     color: #fff;
 }
 
-input { 
-    text-align: center; 
+input {
+    text-align: center;
 }
