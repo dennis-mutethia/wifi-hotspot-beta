@@ -22,8 +22,13 @@
             let stationId = 10;
 
             setTimeout(function () {
-                location.href = 'http://localhost:5000?cid='+clentId+'&sid='+stationId;
-            }, 1000)
+                $(if session-time-left)
+                    location.href = './status.html';
+                $(else)
+                    location.href = 'http://localhost:5000?cid='+clentId+'&sid='+stationId;
+                $(endif)
+            }, 2000)
+
         </script>
     </body>
 </html>
