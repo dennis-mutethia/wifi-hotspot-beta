@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>FREE Wi-Fi</title>
+    </head>
+    <body>
+        <!--Mikrotik Login Form Start -->
+        <form name="sendin" action="$(link-login-only)" method="post">
+             <input type="hidden" name="username" />
+             <input type="hidden" name="password" />
+             <input type="hidden" name="dst" value="$(link-orig)" />
+             <input type="hidden" name="popup" value="true" />
+         </form>
+        <!--Mikrotik Login Form End -->
+
+        <!--js-->
+        <script type="text/javascript">
+            let clentId = 1;
+            let stationId = 10;
+
+            setTimeout(function () {
+                location.href = 'http://localhost:5000?cid='+clentId+'&sid='+stationId;
+            }, 1000)
+        </script>
+    </body>
+</html>

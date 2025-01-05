@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vanzj.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        iframe {
+            width: 100%;
+            border: none;
+            height: 360px;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,17 +40,11 @@
             <div class="row">
                 <div class="col-md-offset-3 col-md-6">
 
-                    <!-- <iframe 
-                        width="100%" 
-                        id="advideo" 
-                        src="https://www.youtube.com/embed/ohQbPRuXHeg?autoplay=1&loop=1&playlist=ohQbPRuXHeg&controls=0&modestbranding=1" 
-                        frameborder="0" 
-                        allow="autoplay; encrypted-media" 
-                        allowfullscreen>
-                    </iframe> -->
+                    <iframe id="advideo"
+                        src="https://www.youtube.com/embed/{{ video.videoId }}?rel=0&modestbranding=1&showinfo=0&controls=1&disablekb=1&autoplay=1&mute=1"
+                        allow="autoplay; encrypted-media" allowfullscreen>
+                    </iframe>
 
-                    <video width="100%" id="advideo" src="{{ url_for('static', filename='content/' + video) }}"
-                        playsinline loop> </video>
                     <h6 class="text-primary text-center">Enter Your Valid Phone Number Below and Enjoy Super Fast Free
                         WIFI <br />
                         Powered by Club Country - Muthiga Inn</h6>
@@ -68,7 +69,7 @@
                                 <!-- Generate slides -->
                                 {% for image in images %}
                                 <div class="slide {{ 'first' if loop.index == 1 }}">
-                                    <img src="{{ url_for('static', filename='content/' + image) }}" alt="">
+                                    <img src="https://i.postimg.cc/{{ image }}" alt="">
                                 </div>
                                 {% endfor %}
                             </div>
@@ -125,10 +126,10 @@
 
         document.onclick = function () {
             // Play the video
-            const videoElement = document.getElementById('advideo');
-            if (videoElement) {
-                videoElement.play();
-            }
+            // const videoElement = document.getElementById('advideo');
+            // if (videoElement) {
+            //     videoElement.play();
+            // }
 
             // Enable the button after 30 seconds
             setTimeout(function () {
