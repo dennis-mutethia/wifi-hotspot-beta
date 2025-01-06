@@ -121,9 +121,6 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.12.4.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script type="text/javascript">
-        var base = 'http://185.203.117.51';
-        var site = 'nairobi';
-        var station = 'muthiga_inn';
         var player;
 
         // This function is called by the YouTube API once it's loaded
@@ -176,14 +173,13 @@
             let phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 $('#notice').html('');
-                let url = base + ':8080/add';
+                let url = "{{ url_for('addSubscriber') }}";
                 $.post(url, {
                     phone: '254' + phone.slice(-9),
-                    site: site,
-                    station: station
+                    station_id: '{{ station.id }}'
                 },
                     function (data, status) {
-                        account = data;
+                        console.log(data);
                     });
             } else {
                 $('#notice').html('Enter Valid Phone Number');

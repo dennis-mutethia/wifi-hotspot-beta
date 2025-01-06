@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS youtube_videos (
   UNIQUE (video_id, station_id)
 );
 
--- Schema for table https://i.postimg.cc images
+-- Schema for table images from https://i.postimg.cc
 CREATE TABLE IF NOT EXISTS postimg_images (
   id SERIAL PRIMARY KEY,
   image_id TEXT,
@@ -47,4 +47,12 @@ CREATE TABLE IF NOT EXISTS postimg_images (
   client_id INT,
   station_id INT,
   UNIQUE (image_id, station_id)
+);
+
+-- Schema for table subscribers
+CREATE TABLE IF NOT EXISTS subscribers (
+  id SERIAL PRIMARY KEY,
+  phone TEXT,
+  created_at TIMESTAMP,
+  station_id INT
 );

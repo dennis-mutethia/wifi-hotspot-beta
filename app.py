@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import random
 
 from utils.db import Db
@@ -25,6 +25,19 @@ def index():
     images = db.get_images(station)
     return render_template('index.html', station=station, link_login_only=link_login_only, link_orig=link_orig,
                            video=random.sample(latest_videos, 1)[0], images=random.sample(images, 5))
+
+@app.route('/add-subscriber', methods=['POST'])
+def addSubscriber():    
+    phone = request.form['phone']
+    station_id = request.form['station_id']
+    subscriber_id = db.add_subscriber(phone, station_id)
+    return jsonify(
+            {
+                "subscriber_id": subscriber_id,
+                "phone": phone,
+                "station_id": station_id
+            }
+        )
 
 @app.route('/terms', methods=['GET'])
 def terms():        

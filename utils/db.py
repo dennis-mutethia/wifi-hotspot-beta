@@ -110,7 +110,7 @@ class Db():
         ON CONFLICT (video_id, station_id)
         DO UPDATE SET 
             video_title = EXCLUDED.video_title
-        RETURNING videoId
+        RETURNING id
         """
 
         params = (video_id, video_title, published_at, client_id, station_id)
@@ -152,3 +152,22 @@ class Db():
         except Exception as e:
             self.conn.rollback()
             raise e   
+  
+    def add_subscriber(self, phone, station_id):
+        self.ensure_connection()            
+        query = """
+        INSERT INTO subscribers(phone, station_id) 
+        VALUES(%s, %s)
+        RETURNING id
+        """
+
+        params = (phone, station_id)
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                self.conn.commit()
+                row_id = cursor.fetchone()[0]
+                return row_id
+        except Exception as e:
+            self.conn.rollback()
+            raise e      
