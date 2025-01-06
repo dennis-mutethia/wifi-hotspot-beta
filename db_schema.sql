@@ -2,9 +2,9 @@
 CREATE TABLE IF NOT EXISTS clients (
   id SERIAL PRIMARY KEY,
   name TEXT,
-  backgroundColor TEXT,
-  foregroundColor TEXT,
-  createdAt TIMESTAMP
+  background_color TEXT,
+  foreground_color TEXT,
+  created_at TIMESTAMP
 );
 
 -- Schema for table users
@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT,
   phone TEXT,
   password TEXT,
-  createdAt TIMESTAMP,
-  clientId INT,
+  created_at TIMESTAMP,
+  client_id INT,
   UNIQUE (phone)
 );
 
@@ -22,29 +22,29 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS stations (
   id SERIAL PRIMARY KEY,
   name TEXT,
-  hotspotUsername TEXT,
-  hotspotPassword TEXT,
-  createdAt TIMESTAMP,
-  clientId INT
+  hotspot_username TEXT,
+  hotspot_password TEXT,
+  created_at TIMESTAMP,
+  client_id INT
 );
 
 -- Schema for table YouTube Videos
 CREATE TABLE IF NOT EXISTS youtube_videos (
   id SERIAL PRIMARY KEY,
-  videoId TEXT,
-  videoTitle TEXT,
-  publishedAt TIMESTAMP,
-  clientId INT,
-  stationId INT,
-  UNIQUE (videoId, stationId)
+  video_id TEXT,
+  video_title TEXT,
+  published_at TIMESTAMP,
+  client_id INT,
+  station_id INT,
+  UNIQUE (video_id, station_id)
 );
 
 -- Schema for table https://i.postimg.cc images
 CREATE TABLE IF NOT EXISTS postimg_images (
   id SERIAL PRIMARY KEY,
-  imageId TEXT,
-  publishedAt TIMESTAMP,
-  clientId INT,
-  stationId INT,
-  UNIQUE (imageId, stationId)
+  image_id TEXT,
+  published_at TIMESTAMP,
+  client_id INT,
+  station_id INT,
+  UNIQUE (image_id, station_id)
 );

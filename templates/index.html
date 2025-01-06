@@ -24,16 +24,16 @@
 <body>
     <!--Mikrotik Login Form Start -->
     <form name="sendin" action="{{ link_login_only }}" method="post">
-        <input type="hidden" name="username" value="{{ station.hotspotUsername }}" />
-        <input type="hidden" name="password" value="{{ station.hotspotPassword }}" />
+        <input type="hidden" name="username" value="{{ station.hotspot_username }}" />
+        <input type="hidden" name="password" value="{{ station.hotspot_password }}" />
         <input type="hidden" name="dst" value="{{ link_orig }}" />
         <input type="hidden" name="popup" value="true" />
     </form>
     <!--Mikrotik Login Form End -->
 
-    <div class="row text-center header" style="background-color: {{ station.client.backgroundColor }};">
+    <div class="row text-center header" style="background-color: {{ station.client.background_color }};">
         <h4 class="header"
-            style="background-color: {{ station.client.backgroundColor }}; color: {{ station.client.foregroundColor }};">
+            style="background-color: {{ station.client.background_color }}; color: {{ station.client.foreground_color }};">
             {{ station.client.name }} FREE Wi-Fi</h4>
     </div>
 
@@ -43,7 +43,7 @@
                 <div class="col-md-offset-3 col-md-6">
 
                     <iframe id="advideo"
-                        src="https://www.youtube.com/embed/{{ video.videoId }}?enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1"
+                        src="https://www.youtube.com/embed/{{ video.video_id }}?enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1"
                         allow="autoplay; encrypted-media" allowfullscreen>
                     </iframe>
 
@@ -72,7 +72,7 @@
                                 <!-- Generate slides -->
                                 {% for image in images %}
                                 <div class="slide {{ 'first' if loop.index == 1 }}">
-                                    <img src="https://i.postimg.cc/{{ image }}" alt="">
+                                    <img src="https://i.postimg.cc/{{ image.image_id }}" alt="">
                                 </div>
                                 {% endfor %}
                             </div>
