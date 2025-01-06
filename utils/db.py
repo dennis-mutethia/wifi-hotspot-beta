@@ -2,11 +2,9 @@ import os, psycopg2
 from dotenv import load_dotenv
 
 class Video():
-    def __init__(self, videoId, title, description, liveBroadcastContent, publishedAt):
+    def __init__(self, videoId, videoTitle, publishedAt):
         self.videoId = videoId
-        self.title = title
-        self.description = description 
-        self.liveBroadcastContent = liveBroadcastContent
+        self.videoTitle = videoTitle
         self.publishedAt = publishedAt
     
 class Db():
@@ -37,45 +35,47 @@ class Db():
             # Reconnect if the connection is invalid
             self.conn = psycopg2.connect(**self.conn_params)  
             
-    def get_videos(self, liveBroadcastContent='none', limit=5, current_page=1):
-        offset = (current_page - 1) * limit
+    def get_videos(self, clientId=0, stationId=0):  
         self.ensure_connection()        
         query = """
-        SELECT videoId, title, description, liveBroadcastContent, publishedAt
+        SELECT videoId, videoTitle, publishedAt
         FROM youtube_videos
-        WHERE liveBroadcastContent = %s
-        ORDER BY publishedAt DESC
-        LIMIT %s OFFSET %s
+        WHERE stationId=%s
         """
-        params = [liveBroadcastContent, limit, offset]
+        params = [stationId]
                 
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
                 data = cursor.fetchall()
+                
+                if len(data) == 0:
+                    query = f'{query} OR clientId=%s'
+                    params.append(clientId)
+                    cursor.execute(query, tuple(params))
+                    data = cursor.fetchall()
+                    
                 videos = []
                 for datum in data:                    
-                    videos.append(Video(datum[0], datum[1], datum[2], datum[3], datum[4]))
+                    videos.append(Video(datum[0], datum[1], datum[2]))
 
                 return videos 
         except Exception as e:
             self.conn.rollback()
             raise e   
   
-    def add_video(self, videoId, title, description, liveBroadcastContent, publishedAt):
+    def add_video(self, videoId, videoTitle, publishedAt, clientId, stationId):
         self.ensure_connection()            
         query = """
-        INSERT INTO youtube_videos(videoId, title, description, liveBroadcastContent, publishedAt) 
+        INSERT INTO youtube_videos(videoId, videoTitle, publishedAt, clientId, stationId) 
         VALUES(%s, %s, %s, %s, %s)
-        ON CONFLICT (videoId)
+        ON CONFLICT (videoId, stationId)
         DO UPDATE SET 
-            title = EXCLUDED.title,
-            description = EXCLUDED.description,
-            liveBroadcastContent = EXCLUDED.liveBroadcastContent
+            videoTitle = EXCLUDED.videoTitle
         RETURNING videoId
         """
 
-        params = (videoId, title, description, liveBroadcastContent, publishedAt)
+        params = (videoId, videoTitle, publishedAt, clientId, stationId)
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
