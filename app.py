@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, redirect, render_template, url_for, request, jsonify
 import random
 
 from utils.db import Db
@@ -11,6 +11,11 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # One year in seconds
 
 db = Db()
+
+# Routes
+@app.route('/')
+def index():
+    return redirect(url_for('dashboard'))
 
 # Routes
 @app.route('/login-subscriber', methods=['GET'])
@@ -43,7 +48,13 @@ def addSubscriber():
 def terms():        
     station_id = request.args.get('station_id', 0)
     station = db.get_station(id=station_id)
-    return render_template('terms.html', station=station,)
+    return render_template('terms.html', station=station)
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():        
+    station_id = request.args.get('station_id', 0)
+    station = db.get_station(id=station_id)
+    return render_template('dashboard.html', station=station)
 
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']
