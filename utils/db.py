@@ -156,8 +156,8 @@ class Db():
     def add_subscriber(self, phone, station_id):
         self.ensure_connection()            
         query = """
-        INSERT INTO subscribers(phone, station_id) 
-        VALUES(%s, %s)
+        INSERT INTO subscribers(phone, station_id, created_at) 
+        VALUES(%s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
         RETURNING id
         """
 
