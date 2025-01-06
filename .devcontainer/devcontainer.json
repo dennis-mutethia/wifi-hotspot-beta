@@ -1,0 +1,17 @@
+{
+    "name": "WIFI-HOTSPOT-BETA",
+    "dockerFile": "../Dockerfile",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                "ms-python.pylint"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux#": "/bin/bash"
+            }
+        }
+    },
+    "forwardPorts": [5000]
+}
