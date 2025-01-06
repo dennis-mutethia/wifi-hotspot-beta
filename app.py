@@ -31,19 +31,10 @@ station = {
 def index():      
     station_id = request.args.get('station_id', 0)
     link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
-    link_orig = request.args.get('link_orig', 'http://192.168.88.1')
+    link_orig = request.args.get('link_orig', 'https://192.168.88.1')
     
     #station = db.get_station(station_id)
-    latest_videos = db.get_videos(liveBroadcastContent='none', limit=4)
-    latest_videos = [
-        {
-            'id': 1,
-            'videoId' : 'qdWniWOZqIE',
-            'publishedAt' : None,
-            'clientId' : 20,
-            'stationId' : 3
-        }
-    ]
+    latest_videos = db.get_videos(clientId=0, stationId=station_id)
     #images uploaded at https://postimages.org/
     images = ['Ff3WDnqT/img-0.jpg', '63kFnCSH/img-1.jpg', '15ZLzcDX/img-2.jpg', '7hSdVfrq/img-3.jpg', 'gchCdBX1/img-4.jpg', 'K8GwPGqy/img-5.jpg', '9FtswRBp/img-6.jpg', 'VN5hh7PG/img-7.jpg', '1zTd1p99/img-8.jpg', 'YCdV85ZL/img-9.jpg']
     return render_template('index.html', station=station, link_login_only=link_login_only, link_orig=link_orig,
