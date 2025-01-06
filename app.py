@@ -14,7 +14,7 @@ db = Db()
 
 # Routes
 @app.route('/login-subscriber', methods=['GET'])
-def index():      
+def loginSubscriber():      
     station_id = request.args.get('station_id', 0)
     link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
     link_orig = request.args.get('link_orig', 'https://192.168.88.1')
