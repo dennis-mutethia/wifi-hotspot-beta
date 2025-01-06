@@ -13,7 +13,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # One year in seconds
 db = Db()
 
 # Routes
-@app.route('/', methods=['GET'])
+@app.route('/login-subscriber', methods=['GET'])
 def index():      
     station_id = request.args.get('station_id', 0)
     link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
@@ -23,7 +23,7 @@ def index():
     latest_videos = db.get_videos(station)
     #images uploaded at https://postimages.org/
     images = db.get_images(station)
-    return render_template('index.html', station=station, link_login_only=link_login_only, link_orig=link_orig,
+    return render_template('login-subscriber.html', station=station, link_login_only=link_login_only, link_orig=link_orig,
                            video=random.sample(latest_videos, 1)[0], images=random.sample(images, 5))
 
 @app.route('/add-subscriber', methods=['POST'])
