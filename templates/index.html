@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ station }} FREE Wi-Fi</title>
+    <title>{{ station.client.name }} FREE Wi-Fi</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css') }}" />
@@ -24,15 +24,17 @@
 <body>
     <!--Mikrotik Login Form Start -->
     <form name="sendin" action="{{ link_login_only }}" method="post">
-        <input type="hidden" name="username" value="{{ username }}" />
-        <input type="hidden" name="password" value="{{ password }}" />
-        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="username" value="{{ station.hotspotUsername }}" />
+        <input type="hidden" name="password" value="{{ station.hotspotPassword }}" />
+        <input type="hidden" name="dst" value="{{ link_orig }}" />
         <input type="hidden" name="popup" value="true" />
     </form>
     <!--Mikrotik Login Form End -->
 
-    <div class="row text-center header">
-        <h4 class="header">Club Country - Muthiga Inn FREE Wi-Fi</h4>
+    <div class="row text-center header" style="background-color: {{ station.client.backgroundColor }};">
+        <h4 class="header"
+            style="background-color: {{ station.client.backgroundColor }}; color: {{ station.client.foregroundColor }};">
+            {{ station.client.name }} FREE Wi-Fi</h4>
     </div>
 
     <div class="demo">
@@ -41,13 +43,14 @@
                 <div class="col-md-offset-3 col-md-6">
 
                     <iframe id="advideo"
-                        src="https://www.youtube.com/embed/{{ video.videoId }}?rel=0&modestbranding=1&showinfo=0&controls=1&disablekb=1&autoplay=1&mute=1"
+                        src="https://www.youtube.com/embed/{{ video.videoId }}?enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1"
                         allow="autoplay; encrypted-media" allowfullscreen>
                     </iframe>
 
+
                     <h6 class="text-primary text-center">Enter Your Valid Phone Number Below and Enjoy Super Fast Free
                         WIFI <br />
-                        Powered by Club Country - Muthiga Inn</h6>
+                        Powered by {{ station.client.name }}</h6>
 
                     <input type="number" class="form-control" id="adphone" name="adphone" class="text-bold warning"
                         placeholder="Phone No. e.g 07123456789" />
@@ -106,12 +109,14 @@
                 <ul class="list-unstyled text-center">
                     <li>Call us on<a href="tel:0759697757">&nbsp;0759 69 77 57</a></li>
                     <br />
-                    <li class="text-muted"><a href="{{ url_for('terms') }}">Terms and Conditions</a> apply</li>
+                    <li class="text-muted"><a href="{{ url_for('terms') }}?station_id={{ station.id }}">Terms and
+                            Conditions</a> apply</li>
                 </ul>
             </div>
         </div>
     </div>
     <!--js-->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/md5.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.12.4.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -119,28 +124,40 @@
         var base = 'http://185.203.117.51';
         var site = 'nairobi';
         var station = 'muthiga_inn';
+        var player;
+
+        // This function is called by the YouTube API once it's loaded
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('advideo', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Set up your click handler
+            document.onclick = function () {
+                // Check if the video is muted and unmute it
+                if (player.isMuted()) {
+                    player.unMute();
+                }
+
+                // Enable the button after 30 seconds
+                setTimeout(function () {
+                    const connectButton = document.getElementById('adconnectbutton');
+                    if (connectButton) {
+                        connectButton.innerHTML = 'Connect';
+                        connectButton.disabled = false; // Enable the button
+                        connect(); // Call the connect function
+                    }
+                }, 30000);
+            };
+        }
 
         $(document).ready(function () {
             $('#adphone').focus();
         });
-
-        document.onclick = function () {
-            // Play the video
-            // const videoElement = document.getElementById('advideo');
-            // if (videoElement) {
-            //     videoElement.play();
-            // }
-
-            // Enable the button after 30 seconds
-            setTimeout(function () {
-                const connectButton = document.getElementById('adconnectbutton');
-                if (connectButton) {
-                    connectButton.innerHTML = 'Connect'
-                    connectButton.disabled = false; // Enable the button
-                    connect(); // Call the connect function
-                }
-            }, 30000);
-        };
 
 
         function connect() {

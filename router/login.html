@@ -18,14 +18,13 @@
 
         <!--js-->
         <script type="text/javascript">
-            let clentId = 1;
             let stationId = 10;
 
             setTimeout(function () {
                 $(if session-time-left)
                     location.href = './status.html';
                 $(else)
-                    location.href = 'http://localhost:5000?cid='+clentId+'&sid='+stationId;
+                    location.href = 'http://localhost:5000?station_id='+stationId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
                 $(endif)
             }, 2000)
 
