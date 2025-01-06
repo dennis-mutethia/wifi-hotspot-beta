@@ -34,7 +34,7 @@
                 <div class="col-md-6">
                     <div class="card full-height">
                         <div class="card-body">
-                            <div class="card-title">Total Connections in the Last One Week</div>
+                            <div class="card-title">Total Connections Per Station</div>
                             <div class="row py-3">
                                 <div class="col-md-4 d-flex flex-column justify-content-around">
                                     <div>
@@ -116,11 +116,6 @@
                                     <time class="date" datetime="9-18">Sep 18</time>
                                     <span class="text">Created need <a href="#">"Volunteer
                                             Opportunity"</a></span>
-                                </li>
-                                <li class="feed-item feed-item-danger">
-                                    <time class="date" datetime="9-17">Sep 17</time>
-                                    <span class="text">Attending the event <a href="single-event.php">"Some New
-                                            Event"</a></span>
                                 </li>
                             </ol>
                         </div>
@@ -207,39 +202,25 @@
     var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
 
     var mytotalIncomeChart = new Chart(totalIncomeChart, {
-        type: 'bar',
+        type: 'polarArea',
         data: {
-            labels: ["M", "T", "W", "T", "F", "S", "S"],
+            labels: ["Muthiga", "Tassia", "Skuta", "Mudavadi", "KImathi"],
             datasets: [{
-                label: "Total COnnections",
-                backgroundColor: '#ff9e27',
-                borderColor: 'rgb(23, 125, 255)',
-                data: [6, 10, 9, 5, 8, 6, 7],
-            }],
+                label: 'Connections Per Station',
+                data: [11, 16, 7, 3, 14],
+                backgroundColor: [
+                    'red',
+                    'rgb(75, 192, 192)',
+                    'rgb(255, 205, 86)',
+                    'rgb(201, 203, 207)',
+                    'rgb(54, 162, 235)'
+                ]
+            }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
             legend: {
                 display: false,
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        display: false //this will remove only the label
-                    },
-                    gridLines: {
-                        drawBorder: false,
-                        display: false
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        drawBorder: false,
-                        display: false
-                    }
-                }]
-            },
+            }
         }
     });
 
