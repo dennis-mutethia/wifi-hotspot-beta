@@ -54,7 +54,25 @@ def terms():
 def dashboard():        
     station_id = request.args.get('station_id', 0)
     station = db.get_station(id=station_id)
-    return render_template('dashboard.html', station=station)
+    stations_connections = [
+        {
+            'name' : 'Muthiga',
+            'count' : 45
+        },
+        {
+            'name' : 'Skuta',
+            'count' : 123
+        },
+        {
+            'name' : 'KImathi',
+            'count' : 952
+        },
+        {
+            'name' : 'Classic',
+            'count' : 88
+        }
+    ]
+    return render_template('dashboard.html', stations_connections=stations_connections)
 
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']

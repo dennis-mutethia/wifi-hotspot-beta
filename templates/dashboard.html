@@ -199,39 +199,48 @@
         styleText: true
     })
 
-    var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
-
-    var mytotalIncomeChart = new Chart(totalIncomeChart, {
-        type: 'polarArea',
-        data: {
-            labels: ["Muthiga", "Tassia", "Skuta", "Mudavadi", "KImathi"],
-            datasets: [{
-                label: 'Connections Per Station',
-                data: [11, 16, 7, 3, 14],
-                backgroundColor: [
-                    'red',
-                    'rgb(75, 192, 192)',
-                    'rgb(255, 205, 86)',
-                    'rgb(201, 203, 207)',
-                    'rgb(54, 162, 235)'
-                ]
-            }]
-        },
-        options: {
-            legend: {
-                display: false,
-            }
+    // Function to generate a random color in rgba format
+    function getRandomColor() {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            const a = 0.7; // Set alpha for transparency
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
-    });
 
-    $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
-        type: 'line',
-        height: '70',
-        width: '100%',
-        lineWidth: '2',
-        lineColor: '#ffa534',
-        fillColor: 'rgba(255, 165, 52, .14)'
-    });
+        // Generate a random color for each segment
+        function getRandomColorsArray(numColors) {
+            let colors = [];
+            for (let i = 0; i < numColors; i++) {
+                colors.push(getRandomColor());
+            }
+            return colors;
+        }
+
+        // Get stations data from Jinja variable
+        const stationsConnections = {{ stations_connections | tojson }};
+        
+        // Extract labels and data from stations array
+        const stationsLabels = stationsConnections.map(station => station.name);
+        const stationsData = stationsConnections.map(station => station.count);
+
+        const totalIncomeChart = document.getElementById('totalIncomeChart');
+        const mytotalIncomeChart = new Chart(totalIncomeChart, {
+            type: 'polarArea',
+            data: {
+                labels: stationsLabels,
+                datasets: [{
+                    label: 'Connections Per Station',
+                    data: stationsData,
+                    backgroundColor: getRandomColorsArray(stationsData.length)
+                }]
+            },
+            options: {
+                legend: {
+                    display: true,
+                }
+            }
+        });
 </script>
 
 {% endblock %}
