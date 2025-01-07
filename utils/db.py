@@ -278,3 +278,31 @@ class Db():
         except Exception as e:
             self.conn.rollback()
             raise e       
+            
+    def get_connections_per_day(self):  
+        self.ensure_connection()        
+        query = """
+        SELECT TO_CHAR(created_at, 'Mon DD') AS date, COUNT(*) AS count 
+        FROM subscribers
+        WHERE created_at >= NOW() - INTERVAL '30 days'
+        GROUP BY TO_CHAR(created_at, 'Mon DD')
+        ORDER BY TO_CHAR(created_at, 'Mon DD')
+        """
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query,)
+                data = cursor.fetchall()
+                                    
+                subs = []
+                for datum in data:  
+                    sub = {
+                        'date' : datum[0],
+                        'count' : datum[1]
+                    }                  
+                    subs.append(sub)
+
+                return subs 
+        except Exception as e:
+            self.conn.rollback()
+            raise e       

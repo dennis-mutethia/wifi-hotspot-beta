@@ -1,150 +1,108 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="main-panel">
-    <div class="content">
-        <div class="panel-header bg-primary-gradient">
-            <div class="page-inner py-4">
+
+<div class="panel-header">
+    <div class="page-inner py-4">
+    </div>
+</div>
+<div class="page-inner mt--5">
+    <div class="row mt--2">
+        <div class="col-md-6">
+            <div class="card full-height">
+                <div class="card-body">
+                    <div class="card-title">Real-Time Statistics</div>
+                    <div class="card-category">Real-Time Information about Wi-Fi Connections Statistics</div>
+                    <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                        <div class="px-2 pb-2 pb-md-0 text-center">
+                            <div id="circles-1"></div>
+                            <h6 class="fw-bold mt-3 mb-0">All Connections</h6>
+                        </div>
+                        <div class="px-2 pb-2 pb-md-0 text-center">
+                            <div id="circles-2"></div>
+                            <h6 class="fw-bold mt-3 mb-0">Active Devices</h6>
+                        </div>
+                        <div class="px-2 pb-2 pb-md-0 text-center">
+                            <div id="circles-3"></div>
+                            <h6 class="fw-bold mt-3 mb-0">Stations</h6>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="page-inner mt--5">
-            <div class="row mt--2">
-                <div class="col-md-6">
-                    <div class="card full-height">
-                        <div class="card-body">
-                            <div class="card-title">Real-Time Statistics</div>
-                            <div class="card-category">Real-Time Information about System Statistics</div>
-                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-1"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">All Connections</h6>
-                                </div>
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-2"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">Active Devices</h6>
-                                </div>
-                                <div class="px-2 pb-2 pb-md-0 text-center">
-                                    <div id="circles-3"></div>
-                                    <h6 class="fw-bold mt-3 mb-0">Stations</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card full-height">
-                        <div class="card-body">
-                            <div class="card-title">Connections Per Station</div>
-                            <div class="row py-4">
-                                <div class="col-md-12">
-                                    <div id="chart-container">
-                                        <canvas id="totalIncomeChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="card full-height">
-                        <div class="card-body">
-                            <div class="card-title">Total Connections Today</div>
-                            <div class="row py-3">
-                                <div class="col-md-12 d-flex flex-column justify-content-around">
-                                    <div>
-                                        <h6 class="fw-bold text-uppercase text-success op-8">Total Connections Today</h6>
-                                        <h3 class="fw-bold">{{ total_connections_today }}</h3>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold text-uppercase text-warning op-8">Unique Devices Today</h6>
-                                        <h3 class="fw-bold">{{ unique_connections_today }}</h3>
-                                    </div>
-                                </div>
+        <div class="col-md-3">
+            <div class="card full-height">
+                <div class="card-body">
+                    <div class="card-title">Connections Per Station</div>
+                    <div class="row py-4">
+                        <div class="col-md-12">
+                            <div id="chart-container">
+                                <canvas id="connectionsPerStationChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-head-row">
-                                <div class="card-title">User Statistics</div>
-                                <div class="card-tools">
-                                    <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
-                                        <span class="btn-label">
-                                            <i class="fa fa-pencil"></i>
-                                        </span>
-                                        Export
-                                    </a>
-                                    <a href="#" class="btn btn-info btn-border btn-round btn-sm">
-                                        <span class="btn-label">
-                                            <i class="fa fa-print"></i>
-                                        </span>
-                                        Print
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container" style="min-height: 375px">
-                                <canvas id="statisticsChart"></canvas>
-                            </div>
-                            <div id="myChartLegend"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card full-height">
-                        <div class="card-header">
-                            <div class="card-title">Latest Connections</div>
-                        </div>
-                        <div class="card-body">
-                            <ol class="activity-feed">
-                                {% for con in latest_connections %}
-                                <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
-                                    <time class="date" datetime="9-25">{{ con.datetime }}</time>
-                                    <span class="text">{{ con.phone }} connected to <a href="#">{{ con.station }} Hotspot</a></span>
-                                </li>
-                                {% endfor %}
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
 
+        <div class="col-md-3">
+            <div class="card full-height">
+                <div class="card-body">
+                    <div class="card-title">Total Connections Today</div>
+                    <div class="row py-3">
+                        <div class="col-md-12 d-flex flex-column justify-content-around">
+                            <div>
+                                <h6 class="fw-bold text-uppercase text-success op-8">Total Connections Today
+                                </h6>
+                                <h3 class="fw-bold">{{ total_connections_today }}</h3>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-uppercase text-warning op-8">Unique Devices Today</h6>
+                                <h3 class="fw-bold">{{ unique_connections_today }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="pull-left">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.themekita.com">
-                            ThemeKita
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Help
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Licenses
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="copyright ml-auto">
-                2018, made with <i class="fa fa-heart heart text-danger"></i> by <a
-                    href="https://www.themekita.com">ThemeKita</a>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">Users/Connections Statistics</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 375px">
+                        <canvas id="connectionsPerDayChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="col-md-4">
+            <div class="card full-height">
+                <div class="card-header">
+                    <div class="card-title">Latest Connections</div>
+                </div>
+                <div class="card-body">
+                    <ol class="activity-feed">
+                        {% for con in latest_connections %}
+                        <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
+                            <time class="date" datetime="9-25">{{ con.datetime }}</time>
+                            <span class="text">{{ con.phone }} connected to <a href="#">{{ con.station }}
+                                    Hotspot</a></span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 <script>
     Circles.create({
         id: 'circles-1',
@@ -193,46 +151,71 @@
 
     // Function to generate a random color in rgba format
     function getRandomColor() {
-            const r = Math.floor(Math.random() * 255);
-            const g = Math.floor(Math.random() * 255);
-            const b = Math.floor(Math.random() * 255);
-            const a = 0.7; // Set alpha for transparency
-            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        const a = 0.7; // Set alpha for transparency
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }
+
+    // Generate a random color for each segment
+    function getRandomColorsArray(numColors) {
+        let colors = [];
+        for (let i = 0; i < numColors; i++) {
+            colors.push(getRandomColor());
         }
+        return colors;
+    }
 
-        // Generate a random color for each segment
-        function getRandomColorsArray(numColors) {
-            let colors = [];
-            for (let i = 0; i < numColors; i++) {
-                colors.push(getRandomColor());
+    // Get stations data from Jinja variable
+    const stationsConnections = {{ stations_connections | tojson }};
+
+    // Extract labels and data from stations array
+    const stationsLabels = stationsConnections.map(station => station.name);
+    const stationsData = stationsConnections.map(station => station.count);
+
+    const connectionsPerStationChart = document.getElementById('connectionsPerStationChart');
+    new Chart(connectionsPerStationChart, {
+        type: 'polarArea',
+        data: {
+            labels: stationsLabels,
+            datasets: [{
+                label: 'Connections/Users Per Station',
+                data: stationsData,
+                backgroundColor: getRandomColorsArray(stationsData.length)
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
             }
-            return colors;
         }
+    });
 
-        // Get stations data from Jinja variable
-        const stationsConnections = {{ stations_connections | tojson }};
-        
-        // Extract labels and data from stations array
-        const stationsLabels = stationsConnections.map(station => station.name);
-        const stationsData = stationsConnections.map(station => station.count);
+    // Get stations data from Jinja variable
+    const connectionsPerDay = {{ connections_per_day | tojson }};
 
-        const totalIncomeChart = document.getElementById('totalIncomeChart');
-        const mytotalIncomeChart = new Chart(totalIncomeChart, {
-            type: 'polarArea',
-            data: {
-                labels: stationsLabels,
-                datasets: [{
-                    label: 'Connections Per Station',
-                    data: stationsData,
-                    backgroundColor: getRandomColorsArray(stationsData.length)
-                }]
-            },
-            options: {
-                legend: {
-                    display: true,
-                }
+    // Extract labels and data from stations array
+    const connectionsPerDayLabels = connectionsPerDay.map(station => station.date);
+    const connectionsPerDayData = connectionsPerDay.map(station => station.count);
+
+    const connectionsPerDayChart = document.getElementById('connectionsPerDayChart');
+    new Chart(connectionsPerDayChart, {
+        type: 'line',
+        data: {
+            labels: connectionsPerDayLabels,
+            datasets: [{
+                label: 'Total Users/Connections Per Day',
+                data: connectionsPerDayData,
+                backgroundColor: getRandomColorsArray(connectionsPerDayData.length)
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
             }
-        });
+        }
+    });
 </script>
 
 {% endblock %}
