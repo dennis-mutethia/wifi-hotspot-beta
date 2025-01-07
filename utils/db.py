@@ -170,4 +170,111 @@ class Db():
                 return row_id
         except Exception as e:
             self.conn.rollback()
-            raise e      
+            raise e    
+            
+    def get_connection_counts_per_station(self):  
+        self.ensure_connection()        
+        query = """
+        WITH subs AS(
+            SELECT station_id, COUNT(*) AS count 
+            FROM subscribers
+            GROUP BY station_id
+        )
+        SELECT stations.name, subs.count
+        FROM stations
+        INNER JOIN subs ON subs.station_id = stations.id
+        """
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query,)
+                data = cursor.fetchall()
+                                    
+                counts = []
+                for datum in data:  
+                    count = {
+                        'name' : datum[0],
+                        'count' : datum[1]
+                    }                  
+                    counts.append(count)
+
+                return counts 
+        except Exception as e:
+            self.conn.rollback()
+            raise e           
+            
+    def get_total_connections(self, today=False, active=False):  
+        self.ensure_connection()        
+        query = """
+        SELECT COUNT(phone) AS count 
+        FROM subscribers
+        WHERE 1=1
+        """
+        
+        if today:
+            query = f"{query} AND DATE(created_at) = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
+        if active:
+            query = f"{query} AND DATE_TRUNC('hour', created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchone()
+                return result[0] if result else 0
+        except Exception as e:
+            self.conn.rollback()
+            raise e         
+            
+    def get_unique_connections(self, today=False):  
+        self.ensure_connection()        
+        query = """
+        SELECT COUNT(DISTINCT phone) AS count 
+        FROM subscribers
+        WHERE 1=1
+        """
+        
+        if today:
+            query = f"{query} AND DATE(created_at) = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchone()
+                return result[0] if result else 0
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+            
+    def get_latest_connections(self):  
+        self.ensure_connection()        
+        query = """
+        WITH subs AS(
+            SELECT phone, station_id, TO_CHAR(created_at, 'Mon DD HH24:MI:SS') AS created_at, DATE_TRUNC('hour', created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') AS active
+            FROM subscribers
+            ORDER BY created_at DESC
+            LIMIT 5
+        )
+        SELECT subs.phone, stations.name, subs.created_at, subs.active
+        FROM stations
+        INNER JOIN subs ON subs.station_id = stations.id
+        """
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query,)
+                data = cursor.fetchall()
+                                    
+                subs = []
+                for datum in data:  
+                    sub = {
+                        'phone' : datum[0],
+                        'station' : datum[1],
+                        'datetime' : datum[2],
+                        'active' : datum[3]
+                    }                  
+                    subs.append(sub)
+
+                return subs 
+        except Exception as e:
+            self.conn.rollback()
+            raise e       

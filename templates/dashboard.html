@@ -31,24 +31,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="card full-height">
                         <div class="card-body">
-                            <div class="card-title">Total Connections Per Station</div>
-                            <div class="row py-3">
-                                <div class="col-md-4 d-flex flex-column justify-content-around">
-                                    <div>
-                                        <h6 class="fw-bold text-uppercase text-success op-8">Total Connections</h6>
-                                        <h3 class="fw-bold">9,782</h3>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold text-uppercase text-warning op-8">Unique Devices</h6>
-                                        <h3 class="fw-bold">1,248</h3>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
+                            <div class="card-title">Connections Per Station</div>
+                            <div class="row py-4">
+                                <div class="col-md-12">
                                     <div id="chart-container">
                                         <canvas id="totalIncomeChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card full-height">
+                        <div class="card-body">
+                            <div class="card-title">Total Connections Today</div>
+                            <div class="row py-3">
+                                <div class="col-md-12 d-flex flex-column justify-content-around">
+                                    <div>
+                                        <h6 class="fw-bold text-uppercase text-success op-8">Total Connections Today</h6>
+                                        <h3 class="fw-bold">{{ total_connections_today }}</h3>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold text-uppercase text-warning op-8">Unique Devices Today</h6>
+                                        <h3 class="fw-bold">{{ unique_connections_today }}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -93,30 +103,12 @@
                         </div>
                         <div class="card-body">
                             <ol class="activity-feed">
-                                <li class="feed-item feed-item-success">
-                                    <time class="date" datetime="9-25">Sep 25 18:45:02</time>
-                                    <span class="text">254723111920 connected to <a href="#">Muthinga Hotspot</a></span>
+                                {% for con in latest_connections %}
+                                <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
+                                    <time class="date" datetime="9-25">{{ con.datetime }}</time>
+                                    <span class="text">{{ con.phone }} connected to <a href="#">{{ con.station }} Hotspot</a></span>
                                 </li>
-                                <li class="feed-item feed-item-secondary">
-                                    <time class="date" datetime="9-21">Sep 21</time>
-                                    <span class="text">Responded to need <a href="#">"In-Kind
-                                            Opportunity"</a></span>
-                                </li>
-                                <li class="feed-item feed-item-primary">
-                                    <time class="date" datetime="9-24">Sep 24</time>
-                                    <span class="text">Added an interest <a href="#">"Volunteer
-                                            Activities"</a></span>
-                                </li>
-                                <li class="feed-item feed-item-info">
-                                    <time class="date" datetime="9-23">Sep 23</time>
-                                    <span class="text">Joined the group <a href="single-group.php">"Boardsmanship
-                                            Forum"</a></span>
-                                </li>
-                                <li class="feed-item feed-item-warning">
-                                    <time class="date" datetime="9-18">Sep 18</time>
-                                    <span class="text">Created need <a href="#">"Volunteer
-                                            Opportunity"</a></span>
-                                </li>
+                                {% endfor %}
                             </ol>
                         </div>
                     </div>
@@ -160,7 +152,7 @@
         value: 100,
         maxValue: 100,
         width: 7,
-        text: '<b style="font-size: 24px">2,133,215</b>',
+        text: '{{ total_connections }}',
         colors: ['white', 'orange'],
         duration: 400,
         wrpClass: 'circles-wrp',
@@ -175,7 +167,7 @@
         value: 100,
         maxValue: 100,
         width: 7,
-        text: '<b style="font-size: 32px">945</b>',
+        text: '{{ active_connections }}',
         colors: ['white', 'green'],
         duration: 400,
         wrpClass: 'circles-wrp',
@@ -190,7 +182,7 @@
         value: 100,
         maxValue: 100,
         width: 7,
-        text: '12',
+        text: '{{ stations_connections | length }}',
         colors: ['white', 'blue'],
         duration: 400,
         wrpClass: 'circles-wrp',
