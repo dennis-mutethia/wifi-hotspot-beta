@@ -67,18 +67,9 @@ def dashboard():
 
 @app.route('/clients', methods=['GET'])
 def clients(): 
-    total_connections = db.get_total_connections()
-    active_connections = db.get_total_connections(active=True)
-    stations_connections = db.get_connection_counts_per_station()
-    total_connections_today = db.get_total_connections(today=True)
-    unique_connections_today = db.get_unique_connections(today=True)
-    connections_per_day = db.get_connections_per_day()
-    latest_connections = db.get_latest_connections()
+    clients = db.get_all_clients()
     return render_template('clients.html', page='clients',
-                           total_connections=total_connections, active_connections=active_connections, 
-                           stations_connections=stations_connections,
-                           total_connections_today=total_connections_today,unique_connections_today=unique_connections_today,
-                           connections_per_day=connections_per_day, latest_connections=latest_connections)
+                           clients=clients)
 
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']

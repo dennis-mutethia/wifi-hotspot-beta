@@ -34,7 +34,7 @@ class Db():
     def get_client(self, id=0):  
         self.ensure_connection()          
         query = """
-        SELECT id, name, background_color, foreground_color
+        SELECT id, name, phone, background_color, foreground_color
         FROM clients
         WHERE id=%s
         """
@@ -45,7 +45,7 @@ class Db():
                 cursor.execute(query, tuple(params))
                 data = cursor.fetchone()
                 if data is not None:
-                    return Client(data[0], data[1], data[2], data[3])
+                    return Client(data[0], data[1], data[2], data[3], data[4])
             
         except Exception as e:
             self.conn.rollback()
@@ -303,6 +303,29 @@ class Db():
                     subs.append(sub)
 
                 return subs 
+        except Exception as e:
+            self.conn.rollback()
+            raise e   
+            
+    def get_all_clients(self):  
+        self.ensure_connection()          
+        query = """
+        SELECT id, name, phone, background_color, foreground_color
+        FROM clients
+        """
+        params = [id]
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                data = cursor.fetchall()
+                clients = []
+                for datum in data:  
+                    client = Client(datum[0], datum[1], datum[2], datum[3], datum[4])
+                    clients.append(client)
+                    
+                return clients
+            
         except Exception as e:
             self.conn.rollback()
             raise e       

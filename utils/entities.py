@@ -1,8 +1,9 @@
 
 class Client():
-    def __init__(self, id, name, background_color, foreground_color):
+    def __init__(self, id, name, phone, background_color, foreground_color):
         self.id = id
         self.name = name
+        self.phone = phone
         self.background_color = background_color
         self.foreground_color = foreground_color
 
