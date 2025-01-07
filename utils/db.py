@@ -252,7 +252,7 @@ class Db():
             SELECT phone, station_id, TO_CHAR(created_at, 'Mon DD HH24:MI:SS') AS created_at, DATE_TRUNC('hour', created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') AS active
             FROM subscribers
             ORDER BY created_at DESC
-            LIMIT 5
+            LIMIT 7
         )
         SELECT subs.phone, stations.name, subs.created_at, subs.active
         FROM stations

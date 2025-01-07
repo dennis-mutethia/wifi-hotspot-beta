@@ -39,27 +39,39 @@
                 </div>
             </div>
             <ul class="nav nav-primary">
-                <li class="nav-item active">
+                <li class="nav-item {{ 'active' if page=='dashboard' }}">
                     <a href="{{ url_for('dashboard') }}">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>                
-                <li class="nav-item">
+                <li class="nav-item {{ 'active' if page=='clients' }}">
+                    <a href="{{ url_for('clients') }}">
+                        <i class="fas fa-coins"></i>
+                        <p>Clients</p>
+                    </a>
+                </li>                
+                <li class="nav-item {{ 'active' if page=='stations' }}">
                     <a href="#stations">
                         <i class="fas fa-desktop"></i>
                         <p>Stations</p>
                     </a>
-                </li>            
-                <li class="nav-item">
+                </li>             
+                <li class="nav-item {{ 'active' if page=='subscribers' }}">
                     <a href="#subs">
                         <i class="far fa-chart-bar"></i>
                         <p>Subscribers</p>
                     </a>
-                </li>            
-                <li class="nav-item">
+                </li>                   
+                <li class="nav-item {{ 'active' if page=='users' }}">
+                    <a href="#users">
+                        <i class="fas fa-users"></i>
+                        <p>System Users</p>
+                    </a>
+                </li>              
+                <li class="nav-item {{ 'active' if page=='settings' }}">
                     <a href="#base">
-                        <i class="fas fa-layer-group"></i>
+                        <i class="fas fa-cogs"></i>
                         <p>Settings</p>
                     </a>
                 </li>

@@ -1,12 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="page-inner">
+    <!-- 
+    <div class="page-header">
+        <h4 class="page-title">Dashboard</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li> 
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Tables</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Datatables</a>
+            </li>
+        </ul>
+    </div> 
+    -->
 
-<div class="panel-header">
-    <div class="page-inner py-4">
-    </div>
-</div>
-<div class="page-inner mt--5">
     <div class="row mt--2">
         <div class="col-md-6">
             <div class="card full-height">
@@ -207,10 +227,12 @@
             datasets: [{
                 label: 'Total Users/Connections Per Day',
                 data: connectionsPerDayData,
-                backgroundColor: getRandomColorsArray(connectionsPerDayData.length)
+                backgroundColor: 'lime',
+                fill: true,
             }]
         },
         options: {
+            responsive: true,
             legend: {
                 display: true,
             }
