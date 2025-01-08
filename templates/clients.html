@@ -7,7 +7,8 @@
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h4 class="card-title">My Clients</h4>
-                    <button class="btn btn-success btn-round ml-auto" data-toggle="modal" data-target="#addClientModal">
+                    <button class="btn btn-success btn-round ml-auto" data-toggle="modal" data-target="#addClientModal"
+                        onclick="addClient()">
                         <i class="fa fa-plus"></i>
                         Add Client
                     </button>
@@ -22,7 +23,7 @@
                                 <input id="editClientId" name="editClientId" type="hidden">
                                 <div class="modal-header no-bd">
                                     <h5 class="modal-title">
-                                        <span class="fw-mediumbold">
+                                        <span id="action_lable" class="fw-mediumbold">
                                             Add New</span>
                                         <span class="fw-light">
                                             Client
@@ -83,7 +84,7 @@
                                         <span class="fw-mediumbold">
                                             Are you sure you want to Remove </span>
                                         <span class="fw-light" id="removeClientName">
-                                            
+
                                         </span>
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -126,13 +127,15 @@
                                 <td>{{ client.foreground_color }}</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <button type="button" title="Edit this Client" data-toggle="modal" data-target="#addClientModal"
-                                            onclick="editClient({{ client.id }}, '{{ client.name }}', '{{ client.phone }}', '{{ client.background_color }}', '{{ client.phone }}', '{{ client.foreground_color }}')"
+                                        <button type="button" title="Edit this Client" data-toggle="modal"
+                                            data-target="#addClientModal"
+                                            onclick="editClient({{ client.id }}, '{{ client.name }}', '{{ client.phone }}', '{{ client.background_color }}', '{{ client.foreground_color }}')"
                                             class="btn btn-link btn-primary btn-lg"
                                             data-original-title="Edit this Client">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button type="button" title="Remove this Client" data-toggle="modal" data-target="#removeClientModal"
+                                        <button type="button" title="Remove this Client" data-toggle="modal"
+                                            data-target="#removeClientModal"
                                             onclick="removeClient({{ client.id }}, '{{ client.name }}')"
                                             class="btn btn-link btn-danger" data-original-title="Remove this Client">
                                             <i class="fa fa-times"></i>
@@ -159,7 +162,18 @@
         });
     });
 
+    function addClient() {
+        $('#action_lable').html('Add New');
+        $('#editClientId').val(null);
+        $('#clientName').val(null);
+        $('#clientPhone').val(null);
+        $('#backgroundColor').val(null);
+        $('#foregroundColor').val(null);
+        $('#addClientButton').val('add');
+    }
+
     function editClient(id, name, phone, background_color, foreground_color) {
+        $('#action_lable').html('Edit');
         $('#editClientId').val(id);
         $('#clientName').val(name);
         $('#clientPhone').val(phone);
