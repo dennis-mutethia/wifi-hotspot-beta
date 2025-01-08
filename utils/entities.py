@@ -7,7 +7,7 @@ class Client():
         self.background_color = background_color
         self.foreground_color = foreground_color
 
-class Station():
+class Hotspot():
     def __init__(self, id, name, hotspot_username, hotspot_password, client):
         self.id = id
         self.name = name
@@ -24,3 +24,12 @@ class Video():
 class Image():
     def __init__(self, image_id):
         self.image_id = image_id
+
+class HotspotUser():
+    def __init__(self, id, phone, session_hour, created_at, client, hotspot):
+        self.id = id
+        self.phone = phone
+        self.session_hour = session_hour
+        self.created_at = created_at
+        self.client = client
+        self.hotspot = hotspot

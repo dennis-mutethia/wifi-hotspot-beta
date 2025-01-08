@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ station.client.name }} FREE Wi-Fi</title>
+    <title>{{ hotspot.client.name }} FREE Wi-Fi</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css') }}" />
@@ -24,17 +24,17 @@
 <body>
     <!--Mikrotik Login Form Start -->
     <form name="sendin" action="{{ link_login_only }}" method="post">
-        <input type="hidden" name="username" value="{{ station.hotspot_username }}" />
-        <input type="hidden" name="password" value="{{ station.hotspot_password }}" />
+        <input type="hidden" name="username" value="{{ hotspot.hotspot_username }}" />
+        <input type="hidden" name="password" value="{{ hotspot.hotspot_password }}" />
         <input type="hidden" name="dst" value="{{ link_orig }}" />
         <input type="hidden" name="popup" value="true" />
     </form>
     <!--Mikrotik Login Form End -->
 
-    <div class="row text-center header" style="background-color: {{ station.client.background_color }};">
+    <div class="row text-center header" style="background-color: {{ hotspot.client.background_color }};">
         <h4 class="header"
-            style="background-color: {{ station.client.background_color }}; color: {{ station.client.foreground_color }};">
-            {{ station.client.name }} FREE Wi-Fi</h4>
+            style="background-color: {{ hotspot.client.background_color }}; color: {{ hotspot.client.foreground_color }};">
+            {{ hotspot.client.name }} FREE Wi-Fi</h4>
     </div>
 
     <div class="demo">
@@ -50,7 +50,7 @@
 
                     <h6 class="text-primary text-center">Enter Your Valid Phone Number Below and Enjoy Super Fast Free
                         WIFI <br />
-                        Powered by {{ station.client.name }}</h6>
+                        Powered by {{ hotspot.client.name }}</h6>
 
                     <input type="number" class="form-control" id="adphone" name="adphone" class="text-bold warning"
                         placeholder="Phone No. e.g 07123456789" />
@@ -108,7 +108,7 @@
                     <ul class="list-unstyled text-center">
                         <li>Call us on<a href="tel:0759697757">&nbsp;0759 69 77 57</a></li>
                         <br />
-                        <li class="text-muted"><a href="{{ url_for('terms') }}?station_id={{ station.id }}">Terms and
+                        <li class="text-muted"><a href="{{ url_for('terms') }}?hotspot_id={{ hotspot.id }}">Terms and
                                 Conditions</a> apply</li>
                     </ul>
 
@@ -177,7 +177,7 @@
                 let url = "{{ url_for('addSubscriber') }}";
                 $.post(url, {
                     phone: '254' + phone.slice(-9),
-                    station_id: '{{ station.id }}'
+                    hotspot_id: '{{ hotspot.id }}'
                 },
                     function (data, status) {
                         console.log(data);

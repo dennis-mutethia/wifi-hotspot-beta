@@ -44,7 +44,7 @@
                         </div>
                         <div class="px-2 pb-2 pb-md-0 text-center">
                             <div id="circles-3"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Stations</h6>
+                            <h6 class="fw-bold mt-3 mb-0">Hotspots</h6>
                         </div>
                     </div>
                 </div>
@@ -53,11 +53,11 @@
         <div class="col-md-3">
             <div class="card full-height">
                 <div class="card-body">
-                    <div class="card-title">Connections Per Station</div>
+                    <div class="card-title">Connections Per Hotspot</div>
                     <div class="row py-4">
                         <div class="col-md-12">
                             <div id="chart-container">
-                                <canvas id="connectionsPerStationChart"></canvas>
+                                <canvas id="connectionsPerhotspotChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -87,21 +87,21 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Users/Connections Statistics</div>
+                        <div class="card-title">Hotspot Users Statistics Per Day</div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="chart-container" style="min-height: 375px">
-                        <canvas id="connectionsPerDayChart"></canvas>
+                        <canvas id="hotspotUsersPerDayChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card full-height">
                 <div class="card-header">
                     <div class="card-title">Latest Connections</div>
@@ -111,11 +111,25 @@
                         {% for con in latest_connections %}
                         <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
                             <time class="date" datetime="9-25">{{ con.datetime }}</time>
-                            <span class="text">{{ con.phone }} connected to <a href="#">{{ con.station }}
-                                    Hotspot</a></span>
+                            <span class="text">{{ con.phone }} [<small class="text-primary">{{ con.hotspot }}
+                                    Hotspot]</small></span>
                         </li>
                         {% endfor %}
                     </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">Today Hotspot Users Hourly Statistics</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 375px">
+                        <canvas id="hotspotUsersPerHourChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,7 +174,7 @@
         value: 100,
         maxValue: 100,
         width: 7,
-        text: '{{ stations_connections | length }}',
+        text: '{{ all_hotspots | length }}',
         colors: ['white', 'blue'],
         duration: 400,
         wrpClass: 'circles-wrp',
@@ -187,22 +201,22 @@
         return colors;
     }
 
-    // Get stations data from Jinja variable
-    const stationsConnections = {{ stations_connections | tojson }};
+    // Get hotspots data from Jinja variable
+    const hotspotsConnections = {{ hotspots_connections | tojson }};
 
-    // Extract labels and data from stations array
-    const stationsLabels = stationsConnections.map(station => station.name);
-    const stationsData = stationsConnections.map(station => station.count);
+    // Extract labels and data from hotspots array
+    const hotspotsLabels = hotspotsConnections.map(hotspot => hotspot.name);
+    const hotspotsData = hotspotsConnections.map(hotspot => hotspot.count);
 
-    const connectionsPerStationChart = document.getElementById('connectionsPerStationChart');
-    new Chart(connectionsPerStationChart, {
+    const connectionsPerhotspotChart = document.getElementById('connectionsPerhotspotChart');
+    new Chart(connectionsPerhotspotChart, {
         type: 'polarArea',
         data: {
-            labels: stationsLabels,
+            labels: hotspotsLabels,
             datasets: [{
-                label: 'Connections/Users Per Station',
-                data: stationsData,
-                backgroundColor: getRandomColorsArray(stationsData.length)
+                label: 'Connections/Users Per hotspot',
+                data: hotspotsData,
+                backgroundColor: getRandomColorsArray(hotspotsData.length)
             }]
         },
         options: {
@@ -212,20 +226,20 @@
         }
     });
 
-    // Get stations data from Jinja variable
+    // Get hotspots data from Jinja variable
     const connectionsPerDay = {{ connections_per_day | tojson }};
 
-    // Extract labels and data from stations array
-    const connectionsPerDayLabels = connectionsPerDay.map(station => station.date);
-    const connectionsPerDayData = connectionsPerDay.map(station => station.count);
+    // Extract labels and data from hotspots array
+    const connectionsPerDayLabels = connectionsPerDay.map(hotspot => hotspot.date);
+    const connectionsPerDayData = connectionsPerDay.map(hotspot => hotspot.count);
 
-    const connectionsPerDayChart = document.getElementById('connectionsPerDayChart');
-    new Chart(connectionsPerDayChart, {
+    const hotspotUsersPerDayChart = document.getElementById('hotspotUsersPerDayChart');
+    new Chart(hotspotUsersPerDayChart, {
         type: 'line',
         data: {
             labels: connectionsPerDayLabels,
             datasets: [{
-                label: 'Total Users/Connections Per Day',
+                label: 'Hotspot Users',
                 data: connectionsPerDayData,
                 backgroundColor: 'lime',
                 fill: true,

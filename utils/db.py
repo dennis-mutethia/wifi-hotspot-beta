@@ -1,7 +1,7 @@
 import os, psycopg2
 from dotenv import load_dotenv
 
-from utils.entities import Client, Image, Station, Video
+from utils.entities import Client, Image, Hotspot, Video
     
 class Db():
     def __init__(self):
@@ -51,11 +51,38 @@ class Db():
             self.conn.rollback()
             raise e   
             
-    def get_station(self, id=0):  
+    def get_all_hotspots(self, client_id=0):  
         self.ensure_connection()          
         query = """
         SELECT id, name, hotspot_username, hotspot_password, client_id
-        FROM stations
+        FROM hotspots        
+        """
+        params = []
+        if client_id>0:
+            query = f"{query} WHERE client_id=%s"            
+            params.append(client_id)
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                data = cursor.fetchall()
+                hotspots = []
+                for datum in data:  
+                    client = self.get_client(id=datum[4])
+                    hotspot = Hotspot(datum[0], datum[1], datum[2], datum[3], client)
+                    hotspots.append(hotspot)
+                    
+                return hotspots
+            
+        except Exception as e:
+            self.conn.rollback()
+            raise e       
+               
+    def get_hotspot(self, id=0):  
+        self.ensure_connection()          
+        query = """
+        SELECT id, name, hotspot_username, hotspot_password, client_id
+        FROM hotspots
         WHERE id=%s
         """
         params = [id]
@@ -67,20 +94,20 @@ class Db():
                 if data is not None:
                     client = self.get_client(id=data[4])
                         
-                    return Station(data[0], data[1], data[2], data[3], client)
+                    return Hotspot(data[0], data[1], data[2], data[3], client)
             
         except Exception as e:
             self.conn.rollback()
             raise e   
             
-    def get_videos(self, station):  
+    def get_videos(self, hotspot):  
         self.ensure_connection()        
         query = """
         SELECT video_id, video_title, published_at
         FROM youtube_videos
-        WHERE station_id=%s
+        WHERE hotspot_id=%s
         """
-        params = [station.id]
+        params = [hotspot.id]
                 
         try:
             with self.conn.cursor() as cursor:
@@ -89,7 +116,7 @@ class Db():
                 
                 if len(data) == 0:
                     query = f'{query} OR client_id=%s'
-                    params.append(station.client.id)
+                    params.append(hotspot.client.id)
                     cursor.execute(query, tuple(params))
                     data = cursor.fetchall()
                     
@@ -102,18 +129,18 @@ class Db():
             self.conn.rollback()
             raise e   
   
-    def add_video(self, video_id, video_title, published_at, client_id, station_id):
+    def add_video(self, video_id, video_title, published_at, client_id, hotspot_id):
         self.ensure_connection()            
         query = """
-        INSERT INTO youtube_videos(video_id, video_title, published_at, client_id, station_id) 
+        INSERT INTO youtube_videos(video_id, video_title, published_at, client_id, hotspot_id) 
         VALUES(%s, %s, %s, %s, %s)
-        ON CONFLICT (video_id, station_id)
+        ON CONFLICT (video_id, hotspot_id)
         DO UPDATE SET 
             video_title = EXCLUDED.video_title
         RETURNING id
         """
 
-        params = (video_id, video_title, published_at, client_id, station_id)
+        params = (video_id, video_title, published_at, client_id, hotspot_id)
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
@@ -124,14 +151,14 @@ class Db():
             self.conn.rollback()
             raise e      
             
-    def get_images(self, station):  
+    def get_images(self, hotspot):  
         self.ensure_connection()        
         query = """
         SELECT image_id
         FROM postimg_images
-        WHERE station_id=%s
+        WHERE hotspot_id=%s
         """
-        params = [station.id]
+        params = [hotspot.id]
                 
         try:
             with self.conn.cursor() as cursor:
@@ -140,7 +167,7 @@ class Db():
                 
                 if len(data) == 0:
                     query = f'{query} OR client_id=%s'
-                    params.append(station.client.id)
+                    params.append(hotspot.client.id)
                     cursor.execute(query, tuple(params))
                     data = cursor.fetchall()
                     
@@ -153,36 +180,39 @@ class Db():
             self.conn.rollback()
             raise e   
   
-    def add_subscriber(self, phone, station_id):
+    def add_hotspot_user(self, phone, hotspot_id, client_id):
         self.ensure_connection()            
         query = """
-        INSERT INTO subscribers(phone, station_id, created_at) 
-        VALUES(%s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
+        INSERT INTO hotspot_users(phone, hotspot_id, client_id, session_hour, created_at) 
+        VALUES(%s, %s, %s, DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi'), CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
+        ON CONFLICT (phone, session_hour, hotspot_id)
+        DO NOTHING 
         RETURNING id
         """
 
-        params = (phone, station_id)
+        params = (phone, hotspot_id, client_id)
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
                 self.conn.commit()
-                row_id = cursor.fetchone()[0]
+                added = cursor.fetchone()
+                row_id = added[0] if added is not None else 0
                 return row_id
         except Exception as e:
             self.conn.rollback()
             raise e    
             
-    def get_connection_counts_per_station(self):  
+    def get_connection_counts_per_hotspot(self):  
         self.ensure_connection()        
         query = """
         WITH subs AS(
-            SELECT station_id, COUNT(*) AS count 
-            FROM subscribers
-            GROUP BY station_id
+            SELECT hotspot_id, COUNT(*) AS count 
+            FROM hotspot_users
+            GROUP BY hotspot_id
         )
-        SELECT stations.name, subs.count
-        FROM stations
-        INNER JOIN subs ON subs.station_id = stations.id
+        SELECT hotspots.name, subs.count
+        FROM hotspots
+        INNER JOIN subs ON subs.hotspot_id = hotspots.id
         """
                 
         try:
@@ -207,14 +237,14 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT COUNT(phone) AS count 
-        FROM subscribers
+        FROM hotspot_users
         WHERE 1=1
         """
         
         if today:
             query = f"{query} AND DATE(created_at) = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
         if active:
-            query = f"{query} AND DATE_TRUNC('hour', created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
+            query = f"{query} AND session_hour = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')"
                 
         try:
             with self.conn.cursor() as cursor:
@@ -229,7 +259,7 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT COUNT(DISTINCT phone) AS count 
-        FROM subscribers
+        FROM hotspot_users
         WHERE 1=1
         """
         
@@ -249,14 +279,14 @@ class Db():
         self.ensure_connection()        
         query = """
         WITH subs AS(
-            SELECT phone, station_id, TO_CHAR(created_at, 'Mon DD HH24:MI:SS') AS created_at, DATE_TRUNC('hour', created_at) = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') AS active
-            FROM subscribers
+            SELECT phone, hotspot_id, TO_CHAR(created_at, 'Mon DD HH24:MI:SS') AS created_at, session_hour = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') AS active
+            FROM hotspot_users
             ORDER BY created_at DESC
-            LIMIT 7
+            LIMIT 5
         )
-        SELECT subs.phone, stations.name, subs.created_at, subs.active
-        FROM stations
-        INNER JOIN subs ON subs.station_id = stations.id
+        SELECT subs.phone, hotspots.name, subs.created_at, subs.active
+        FROM hotspots
+        INNER JOIN subs ON subs.hotspot_id = hotspots.id
         """
                 
         try:
@@ -268,7 +298,7 @@ class Db():
                 for datum in data:  
                     sub = {
                         'phone' : datum[0],
-                        'station' : datum[1],
+                        'hotspot' : datum[1],
                         'datetime' : datum[2],
                         'active' : datum[3]
                     }                  
@@ -283,7 +313,7 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT TO_CHAR(created_at, 'Mon DD') AS date, COUNT(*) AS count 
-        FROM subscribers
+        FROM hotspot_users
         WHERE created_at >= NOW() - INTERVAL '30 days'
         GROUP BY TO_CHAR(created_at, 'Mon DD')
         ORDER BY TO_CHAR(created_at, 'Mon DD')

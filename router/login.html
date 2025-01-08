@@ -18,13 +18,13 @@
 
         <!--js-->
         <script type="text/javascript">
-            let stationId = 1;
+            let hotspotId = 1;
 
             setTimeout(function () {
                 $(if session-time-left)
                     location.href = './status.html';
                 $(else)
-                    location.href = 'https://hotspot-seven.vercel.app/login-subscriber?station_id='+stationId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
+                    location.href = 'https://hotspot-seven.vercel.app/login-subscriber?hotspot_id='+hotspotId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
                 $(endif)
             }, 2000)
 
