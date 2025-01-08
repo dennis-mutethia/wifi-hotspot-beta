@@ -67,8 +67,26 @@ def dashboard():
                            total_connections_today=total_connections_today,unique_connections_today=unique_connections_today,
                            connections_per_day=connections_per_day, latest_connections=latest_connections)
 
-@app.route('/clients', methods=['GET'])
+@app.route('/clients', methods=['GET', 'POST'])
 def clients(): 
+    if request.method == 'POST':   
+        action = request.form['action'] 
+        if action in ['add', 'edit']:
+            client_name = request.form['clientName', None]
+            client_phone = request.form['clientPhone', None]
+            background_color = request.form['backgroundColor', None]
+            foreground_color = request.form['foregroundColor', None]      
+            if action == 'add':
+                updated_client_id = db.update_client(None, client_name, client_phone, background_color, foreground_color)
+                
+            elif action == 'edit':
+                edit_client_id = int(request.form['editClientId'])
+                updated_client_id = db.update_client(edit_client_id, client_name, client_phone, background_color, foreground_color)
+        
+        elif action =='remove':
+            remove_client_id = int(request.form['removeClientId'])
+            db.remove_client(remove_client_id)
+             
     clients = db.get_all_clients()
     return render_template('clients.html', page='clients',
                            clients=clients)

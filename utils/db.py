@@ -30,7 +30,47 @@ class Db():
         except Exception:
             # Reconnect if the connection is invalid
             self.conn = psycopg2.connect(**self.conn_params)  
+    
+    
+            raise e   
+  
+    def update_client(self, id, name, phone, background_color, foreground_color):
+        self.ensure_connection()            
+        
+        if id is None:
+            query = """
+            INSERT INTO clients(name, phone, background_color, foreground_color, created_at) 
+            VALUES(%s, %s, %s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
+            """
+            params = (name, phone, background_color, foreground_color)
+        else:
+            query = """
+            INSERT INTO clients(id, name, phone, background_color, foreground_color, created_at) 
+            VALUES(%s, %s, %s, %s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
+            """
+            params = (id, name, phone, background_color, foreground_color)
             
+        query = f"""{query}
+            ON CONFLICT (id)
+            DO UPDATE SET 
+                name = EXCLUDED.name, 
+                phone = EXCLUDED.phone, 
+                background_color = EXCLUDED.background_color, 
+                foreground_color = EXCLUDED.foreground_color
+            RETURNING id
+            """
+        
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                self.conn.commit()
+                row_id = cursor.fetchone()[0]
+                return row_id
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+    
+             
     def get_client(self, id=0):  
         self.ensure_connection()          
         query = """
@@ -45,11 +85,28 @@ class Db():
                 cursor.execute(query, tuple(params))
                 data = cursor.fetchone()
                 if data is not None:
-                    return Client(data[0], data[1], data[2], data[3], data[4])
+                    return Client(data[0], data[1], data[2], data[3], data[4], None)
             
         except Exception as e:
             self.conn.rollback()
             raise e   
+  
+    def remove_client(self, id):
+        self.ensure_connection()            
+        
+        query = """
+        DELETE FROM clients
+        WHERE id = %s
+        """
+        params = [id]
+        
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
             
     def get_all_hotspots(self, client_id=0):  
         self.ensure_connection()          
@@ -340,8 +397,14 @@ class Db():
     def get_all_clients(self):  
         self.ensure_connection()          
         query = """
-        SELECT id, name, phone, background_color, foreground_color
+        WITH hotspots AS(
+            SELECT client_id, COUNT(id) AS count
+            FROM hotspots 
+            GROUP BY client_id
+        )
+        SELECT id, name, phone, background_color, foreground_color, hotspots.count AS hotspots
         FROM clients
+        LEFT JOIN hotspots ON hotspots.client_id = clients.id
         """
         params = [id]
                 
@@ -351,7 +414,7 @@ class Db():
                 data = cursor.fetchall()
                 clients = []
                 for datum in data:  
-                    client = Client(datum[0], datum[1], datum[2], datum[3], datum[4])
+                    client = Client(datum[0], datum[1], datum[2], datum[3], datum[4], datum[5])
                     clients.append(client)
                     
                 return clients
