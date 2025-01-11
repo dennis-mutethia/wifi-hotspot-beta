@@ -22,15 +22,6 @@
 </head>
 
 <body>
-    <!--Mikrotik Login Form Start -->
-    <form name="sendin" action="{{ link_login_only }}" method="post">
-        <input type="hidden" name="username" value="{{ hotspot.hotspot_username }}" />
-        <input type="hidden" name="password" value="{{ hotspot.hotspot_password }}" />
-        <input type="hidden" name="dst" value="{{ link_orig }}" />
-        <input type="hidden" name="popup" value="true" />
-    </form>
-    <!--Mikrotik Login Form End -->
-
     <div class="row text-center header" style="background-color: {{ hotspot.client.background_color }};">
         <h4 class="header"
             style="background-color: {{ hotspot.client.background_color }}; color: {{ hotspot.client.foreground_color }};">
@@ -160,10 +151,17 @@
 
         function connect() {
             let phone = $('#adphone').val().trim();
-            if (phone.length === 10) {
-                setTimeout(function () {
-                    document.sendin.submit();
-                }, 2000);
+            if (phone.length === 10) {                
+                let url = "{{ link_login_only }}";
+                $.post(url, {
+                    username: '{{ hotspot.hotspot_username }}',
+                    password: '{{ hotspot.hotspot_password }}',
+                },
+                    function (data, status) {
+                        console.log(status)
+                        console.log(data);
+                    });
+                location.href = '{{ link_login_only }}';
             }
             else $('#notice').html('Enter Valid Phone Number');
 
@@ -176,6 +174,7 @@
                 $('#notice').html('');
                 let url = "{{ url_for('addSubscriber') }}";
                 $.post(url, {
+                    link_login_only: '{{ link_login_only }}',
                     phone: '254' + phone.slice(-9),
                     hotspot_id: '{{ hotspot.id }}'
                 },

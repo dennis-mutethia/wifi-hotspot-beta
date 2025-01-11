@@ -8,7 +8,7 @@
     </head>
     <body>
         <!--Mikrotik Login Form Start -->
-        <form name="sendin" action="$(link-login-only)" method="post">
+        <form name="sendin" action="$(link-login-only)" method="POST">
              <input type="hidden" name="username" />
              <input type="hidden" name="password" />
              <input type="hidden" name="dst" value="$(link-orig)" />
@@ -19,13 +19,12 @@
         <!--js-->
         <script type="text/javascript">
             let hotspotId = 1;
-            let link_login_only = 'http://192.168.88.1/login'
 
             setTimeout(function () {
                 $(if session-time-left)
                     location.href = './status.html';
                 $(else)
-                    location.href = 'https://hotspot-seven.vercel.app/login-subscriber?hotspot_id='+hotspotId+'&link_login_only='+link_login_only+'&link_orig=$(link-orig)';
+                    location.href = 'https://hotspot-seven.vercel.app/login-subscriber?hotspot_id='+hotspotId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
                 $(endif)
             }, 2000)
 

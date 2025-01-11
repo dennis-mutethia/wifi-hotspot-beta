@@ -1,172 +1,71 @@
-<!DOCTYPE html>
 <html>
-
 <head>
-    <title>FREE Wi-Fi</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    $(if refresh-timeout)
-    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
-    $(endif)
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
-    <link rel="stylesheet" href="css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/bg.css">
-    <link rel="stylesheet" href="css/vanzj.css">
-    <script language="JavaScript">
-        $(if advert - pending == 'yes')
-            var popup = '';
-        function focusAdvert() {
-            if (window.focus) popup.focus();
-        }
-        function openAdvert() {
-            popup = open('$(link-advert)', 'hotspot_advert', '');
-            setTimeout("focusAdvert()", 1000);
-        }
-        $(endif)
-        function openLogout() {
-            if (window.name != 'hotspot_status') return true;
-            open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
-            window.close();
-            return false;
-        }
+$(if refresh-timeout)
+<meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+$(endif)
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<title>Internet hotspot - Status</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
 
-    </script>
+$(if advert-pending == 'yes')
+    var popup = '';
+    function focusAdvert() {
+	if (window.focus) popup.focus();
+    }
+    function openAdvert() {
+	popup = open('$(link-advert)', 'hotspot_advert', '');
+	setTimeout("focusAdvert()", 1000);
+    }
+$(endif)
+    function openLogout() {
+	if (window.name != 'hotspot_status') return true;
+        open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+	window.close();
+	return false;
+    }
+</script>
+    
 </head>
+<body $(if advert-pending == 'yes') onLoad="openAdvert()" $(endif)>
+    <div class="ie-fixMinHeight">
+        <div class="main">
+            <div class="wrap">
+                $(if login-by == 'trial')
+                    <h1>Hi, trial user!</h1>
+                $(elif login-by != 'mac')
+                    <h1>Hi, $(username)!</h1>
+                $(endif)                
 
-<body $(if advert-pending=='yes' ) onLoad="openAdvert()" $(endif)>
-
-    <div class="main">
-        $(if login-by == 'trial')
-        <i style="visibility: hidden;">Trial User</i><br>
-        $(elif login-by != 'mac')
-        <i id="user" style="visibility: hidden;">$(username)</i><br>
-        $(endif)
-        <!--img class="logoVanz" src="img/logo.png" alt="Vanz J Tutorials"/-->
-
-        <div class="container">
-            <!--p class="statusFont2"><b class="blinking2">Connected</b></p-->
-            <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
-
-
-                <table class="table2">
-                    <br>
-                    $(if login-by == 'trial')
-                    <tr>
-                        <td align="right" style="width: 42%;">User <i class="icon icon-user-circle-o">&#xe80f;</i> </td>
-                        <td>Trial User</td>
-                    </tr>
-                    $(elif login-by != 'mac')
-                    <tr>
-                        <td align="right" style="width: 42%;">User <i class="icon icon-user-circle-o">&#xe80f;</i> </td>
-                        <td>$(username)</td>
-                    </tr>
-                    $(endif)
-                    <tr>
-                        <td align="right" style="width: 42%;">IP Address <i class="icon icon-sitemap">&#xf0e8;</i> </td>
-                        <td>$(ip)</td>
-                    </tr>
-                    <tr>
-                        <td align="right">MAC Address <i class="icon icon-barcode">&#xe814;</i> </td>
-                        <td>$(mac)</td>
-                    </tr>
-                    <tr>
-                        <td align="right">Upload <i class="icon icon-upload">&#xf02f;</i> </td>
-                        <td>$(bytes-in-nice)</td>
-                    </tr>
-                    <tr>
-                        <td align="right">Download <i class="icon icon-download">&#xf02e;</i> </td>
-                        <td>$(bytes-out-nice)</td>
-                    </tr>
-                    <tr>
-                        <td align="right">Connected <i class="icon icon-exchange">&#xf0ec;</i> </td>
-                        <td>$(uptime)</td>
-                    </tr>
-                    $(if remain-bytes-total)
-                    <tr>
-                        <td align="right">Bytes Left <i class="icon icon-hourglass-2">&#xf252;</i> </td>
-                        <td>$(remain-bytes-total-nice)</td>
-                    </tr>
-                    $(endif)
+                <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+                    <table>
+                        <tr><td>IP address</td><td>$(ip)</td></tr>
+                        <tr><td>Bytes up / down</td><td>$(bytes-in-nice) / $(bytes-out-nice)</td></tr>
                     $(if session-time-left)
-                    <tr>
-                        <td align="right">Time Left <i class="icon icon-clock">&#xe807;</i> </td>
-                        <td id="timeleft"></td>
-                    </tr>
-
+                        <tr><td>Connected / left</td><td>$(uptime) / $(session-time-left)</td></tr>
+                    $(else)
+                        <tr><td>Connected</td><td>$(uptime)</td></tr>
                     $(endif)
                     $(if blocked == 'yes')
-                    <tr>
-                        <td align="right">Status <i class="icon icon-check">&#xe807;</i> </td>
-                        <td>
-                            <div style="color: #FF8080">
-                                <a href="$(link-advert)" target="hotspot_advert">advertisement</a> required
-                            </div>
-                        </td>
-                    </tr>
+                        <tr><td>Status</td><td>
+                    <a href="$(link-advert)" target="hotspot_advert">Advertisement required</a></td>
+                        </tr>
                     $(elif refresh-timeout)
-                    <!--tr><td align="right" onload="alertUser()">Refresh <i class="icon icon-arrows-cw">&#xe800;</i> </td><td>$(refresh-timeout)</td></tr-->
+                        <tr><td>Status refresh</td><td>$(refresh-timeout)</td></tr>
                     $(endif)
-                    <tr>
-                        <td align="right">Expired <i class="icon icon-calendar">&#xe838;</i> </td>
-                        <td style="padding-top:0px; padding-left:2px;"><iframe id="exp" frameborder="0" scrolling="no"
-                                src="about:blank"></iframe></td>
-                    </tr>
-
-                </table>
-
-
-                <!--  
-$(if login-by-mac != 'yes')
-<br>   
-<button class="button" type="submit"><i class="icon icon-logout">&#xe80c;</i> Pause Time</button>
-
-$(endif)
--->
-            </form>
+                        </table>
+                    $(if login-by-mac != 'yes')
+                    <!-- user manager link. if user manager resides on other router, replace $(hostname) by its address
+                    <button onclick="document.location='http://$(hostname)/user?subs='; return false;">status</button>
+                    <!-- end of user manager link -->
+                    <input type="submit" value="Log out">
+                    $(endif)
+                </form>
+            </div>
         </div>
-
-        <br>
-
-
-        <a href="https://wa.me/+254759697757" style="color: lightgreen;" target="_blank"><b><img src="img/whatsapp2.png"
-                    width="16" height="16"> Chat us on WhatsApp</b></a>
-
-
-        <script type="text/javascript">
-            document.getElementById('title').innerHTML = 'WIFI ' + " > status";
-            //get vaidity
-            var usr = document.getElementById('user').innerHTML
-            //var url = "http://192.168.2.250/status/status.php?name=";
-            var url = "http://192.168.2.254/status/status.php?name=";
-            var SessionName = "Haplite"
-            var getvalid = url + usr + "&session=" + SessionName
-            document.getElementById('exp').src = getvalid;  
-        </script>
-
-        <script>
-            var seconds = '$(session-time-left-secs)';
-            var countDownDate = new Date(Date.now() + seconds * 1000).getTime();
-            var x = setInterval(function () {
-                var now = new Date().getTime();
-                var distance = countDownDate - now;
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("timeleft").innerHTML = days + "d " + hours + "h "
-                    + minutes + "m " + seconds + "s ";
-
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("timeleft").innerHTML = "EXPIRED";
-                }
-            }, 1000);
-        </script>
-
+    </div>
 </body>
-
 </html>

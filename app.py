@@ -1,7 +1,6 @@
-import os
+import os, random
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, url_for, request, jsonify
-import random
+from flask import Flask, redirect, render_template, url_for, request, jsonify 
 
 from utils.db import Db
 
@@ -22,21 +21,21 @@ def index():
 def loginSubscriber():      
     hotspot_id = request.args.get('hotspot_id', 0)
     link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
-    link_orig = request.args.get('link_orig', 'https://192.168.88.1')
     
     hotspot = db.get_hotspot(id=hotspot_id)
     latest_videos = db.get_videos(hotspot)
     #images uploaded at https://postimages.org/
     images = db.get_images(hotspot)
-    return render_template('login-subscriber.html', hotspot=hotspot, link_login_only=link_login_only, link_orig=link_orig,
+    return render_template('login-subscriber.html', hotspot=hotspot, link_login_only=link_login_only,
                            video=random.sample(latest_videos, 1)[0], images=random.sample(images, 5))
 
 @app.route('/add-subscriber', methods=['POST'])
-def addSubscriber():    
+def addSubscriber():     
     phone = request.form['phone']
     hotspot_id = request.form['hotspot_id']
     hotspot = db.get_hotspot(id=hotspot_id)
-    subscriber_id = db.add_hotspot_user(phone, hotspot_id, hotspot.client.id)
+    subscriber_id = db.add_hotspot_user(phone, hotspot_id, hotspot.client.id)  
+
     return jsonify(
             {
                 "subscriber_id": subscriber_id,
