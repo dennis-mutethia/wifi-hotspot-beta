@@ -5,8 +5,7 @@
         "vscode": {
             "extensions": [
                 "ms-azuretools.vscode-docker",
-                "github.vscode-github-actions",
-                "ms-python.pylint"
+                "github.vscode-github-actions"
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux#": "/bin/bash"
