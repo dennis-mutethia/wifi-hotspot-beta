@@ -6,27 +6,27 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
-                    <h4 class="card-title">Clients</h4>
-                    <button class="btn btn-success btn-round ml-auto" data-toggle="modal" data-target="#addClientModal"
-                        onclick="addClient()">
+                    <h4 class="card-title">Hotspots</h4>
+                    <button class="btn btn-success btn-round ml-auto" data-toggle="modal" data-target="#addModal"
+                        onclick="add()">
                         <i class="fa fa-plus"></i>
-                        Add Client
+                        Add Hotspot
                     </button>
                 </div>
             </div>
             <div class="card-body">
                 <!-- Modal -->
-                <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <form method="POST">
-                                <input id="editClientId" name="editClientId" type="hidden">
+                                <input id="editHotspotId" name="editHotspotId" type="hidden">
                                 <div class="modal-header no-bd">
                                     <h5 class="modal-title">
                                         <span id="action_label" class="fw-mediumbold">
                                             Add New</span>
                                         <span class="fw-light">
-                                            Client
+                                            Hotspot
                                         </span>
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -38,52 +38,56 @@
                                         <div class="col-sm-12">
                                             <div class="form-group form-group-default">
                                                 <label>Name</label>
-                                                <input id="clientName" name="clientName" type="text"
-                                                    class="form-control" placeholder="Client Name" required>
+                                                <input id="hotspotName" name="hotspotName" type="text"
+                                                    class="form-control" placeholder="Hotspot Name" required>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="form-group form-group-default">
-                                                <label>Phone</label>
-                                                <input id="clientPhone" name="clientPhone" type="number"
-                                                    class="form-control" placeholder="Client Phone" required>
+                                                <label>Username</label>
+                                                <input id="hotspotUsername" name="hotspotUsername" type="text"
+                                                    class="form-control" placeholder="Hotspot User" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6 pr-0">
                                             <div class="form-group form-group-default">
-                                                <label>Background Color</label>
-                                                <input id="backgroundColor" name="backgroundColor" type="text"
-                                                    class="form-control" placeholder="Background Color">
+                                                <label>Password</label>
+                                                <input id="hotspotPassword" name="hotspotPassword" type="text"
+                                                    class="form-control" placeholder="Hotspot User Password" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
-                                                <label>Foreground Color</label>
-                                                <input id="foregroundColor" name="foregroundColor" type="text"
-                                                    class="form-control" placeholder="Foreground Color">
+                                                <label>Client Name</label>
+                                                <select id="clientId" name="clientId" class="form-control" aria-label="Select Client">
+                                                    {% for client in clients %}
+                                                    <option value="{{ client.id }}">{{ client.name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer no-bd">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    <button type="submit" id="addClientButton" name="action" value="add"
+                                    <button type="submit" id="addButton" name="action" value="add"
                                         class="btn btn-success">Save</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="removeClientModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+                <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <form method="POST">
-                                <input id="removeClientId" name="removeClientId" type="hidden">
+                                <input id="removeHotspotId" name="removeHotspotId" type="hidden">
                                 <div class="modal-header no-bd">
                                     <h5 class="modal-title">
                                         <span class="fw-mediumbold">
                                             Are you sure you want to Remove </span>
-                                        <span class="fw-light" id="removeClientName">
+                                        <span class="fw-light" id="removeHotspotName">
 
                                         </span>
                                     </h5>
@@ -92,12 +96,12 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Click Confirm Remove to Completely Remove this Client.</p>
+                                    <p>Click Confirm Remove to Completely Remove this Hotspot.</p>
                                     <small class="text-danger">THIS ACTION IS NOT REVERSIBLE</small>
                                 </div>
                                 <div class="modal-footer no-bd">
                                     <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                                    <button type="submit" id="removeClientButton" name="action" value="remove"
+                                    <button type="submit" id="removeButton" name="action" value="remove"
                                         class="btn btn-danger">Confirm Remove</button>
                                 </div>
                             </form>
@@ -109,35 +113,37 @@
                     <table id="add-row" class="display table table-striped table-hover">
                         <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Name</th>
-                                <th>Phone</th>
-                                <th>Hotspots</th>
-                                <th>Background Color</th>
-                                <th>Foreground Color</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Client</th>
+                                <th>Subscribers</th>
                                 <th class="text-center" style="width: 10%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for client in clients %}
+                            {% for hotspot in hotspots %}
                             <tr>
-                                <td>{{ client.name }}</td>
-                                <td>{{ client.phone }}</td>
-                                <td>{{ client.hotspots }}</td>
-                                <td>{{ client.background_color }}</td>
-                                <td>{{ client.foreground_color }}</td>
+                                <td>{{ hotspot.id }}</td>
+                                <td>{{ hotspot.name }}</td>
+                                <td>{{ hotspot.hotspot_username }}</td>
+                                <td>{{ hotspot.hotspot_password }}</td>
+                                <td>{{ hotspot.client_name }}</td>
+                                <td>{{ hotspot.subscribers }}</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <button type="button" title="Edit this Client" data-toggle="modal"
-                                            data-target="#addClientModal"
-                                            onclick="editClient({{ client.id }}, '{{ client.name }}', '{{ client.phone }}', '{{ client.background_color }}', '{{ client.foreground_color }}')"
+                                        <button type="button" title="Edit this Hotspot" data-toggle="modal"
+                                            data-target="#addModal"
+                                            onclick="edit({{ hotspot.id }}, '{{ hotspot.name }}', '{{ hotspot.hotspot_username }}', '{{ hotspot.hotspot_password }}', '{{ hotspot.client_id }}')"
                                             class="btn btn-link btn-primary btn-lg"
-                                            data-original-title="Edit this Client">
+                                            data-original-title="Edit this Hotspot">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button type="button" title="Remove this Client" data-toggle="modal"
-                                            data-target="#removeClientModal"
-                                            onclick="removeClient({{ client.id }}, '{{ client.name }}')"
-                                            class="btn btn-link btn-danger" data-original-title="Remove this Client">
+                                        <button type="button" title="Remove this Hotspot" data-toggle="modal"
+                                            data-target="#removeModal"
+                                            onclick="remove({{ hotspot.id }}, '{{ hotspot.name }}')"
+                                            class="btn btn-link btn-danger" data-original-title="Remove this Hotspot">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -162,29 +168,29 @@
         });
     });
 
-    function addClient() {
+    function add() {
         $('#action_label').html('Add New');
-        $('#editClientId').val(null);
-        $('#clientName').val(null);
-        $('#clientPhone').val(null);
-        $('#backgroundColor').val(null);
-        $('#foregroundColor').val(null);
-        $('#addClientButton').val('add');
+        $('#editHotspotId').val(null);
+        $('#hotspotName').val(null);
+        $('#hotspotUsername').val(null);
+        $('#hotspotPassword').val(null);
+        $('#clientId').val(1);
+        $('#addButton').val('add');
     }
 
-    function editClient(id, name, phone, background_color, foreground_color) {
+    function edit(id, name, hotspotUsername, hotspotPassword, clientId) {
         $('#action_label').html('Edit');
-        $('#editClientId').val(id);
-        $('#clientName').val(name);
-        $('#clientPhone').val(phone);
-        $('#backgroundColor').val(background_color);
-        $('#foregroundColor').val(foreground_color);
-        $('#addClientButton').val('edit');
+        $('#editHotspotId').val(id);
+        $('#hotspotName').val(name);
+        $('#hotspotUsername').val(hotspotUsername);
+        $('#hotspotPassword').val(hotspotPassword);
+        $('#clientId').val(clientId);
+        $('#addButton').val('edit');
     }
 
-    function removeClient(id, name) {
-        $('#removeClientId').val(id);
-        $('#removeClientName').html(name);
+    function remove(id, name) {
+        $('#removeHotspotId').val(id);
+        $('#removeHotspotName').html(name);
     }
 </script>
 

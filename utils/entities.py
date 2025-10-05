@@ -9,12 +9,14 @@ class Client():
         self.hotspots = hotspots
 
 class Hotspot():
-    def __init__(self, id, name, hotspot_username, hotspot_password, client):
+    def __init__(self, id, name, hotspot_username, hotspot_password, client_id, client_name, subscribers):
         self.id = id
         self.name = name
         self.hotspot_username = hotspot_username
         self.hotspot_password = hotspot_password
-        self.client = client
+        self.client_id = client_id
+        self.client_name = client_name
+        self.subscribers = subscribers
       
 class Video():
     def __init__(self, video_id, video_title, published_at):

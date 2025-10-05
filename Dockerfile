@@ -1,5 +1,5 @@
 # Use python base image
-FROM python:3.10-slim-buster
+FROM python:3.13-slim-bullseye
 
 # Update packages, install git, and clean up
 RUN apt-get update \
