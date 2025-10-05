@@ -8,12 +8,12 @@ def subscriber(db):
         
         hotspot = db.get_hotspots(id=hotspot_id)[0]
         client = db.get_clients(id=hotspot.client_id)[0]
-        latest_videos = db.get_videos(hotspot.id, client.id) #Youtube videos    
-        video=random.sample(latest_videos, 1)[0]
-        images = db.get_images(hotspot.id, client.id) #images uploaded at https://postimages.org/
-        images=random.sample(images, min(5, len(images)))
+        media = db.get_media(client_id=client.id, hotspot_id=hotspot.id) or db.get_videos(client_id=client.id) #Youtube videos or images uploaded at https://postimages.org/
+        images = [image for image in media if image.type == 'image']
+        videos = [video for video in media if video.type == 'video']
         return render_template('login-subscriber.html', hotspot=hotspot, client=client, link_login_only=link_login_only,
-                            video=video, images=images)
+                            video=random.sample(videos, min(1, len(videos)))[0], 
+                            images=random.sample(images, min(5, len(images))))
         
     elif request.method == 'POST':   
         phone = request.form['phone']
@@ -67,7 +67,6 @@ def clients(db):
     return render_template('clients.html', page='clients', clients=clients)
     
     
-    
 def hotspots(db): 
     if request.method == 'POST':   
         action = request.form['action'] 
@@ -90,3 +89,37 @@ def hotspots(db):
     hotspots = db.get_hotspots()
     clients = db.get_clients() 
     return render_template('hotspots.html', page='hotspots', hotspots=hotspots, clients=clients)
+
+
+def gallery(db): 
+    if request.method == 'POST':   
+        action = request.form['action'] 
+        if action in ['add', 'edit']:
+            url = request.form['url']
+            client_id = request.form['clientId']   
+            hotspot_id = request.form['hotspotId']   
+            
+            if 'youtube' in url:
+                type = 'video'
+                source_id = url.replace('https://www.youtube.com/watch?v=', '')
+            if 'postimg' in url:
+                type = 'image'
+                source_id = url.replace('https://i.postimg.cc/', '')
+                   
+            if action == 'add':
+                added_media_id = db.update_media(None, type, source_id, client_id, hotspot_id)
+                
+            elif action == 'edit':
+                edit_media_id = int(request.form['editMediaId'])
+                updated_media_id = db.update_media(edit_media_id, type, source_id, client_id, hotspot_id)
+        
+        elif action =='remove':
+            remove_media_id = int(request.form['removeMediaId'])
+            db.remove_media(remove_media_id)
+            
+    media = db.get_media() #Youtube videos or images uploaded at https://postimages.org/
+    images = [image for image in media if image.type == 'image']
+    videos = [video for video in media if video.type == 'video']
+    hotspots = db.get_hotspots()
+    clients = db.get_clients() 
+    return render_template('gallery.html', page='gallery', hotspots=hotspots, clients=clients, images=images, videos=videos)

@@ -17,15 +17,14 @@ class Hotspot():
         self.client_id = client_id
         self.client_name = client_name
         self.subscribers = subscribers
-      
-class Video():
-    def __init__(self, video_id, video_title):
-        self.video_id = video_id
-        self.video_title = video_title
-
-class Image():
-    def __init__(self, image_id):
-        self.image_id = image_id
+   
+class Media():
+    def __init__(self, id, type, source_id, client_id, hotspot_id):
+        self.id = id
+        self.type = type
+        self.source_id = source_id
+        self.client_id = client_id
+        self.hotspot_id = hotspot_id
 
 class Subscriber():
     def __init__(self, id, phone, session_hour, created_at, client, hotspot):

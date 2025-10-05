@@ -45,6 +45,10 @@ def clients():
 def hotspots(): 
     return routes.hotspots(db)
 
+@app.route('/gallery', methods=['GET', 'POST'])
+def gallery(): 
+    return routes.gallery(db)
+
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']
     app.run(debug=debug_mode)

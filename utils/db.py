@@ -1,7 +1,7 @@
 import os, psycopg2
 from dotenv import load_dotenv
 
-from utils.entities import Client, Image, Hotspot, Video
+from utils.entities import Client, Hotspot, Media
     
 class Db():
     def __init__(self):
@@ -198,88 +198,89 @@ class Db():
             raise e
         
                     
-    def get_videos(self, hotspot_id, client_id):  
+    def get_media(self, type=None, client_id=None, hotspot_id=None):  
+        #id, type, source_id, client_id, hotspot_id)
         self.ensure_connection()        
         query = """
-        SELECT video_id, video_title
-        FROM youtube_videos
-        WHERE hotspot_id=%s
+        SELECT id, type, source_id, client_id, hotspot_id
+        FROM media
+        WHERE 1=1
         """
-        params = [hotspot_id]
+        params = []
+        if type:
+            query = f'{query} AND type=%s'
+            params.append(type)
+        if client_id:
+            query = f'{query} AND client_id=%s'
+            params.append(client_id)
+        if hotspot_id:
+            query = f'{query} AND hotspot_id=%s'
+            params.append(hotspot_id)
                 
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
                 data = cursor.fetchall()
-                
-                if len(data) == 0:
-                    query = f'{query} OR client_id=%s'
-                    params.append(client_id)
-                    cursor.execute(query, tuple(params))
-                    data = cursor.fetchall()
                     
-                videos = []
+                media = []
                 for datum in data:                    
-                    videos.append(Video(datum[0], datum[1]))
+                    media.append(Media(datum[0], datum[1], datum[2], datum[3], datum[4]))
 
-                return videos 
+                return media 
         except Exception as e:
-            self.conn.rollback()
             raise e   
         
   
-    def add_video(self, video_id, video_title, client_id, hotspot_id):
-        self.ensure_connection()            
-        query = """
-        INSERT INTO youtube_videos(video_id, video_title, client_id, hotspot_id) 
-        VALUES(%s, %s, %s, %s)
-        ON CONFLICT (video_id, hotspot_id)
-        DO UPDATE SET 
-            video_title = EXCLUDED.video_title
-        RETURNING id
+    def update_media(self, id, type, source_id, client_id, hotspot_id):
+        self.ensure_connection()    
+        query = f"""
+        INSERT INTO media(type, source_id, client_id, hotspot_id {',id' if id else ''}) 
+        VALUES(%s, %s, %s, %s {',%s' if id else ''})
         """
-
-        params = (video_id, video_title, client_id, hotspot_id)
+        params = [type, source_id, client_id, hotspot_id]
+        if id:
+            query = f"""{query}
+            ON CONFLICT (id)
+            DO UPDATE SET 
+                type = EXCLUDED.type, 
+                source_id = EXCLUDED.source_id, 
+                client_id = EXCLUDED.client_id, 
+                hotspot_id = EXCLUDED.hotspot_id     
+            """
+            params.append(id)
+        else:
+            query = f"""{query}
+            ON CONFLICT (type, source_id, hotspot_id)
+            DO NOTHING
+            """
+        query = f"{query} RETURNING id"            
+                    
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
                 self.conn.commit()
-                row_id = cursor.fetchone()[0]
-                return row_id
+                rows= cursor.fetchone()
+                return rows[0] if rows else 0
         except Exception as e:
             self.conn.rollback()
-            raise e  
-            
-            
-    def get_images(self, hotspot_id, client_id):  
-        self.ensure_connection()        
+            raise e    
+        
+        
+    def remove_media(self, id):
+        self.ensure_connection()    
         query = """
-        SELECT image_id
-        FROM postimg_images
-        WHERE hotspot_id=%s
+        DELETE FROM media
+        WHERE id = %s
         """
-        params = [hotspot_id]
-                
+        params = [id]
+        
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
-                data = cursor.fetchall()
-                
-                if len(data) == 0:
-                    query = f'{query} OR client_id=%s'
-                    params.append(client_id)
-                    cursor.execute(query, tuple(params))
-                    data = cursor.fetchall()
-                    
-                images = []
-                for datum in data:                    
-                    images.append(Image(datum[0]))
-
-                return images 
+                self.conn.commit()
         except Exception as e:
             self.conn.rollback()
-            raise e 
-          
+            raise e     
   
     def add_subscriber(self, phone, hotspot_id, client_id):
         self.ensure_connection()            

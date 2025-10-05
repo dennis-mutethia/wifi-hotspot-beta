@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-inner">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Gallery</h4>
+                    <button class="btn btn-success btn-round ml-auto  btn-sm" data-toggle="modal" data-target="#addModal"
+                        onclick="add()">
+                        <i class="fa fa-plus"></i>
+                        Add Image/Video
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-images-tab" data-toggle="pill" href="#pills-images"
+                            role="tab" aria-controls="pills-images" aria-selected="false">Images</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-videos-tab" data-toggle="pill" href="#pills-videos" role="tab"
+                            aria-controls="pills-videos" aria-selected="true">Videos</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2 mb-3" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-images" role="tabpanel"
+                        aria-labelledby="pills-images-tab">
+                        <div class="row">
+                            {% for image in images %}
+                            <div class="col-6 col-sm-4 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body p-3 text-center">
+                                        <div class="text-right text-danger">
+                                            <a class="notification fa fa-trash text-xs" href="#"
+                                                onclick="remove({{ image.id }}, 'Image')" data-toggle="modal"
+                                                data-target="#removeModal"></a>
+                                        </div>
+                                        <div class="h1 m-0">
+                                            <img src="https://i.postimg.cc/{{ image.source_id }}" alt="" width="100%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-videos" role="tabpanel"
+                        aria-labelledby="pills-videos-tab">
+                        <div class="row">
+                            {% for video in videos %}
+                            <div class="col-6 col-sm-4 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body p-3 text-center">
+                                        <div class="text-right text-danger">
+                                            <a class="notification fa fa-trash text-xs" href="#"
+                                                onclick="remove({{ video.id }}, 'Video')" data-toggle="modal"
+                                                data-target="#removeModal"></a>
+                                        </div>
+                                        <div class="h1 m-0">
+                                            <iframe
+                                                src="https://www.youtube.com/embed/{{ video.source_id }}?playlist={{ video.source_id }}&loop=1&enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1"
+                                                allow="autoplay; encrypted-media" allowfullscreen width="100%">
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <input id="editMediaId" name="editMediaId" type="hidden">
+                <div class="modal-header no-bd">
+                    <h5 class="modal-title">
+                        <span id="action_label" class="fw-mediumbold">
+                            Add New</span>
+                        <span class="fw-light">
+                            <a class="btn btn-success btn-border btn-round btn-xs" href="https://postimages.org/" target="_blank">PostImg Image</a> or 
+                            <a class="btn btn-danger btn-border btn-round btn-xs" href="https://www.youtube.com/" target="_blank">Youtube Video</a>
+                        </span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Youtube Video or PostImg URL</label>
+                                <input id="url" name="url" type="text" class="form-control"
+                                    placeholder="https://i.postimg.cc/cLnn3wnX/6.jpg" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default">
+                                <label>Select Client Name</label>
+                                <select id="clientId" name="clientId" class="form-control">
+                                    {% for client in clients %}
+                                    <option value="{{ client.id }}">{{ client.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default">
+                                <label>Select Hotspot</label>
+                                <select id="hotspotId" name="hotspotId" class="form-control">
+                                    {% for hotspot in hotspots %}
+                                    <option value="{{ hotspot.id }}">{{ hotspot.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer no-bd">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" id="addButton" name="action" value="add" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <input id="removeMediaId" name="removeMediaId" type="hidden">
+                <div class="modal-header no-bd">
+                    <h5 class="modal-title">
+                        <span class="fw-mediumbold">
+                            Are you sure you want to Remove </span>
+                        <span class="fw-light" id="removeMediaName">
+
+                        </span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Click Confirm Remove to Completely Remove this Media.</p>
+                    <small class="text-danger">THIS ACTION IS NOT REVERSIBLE</small>
+                </div>
+                <div class="modal-footer no-bd">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="submit" id="removeButton" name="action" value="remove" class="btn btn-danger">Confirm
+                        Remove</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#table-videos').DataTable({
+            "pageLength": 5,
+        });
+        $('#table-images').DataTable({
+            "pageLength": 5,
+        });
+    });
+
+    function add() {
+        $('#action_label').html('Add New');
+        $('#editMediaId').val(null);
+        $('#url').val(null);
+        $('#clientId').val(1);
+        $('#hotspotId').val(1);
+        $('#addButton').val('add');
+    }
+
+    function edit(id, url, clientId, hotspotId) {
+        $('#action_label').html('Edit');
+        $('#editMediaId').val(id);
+        $('#url').val(url);
+        $('#clientId').val(clientId);
+        $('#hotspotId').val(hotspotId);
+        $('#addButton').val('edit');
+    }
+
+    function remove(id, name) {
+        $('#removeMediaId').val(id);
+        $('#removeMediaName').html(name);
+    }
+</script>
+
+{% endblock %}
