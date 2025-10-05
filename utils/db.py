@@ -4,36 +4,29 @@ from dotenv import load_dotenv
 from utils.entities import Client, Hotspot, Media
     
 class Db():
+    
     def __init__(self):
         load_dotenv()
-        # Access the environment variables
-        self.conn_params = {
-            'host': os.getenv('DB_HOST'),
-            'port': os.getenv('DB_PORT'),
-            'database': os.getenv('DB_NAME'),
-            'user': os.getenv('DB_USER'),
-            'password': os.getenv('DB_PASSWORD')
-        }
+        self.database_url = os.getenv('DATABASE_URL')
         
         self.conn = None
         self.ensure_connection()
-        
     
     def ensure_connection(self):
         try:
             # Check if the connection is open
             if self.conn is None or self.conn.closed:
-                self.conn = psycopg2.connect(**self.conn_params)
+                self.conn = psycopg2.connect(self.database_url)
             else:
                 # Test the connection
                 with self.conn.cursor() as cursor:
                     cursor.execute("SELECT 1")
         except Exception as e:
+            print(e)
             # Reconnect if the connection is invalid
-            self.conn = psycopg2.connect(**self.conn_params)  
-            raise e   
-        
-  
+            self.conn = psycopg2.connect(self.database_url)
+      
+          
     def update_client(self, id, name, phone, background_color, foreground_color):
         self.ensure_connection()            
         
