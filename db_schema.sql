@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS youtube_videos (
 CREATE TABLE IF NOT EXISTS postimg_images (
   id SERIAL PRIMARY KEY,
   image_id TEXT,
-  published_at TIMESTAMP,
   client_id INT,
   hotspot_id INT,
   UNIQUE (image_id, hotspot_id)

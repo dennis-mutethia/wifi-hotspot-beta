@@ -58,8 +58,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
-                                                <label>Client Name</label>
-                                                <select id="clientId" name="clientId" class="form-control" aria-label="Select Client">
+                                                <label>Select Client Name</label>
+                                                <select id="clientId" name="clientId" class="form-control">
                                                     {% for client in clients %}
                                                     <option value="{{ client.id }}">{{ client.name }}</option>
                                                     {% endfor %}

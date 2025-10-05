@@ -3,21 +3,23 @@ from flask import render_template, request, jsonify
 
 def subscriber(db): 
     if request.method == 'GET':       
-        hotspot_id = request.args.get('hotspot_id', 0)
+        hotspot_id = int(request.args.get('hotspot_id', 0))
         link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
         
-        hotspot = db.get_hotspot(id=hotspot_id)
-        latest_videos = db.get_videos(hotspot)
-        #images uploaded at https://postimages.org/
-        images = db.get_images(hotspot)
-        return render_template('login-subscriber.html', hotspot=hotspot, link_login_only=link_login_only,
-                            video=random.sample(latest_videos, 1)[0], images=random.sample(images, 5))
+        hotspot = db.get_hotspots(id=hotspot_id)[0]
+        client = db.get_clients(id=hotspot.client_id)[0]
+        latest_videos = db.get_videos(hotspot.id, client.id) #Youtube videos    
+        video=random.sample(latest_videos, 1)[0]
+        images = db.get_images(hotspot.id, client.id) #images uploaded at https://postimages.org/
+        #images=random.sample(images, 5)
+        return render_template('login-subscriber.html', hotspot=hotspot, client=client, link_login_only=link_login_only,
+                            video=video, images=images)
         
     elif request.method == 'POST':   
         phone = request.form['phone']
-        hotspot_id = request.form['hotspot_id']
-        hotspot = db.get_hotspot(id=hotspot_id)
-        subscriber_id = db.add_hotspot_user(phone, hotspot_id, hotspot.client.id)  
+        hotspot_id = int(request.args.get('hotspot_id', 0))
+        hotspot = db.get_hotspots(id=hotspot_id)[0]
+        subscriber_id = db.add_hotspot_user(phone, hotspot_id, hotspot.client_id)  
 
         return jsonify(
                 {

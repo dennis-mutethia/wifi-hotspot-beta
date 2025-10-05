@@ -114,7 +114,7 @@ class Db():
             raise e
         
             
-    def get_hotspots(self, id=0, client_id=0):  
+    def get_hotspots(self, id: int=0, client_id: int=0):  
         self.ensure_connection()          
         query = """        
         WITH subscribers AS(
@@ -198,14 +198,14 @@ class Db():
             raise e
         
                     
-    def get_videos(self, hotspot):  
+    def get_videos(self, hotspot_id, client_id):  
         self.ensure_connection()        
         query = """
-        SELECT video_id, video_title, published_at
+        SELECT video_id, video_title
         FROM youtube_videos
         WHERE hotspot_id=%s
         """
-        params = [hotspot.id]
+        params = [hotspot_id]
                 
         try:
             with self.conn.cursor() as cursor:
@@ -214,13 +214,13 @@ class Db():
                 
                 if len(data) == 0:
                     query = f'{query} OR client_id=%s'
-                    params.append(hotspot.client.id)
+                    params.append(client_id)
                     cursor.execute(query, tuple(params))
                     data = cursor.fetchall()
                     
                 videos = []
                 for datum in data:                    
-                    videos.append(Video(datum[0], datum[1], datum[2]))
+                    videos.append(Video(datum[0], datum[1]))
 
                 return videos 
         except Exception as e:
@@ -228,18 +228,18 @@ class Db():
             raise e   
         
   
-    def add_video(self, video_id, video_title, published_at, client_id, hotspot_id):
+    def add_video(self, video_id, video_title, client_id, hotspot_id):
         self.ensure_connection()            
         query = """
-        INSERT INTO youtube_videos(video_id, video_title, published_at, client_id, hotspot_id) 
-        VALUES(%s, %s, %s, %s, %s)
+        INSERT INTO youtube_videos(video_id, video_title, client_id, hotspot_id) 
+        VALUES(%s, %s, %s, %s)
         ON CONFLICT (video_id, hotspot_id)
         DO UPDATE SET 
             video_title = EXCLUDED.video_title
         RETURNING id
         """
 
-        params = (video_id, video_title, published_at, client_id, hotspot_id)
+        params = (video_id, video_title, client_id, hotspot_id)
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
@@ -251,14 +251,14 @@ class Db():
             raise e  
             
             
-    def get_images(self, hotspot):  
+    def get_images(self, hotspot_id, client_id):  
         self.ensure_connection()        
         query = """
         SELECT image_id
         FROM postimg_images
         WHERE hotspot_id=%s
         """
-        params = [hotspot.id]
+        params = [hotspot_id]
                 
         try:
             with self.conn.cursor() as cursor:
@@ -267,7 +267,7 @@ class Db():
                 
                 if len(data) == 0:
                     query = f'{query} OR client_id=%s'
-                    params.append(hotspot.client.id)
+                    params.append(client_id)
                     cursor.execute(query, tuple(params))
                     data = cursor.fetchall()
                     

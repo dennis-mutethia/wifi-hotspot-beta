@@ -19,10 +19,9 @@ class Hotspot():
         self.subscribers = subscribers
       
 class Video():
-    def __init__(self, video_id, video_title, published_at):
+    def __init__(self, video_id, video_title):
         self.video_id = video_id
         self.video_title = video_title
-        self.published_at = published_at
 
 class Image():
     def __init__(self, image_id):
