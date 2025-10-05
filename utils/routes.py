@@ -30,7 +30,7 @@ def subscriber(db):
 def dashboard(db): 
     total_connections = db.get_total_connections()
     active_connections = db.get_total_connections(active=True)
-    all_hotspots = db.get_all_hotspots(client_id=0)
+    all_hotspots = db.get_hotspots(client_id=0)
     hotspots_connections = db.get_connection_counts_per_hotspot()
     total_connections_today = db.get_total_connections(today=True)
     unique_connections_today = db.get_unique_connections(today=True)
