@@ -119,7 +119,7 @@ class Db():
         query = """        
         WITH subscribers AS(
             SELECT hotspot_id, COUNT(id) AS count
-            FROM hotspot_users 
+            FROM subscribers 
             GROUP BY hotspot_id
         )
         SELECT hotspots.id, hotspots.name, hotspot_username, hotspot_password, clients.id, clients.name, subscribers.count
@@ -281,10 +281,10 @@ class Db():
             raise e 
           
   
-    def add_hotspot_user(self, phone, hotspot_id, client_id):
+    def add_subscriber(self, phone, hotspot_id, client_id):
         self.ensure_connection()            
         query = """
-        INSERT INTO hotspot_users(phone, hotspot_id, client_id, session_hour, created_at) 
+        INSERT INTO subscribers(phone, hotspot_id, client_id, session_hour, created_at) 
         VALUES(%s, %s, %s, DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi'), CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
         ON CONFLICT (phone, session_hour, hotspot_id)
         DO NOTHING 
@@ -309,7 +309,7 @@ class Db():
         query = """
         WITH subs AS(
             SELECT hotspot_id, COUNT(*) AS count 
-            FROM hotspot_users
+            FROM subscribers
             GROUP BY hotspot_id
         )
         SELECT hotspots.name, subs.count
@@ -340,7 +340,7 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT COUNT(phone) AS count 
-        FROM hotspot_users
+        FROM subscribers
         WHERE 1=1
         """
         
@@ -363,7 +363,7 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT COUNT(DISTINCT phone) AS count 
-        FROM hotspot_users
+        FROM subscribers
         WHERE 1=1
         """
         
@@ -385,7 +385,7 @@ class Db():
         query = """
         WITH subs AS(
             SELECT phone, hotspot_id, TO_CHAR(created_at, 'Mon DD HH24:MI:SS') AS created_at, session_hour = DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') AS active
-            FROM hotspot_users
+            FROM subscribers
             ORDER BY created_at DESC
             LIMIT 5
         )
@@ -419,7 +419,7 @@ class Db():
         self.ensure_connection()        
         query = """
         SELECT TO_CHAR(created_at, 'Mon DD') AS date, COUNT(*) AS count 
-        FROM hotspot_users
+        FROM subscribers
         WHERE created_at >= NOW() - INTERVAL '30 days'
         GROUP BY TO_CHAR(created_at, 'Mon DD')
         ORDER BY TO_CHAR(created_at, 'Mon DD')

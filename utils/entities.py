@@ -27,7 +27,7 @@ class Image():
     def __init__(self, image_id):
         self.image_id = image_id
 
-class HotspotUser():
+class Subscriber():
     def __init__(self, id, phone, session_hour, created_at, client, hotspot):
         self.id = id
         self.phone = phone

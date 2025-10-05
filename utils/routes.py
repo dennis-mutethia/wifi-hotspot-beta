@@ -11,7 +11,7 @@ def subscriber(db):
         latest_videos = db.get_videos(hotspot.id, client.id) #Youtube videos    
         video=random.sample(latest_videos, 1)[0]
         images = db.get_images(hotspot.id, client.id) #images uploaded at https://postimages.org/
-        #images=random.sample(images, 5)
+        images=random.sample(images, min(5, len(images)))
         return render_template('login-subscriber.html', hotspot=hotspot, client=client, link_login_only=link_login_only,
                             video=video, images=images)
         
@@ -19,7 +19,7 @@ def subscriber(db):
         phone = request.form['phone']
         hotspot_id = int(request.args.get('hotspot_id', 0))
         hotspot = db.get_hotspots(id=hotspot_id)[0]
-        subscriber_id = db.add_hotspot_user(phone, hotspot_id, hotspot.client_id)  
+        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id)  
 
         return jsonify(
                 {

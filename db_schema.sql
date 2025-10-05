@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS youtube_videos (
   id SERIAL PRIMARY KEY,
   video_id TEXT,
   video_title TEXT,
-  published_at TIMESTAMP,
   client_id INT,
   hotspot_id INT,
   UNIQUE (video_id, hotspot_id)
@@ -45,21 +44,18 @@ CREATE TABLE IF NOT EXISTS postimg_images (
   id SERIAL PRIMARY KEY,
   image_id TEXT,
   client_id INT,
-  hotspot_id INT,
+  hotspot_id INT,  
   UNIQUE (image_id, hotspot_id)
 );
 
 -- Schema for table subscribers
-CREATE TABLE IF NOT EXISTS hotspot_users (
+CREATE TABLE IF NOT EXISTS subscribers (
   id SERIAL,
   phone TEXT NOT NULL,
   session_hour TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   client_id INT,
   hotspot_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (phone, session_hour, hotspot_id)
-) PARTITION BY RANGE (hotspot_id);
-
-CREATE TABLE hotspot_users_1 PARTITION OF hotspot_users
-FOR VALUES FROM (1) TO (2);
+);
 

@@ -96,7 +96,7 @@
                 </div>
                 <div class="card-body">
                     <div class="chart-container" style="min-height: 375px">
-                        <canvas id="hotspotUsersPerDayChart"></canvas>
+                        <canvas id="subscribersPerDayChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="card-body">
                     <div class="chart-container" style="min-height: 375px">
-                        <canvas id="hotspotUsersPerHourChart"></canvas>
+                        <canvas id="subscribersPerHourChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -233,8 +233,8 @@
     const connectionsPerDayLabels = connectionsPerDay.map(hotspot => hotspot.date);
     const connectionsPerDayData = connectionsPerDay.map(hotspot => hotspot.count);
 
-    const hotspotUsersPerDayChart = document.getElementById('hotspotUsersPerDayChart');
-    new Chart(hotspotUsersPerDayChart, {
+    const subscribersPerDayChart = document.getElementById('subscribersPerDayChart');
+    new Chart(subscribersPerDayChart, {
         type: 'line',
         data: {
             labels: connectionsPerDayLabels,
