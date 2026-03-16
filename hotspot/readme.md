@@ -13,7 +13,7 @@ Local IP = 192.168.88.1
 ```
 hotspot address = 192.168.88.1
 DNS Name = hotspot.matrixsys.wifi #Or your preferred name
-Login By #Chack ONLY HTTP PAP
+Login By #Check ONLY HTTP PAP
 DNS Servers = `208.67.222.123` and `208.67.220.123` - Family Shield (To block Adult Content)
 ```
 5. Go to `IP > Hotspot > Users` and create a new user 

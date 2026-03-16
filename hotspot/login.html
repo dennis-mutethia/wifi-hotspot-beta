@@ -19,13 +19,13 @@
         <!--js-->
         <script type="text/javascript">
             let hotspotId = 1;
-            baseUrl = 'https://hotspot-seven.vercel.app'
+            radiusUrl = 'https://hotspot-seven.vercel.app'
 
             setTimeout(function () {
                 $(if session-time-left)
                     location.href = './status.html';
                 $(else)
-                    location.href = baseUrl+'/login-subscriber?hotspot_id='+hotspotId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
+                    location.href = radiusUrl+'/login-subscriber?hotspot_id='+hotspotId+'&link_login_only=$(link-login-only)&link_orig=$(link-orig)';
                 $(endif)
             }, 2000)
 
