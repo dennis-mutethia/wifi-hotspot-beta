@@ -14,7 +14,7 @@ Local IP = 192.168.88.1
 hotspot address = 192.168.88.1
 DNS Name = hotspot.matrixsys.wifi #Or your preferred name
 Login By #Check ONLY HTTP PAP
-DNS Servers = `208.67.222.123` and `208.67.220.123` - Family Shield (To block Adult Content)
+DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Adult Content)
 ```
 5. Go to `IP > Hotspot > Users` and create a new user 
 ```
@@ -25,9 +25,15 @@ password = TgdV&^84 #or your preferred password
 6. Go to `IP > Hotspot > User Profiles` and update
 ```
 Shared Users = 254
+Rate Limit (rx/tx) = 1M/1M
 ```
-7. Go to `IP > Hotspot > Walled Garden` and add
+7. Add Walled Garden for Backend & Media Access (allows access without login). Open Terminal and
 ```
-https://hotspot-seven.vercel.app
-https://youtube.com
+/ip hotspot walled-garden add action=allow disabled=no dst-host=hotspot-seven.vercel.app
+/ip hotspot walled-garden add action=allow disabled=no dst-host=youtube.com
+/ip hotspot walled-garden add action=allow disabled=no dst-host=i.postimg.cc
+```
+8. Schedule Hourly Reboot
+```
+/system scheduler add name=hourly-reboot start-time=00:00:00 interval=1h on-event="/system reboot"
 ```
