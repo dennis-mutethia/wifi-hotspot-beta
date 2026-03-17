@@ -17,7 +17,7 @@ def subscriber(db):
         
     elif request.method == 'POST':   
         phone = request.form['phone']
-        hotspot_id = int(request.args.get('hotspot_id', 0))
+        hotspot_id = int(request.form['hotspot_id'])
         hotspot = db.get_hotspots(id=hotspot_id)[0]
         subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id)  
 

@@ -154,7 +154,32 @@
             $('#adphone').focus();
         });
 
+        isSubscribed = false;
+
+        function subscribe() {
+            let phone = $('#adphone').val().trim();
+            if (phone.length === 10) {
+                $('#notice').html('');
+                let url = "{{ url_for('addSubscriber') }}";
+                $.post(url, {
+                    phone: '254' + phone.slice(-9),
+                    hotspot_id: '{{ hotspot.id }}'
+                },
+                    function (data, status) {
+                        console.log(data);
+                        localStorage.setItem("userPhone", phone);
+                        isSubscribed = true;
+                    });
+            } else {
+                $('#notice').html('Enter Valid Phone Number');
+            }
+        }
+
         function connect() {
+            if (!isSubscribed) {
+                subscribe();
+            }
+
             let phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 let url = "{{ link_login_only }}";
@@ -173,21 +198,7 @@
         }
 
         $('#adphone').on('keyup', function () {
-            let phone = $('#adphone').val().trim();
-            if (phone.length === 10) {
-                $('#notice').html('');
-                let url = "{{ url_for('addSubscriber') }}";
-                $.post(url, {
-                    phone: '254' + phone.slice(-9),
-                    hotspot_id: '{{ hotspot.id }}'
-                },
-                    function (data, status) {
-                        console.log(data);
-                        //localStorage.setItem("userPhone", phone);
-                    });
-            } else {
-                $('#notice').html('Enter Valid Phone Number');
-            }
+            subscribe();
         });
 
     </script>
