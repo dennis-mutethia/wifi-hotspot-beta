@@ -176,12 +176,8 @@
         }
 
         function connect() {
-            if (!isSubscribed) {
-                subscribe();
-            }
-
-            let phone = $('#adphone').val().trim();
-            if (phone.length === 10) {
+            if (isSubscribed) {
+                let phone = $('#adphone').val().trim();
                 let url = "{{ link_login_only }}";
                 $.post(url, {
                     username: '{{ hotspot.hotspot_username }}',
@@ -191,8 +187,9 @@
                         console.log(data);
                     });
                 location.href = '{{ link_login_only }}';
+            } else {
+                subscribe();
             }
-            else $('#notice').html('Enter Valid Phone Number');
 
             return false;
         }
