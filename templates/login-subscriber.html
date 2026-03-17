@@ -47,8 +47,8 @@
                         placeholder="Phone No. e.g 07123456789" />
                     <h6 id="notice" class="text-center text-danger"></h6>
 
-                    <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect();"
-                        >Connect</button>
+                    <button id="adconnectbutton" type="button" class="btn btn-success btn-block"
+                        onclick="connect();">Connect</button>
                     <br />
 
                     <!--Sliding Picture Start-->
@@ -93,7 +93,7 @@
                         </script>
                     </div>
                     <!--Sliding Picture End-->
-                    
+
                     <hr />
                     <h5 class="text-center">For Support or Advertisement Queries</h5>
                     <ul class="list-unstyled text-center">
@@ -145,20 +145,24 @@
         }
 
         $(document).ready(function () {
+            let userPhone = localStorage.getItem("userPhone");
+
+            if (userPhone) {
+                $('#adphone').val(userPhone);
+            }
+
             $('#adphone').focus();
         });
 
-
         function connect() {
             let phone = $('#adphone').val().trim();
-            if (phone.length === 10) {                
+            if (phone.length === 10) {
                 let url = "{{ link_login_only }}";
                 $.post(url, {
                     username: '{{ hotspot.hotspot_username }}',
                     password: '{{ hotspot.hotspot_password }}',
                 },
                     function (data, status) {
-                        console.log(status)
                         console.log(data);
                     });
                 location.href = '{{ link_login_only }}';
@@ -174,12 +178,12 @@
                 $('#notice').html('');
                 let url = "{{ url_for('addSubscriber') }}";
                 $.post(url, {
-                    link_login_only: '{{ link_login_only }}',
                     phone: '254' + phone.slice(-9),
                     hotspot_id: '{{ hotspot.id }}'
                 },
                     function (data, status) {
                         console.log(data);
+                        //localStorage.setItem("userPhone", phone);
                     });
             } else {
                 $('#notice').html('Enter Valid Phone Number');
