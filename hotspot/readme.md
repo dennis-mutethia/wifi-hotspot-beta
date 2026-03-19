@@ -20,7 +20,7 @@ DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Ad
 ```
 server = server1
 name = DFRSCGS #or your preferred username
-password = TgdV&^84 #or your preferred password
+password = TgdV84 #or your preferred password
 ```
 6. Go to `IP > Hotspot > User Profiles` and update
 ```
@@ -32,6 +32,12 @@ Rate Limit (rx/tx) = 1M/1M
 /ip hotspot walled-garden add action=allow disabled=no dst-host=hotspot-seven.vercel.app
 /ip hotspot walled-garden add action=allow disabled=no dst-host=youtube.com
 /ip hotspot walled-garden add action=allow disabled=no dst-host=i.postimg.cc
+```
+8. Enable hotspot & scheduler
+```
+system device-mode
+print
+update scheduler=yes hotspot=yes
 ```
 8. Schedule Hourly Reboot
 ```
