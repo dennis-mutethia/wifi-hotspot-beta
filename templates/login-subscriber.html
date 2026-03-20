@@ -179,7 +179,7 @@
         function connect() {
             if (isSubscribed) {
                 let phone = $('#adphone').val().trim();
-                let url = "http://governor.mutuma.wifi/login"; //"http://192.168.137.141" // "{{ link_login_only }}";
+                let url = "{{ link_login_only }}"; // "http://mca.mubichi.wifi/login"; //"http://192.168.137.141" // "{{ link_login_only }}";
                 $.post(url, {
                     username: '{{ hotspot.hotspot_username }}',
                     password: '{{ hotspot.hotspot_password }}',
@@ -187,7 +187,7 @@
                     function (data, status) {
                         console.log(data);
                     });
-                location.href = '{{ link_login_only }}';
+               // location.href = '{{ link_login_only }}';
             } else {
                 subscribe();
             }
