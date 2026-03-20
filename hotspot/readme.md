@@ -41,5 +41,5 @@ update scheduler=yes hotspot=yes
 ```
 8. Schedule Hourly Reboot
 ```
-/system scheduler add name=hourly-reboot start-time=00:00:00 interval=1h on-event="/system reboot"
+ 
 ```
