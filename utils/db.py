@@ -1,7 +1,7 @@
 import os, psycopg2
 from dotenv import load_dotenv
 
-from utils.entities import Client, Hotspot, Media
+from utils.entities import Client, Hotspot, Media, Subscriber
     
 class Db():
     
@@ -274,7 +274,40 @@ class Db():
         except Exception as e:
             self.conn.rollback()
             raise e     
-  
+    
+                    
+    def get_subscribers(self, client_id=None, hotspot_id=None):  
+        #id, type, source_id, client_id, hotspot_id)
+        self.ensure_connection()        
+        query = """  
+        SELECT subscribers.id, subscribers.phone, subscribers.session_hour, subscribers.created_at, clients.name, hotspots.name, 
+            (DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') = subscribers.session_hour) AS connected            
+        FROM subscribers 
+        INNER JOIN hotspots ON hotspots.id = subscribers.hotspot_id
+        INNER JOIN clients ON clients.id = hotspots.client_id
+        WHERE 1=1    
+        """
+        params = []
+        if hotspot_id:
+            query = f'{query} AND subscribers.hotspot_id=%s'
+            params.append(hotspot_id)
+        if client_id:
+            query = f'{query} AND hotspots.client_id=%s'
+            params.append(client_id)
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                data = cursor.fetchall()
+                    
+                subscribers = []
+                for datum in data:                
+                    subscribers.append(Subscriber(datum[0], datum[1], datum[2], datum[3], datum[4], datum[5], datum[6]))
+
+                return subscribers 
+        except Exception as e:
+            raise e   
+        
     def add_subscriber(self, phone, hotspot_id, client_id):
         self.ensure_connection()            
         query = """

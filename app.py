@@ -29,9 +29,10 @@ def addSubscriber():
 
 @app.route('/terms', methods=['GET'])
 def terms():        
-    hotspot_id = request.args.get('hotspot_id', 0)
-    hotspot = db.get_hotspot(id=hotspot_id)
-    return render_template('terms.html', hotspot=hotspot)
+    hotspot_id = int(request.args.get('hotspot_id', 0))
+    hotspot = db.get_hotspots(id=hotspot_id)[0]
+    client = db.get_clients(id=hotspot.client_id)[0]
+    return render_template('terms.html', hotspot=hotspot, client=client)
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard(): 
@@ -48,6 +49,10 @@ def hotspots():
 @app.route('/gallery', methods=['GET', 'POST'])
 def gallery(): 
     return routes.gallery(db)
+
+@app.route('/subscribers', methods=['GET', 'POST'])
+def subscribers(): 
+    return routes.subscribers(db)
 
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']

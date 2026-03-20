@@ -89,6 +89,11 @@ def hotspots(db):
     hotspots = db.get_hotspots()
     clients = db.get_clients() 
     return render_template('hotspots.html', page='hotspots', hotspots=hotspots, clients=clients)
+    
+    
+def subscribers(db):       
+    subscribers = db.get_subscribers()
+    return render_template('subscribers.html', page='subscribers', subscribers=subscribers)
 
 
 def gallery(db): 
