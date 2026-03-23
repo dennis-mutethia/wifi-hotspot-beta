@@ -19,7 +19,7 @@ DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Ad
 5. Go to `IP > Hotspot > Users` and create a new user 
 ```
 server = server1
-name = DFRSCGS #or your preferred username
+name = Friend #or your preferred username
 password = TgdV84 #or your preferred password
 ```
 6. Go to `IP > Hotspot > User Profiles` and update
@@ -29,10 +29,15 @@ Rate Limit (rx/tx) = 1M/1M
 ```
 7. Add Walled Garden for Backend & Media Access (allows access without login). Open Terminal and
 ```
-/ip hotspot walled-garden add action=allow disabled=no dst-host=matrix-hotspot.vercel.app
-/ip hotspot walled-garden add action=allow disabled=no dst-host=i.postimg.cc
-/ip hotspot walled-garden add action=allow disabled=no dst-host=youtube.com
-/ip hotspot walled-garden add action=allow disabled=no dst-host=m.youtube.com
+/ip hotspot walled-garden 
+add action=allow disabled=no dst-host=matrix-hotspot.vercel.app
+add action=allow disabled=no dst-host=i.postimg.cc
+add action=allow disabled=no dst-host=youtube.com
+add action=allow disabled=no dst-host=m.youtube.com
+
+/ip hotspot walled-garden  
+add action=allow disabled=no dst-host=youtube.com
+add action=allow disabled=no dst-host=m.youtube.com
 ```
 8. Enable hotspot & scheduler
 ```
@@ -40,7 +45,13 @@ system device-mode
 print
 update scheduler=yes hotspot=yes
 ```
-8. Schedule Hourly Reboot
+9. Schedule Hourly Reboot
 ```
- 
+/system scheduler add name=hourly-reboot start-time=00:00:00 interval=1h on-event="/system reboot"
+```
+10. Go to `IP > DHCP Server`
+```
+Double click the DHCP SERVER and update
+Check Always Broadcast
+Check Add ARP for Leases
 ```

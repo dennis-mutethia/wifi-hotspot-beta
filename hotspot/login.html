@@ -26,10 +26,10 @@
 
 <body>
     <!--Mikrotik Login Form Start -->
-    <form id="sendin" name="sendin" action="$(link-login-only)" method="POST">
+    <form id="sendin" name="sendin" action="http://192.168.88.1/login" method="POST">
         <input type="hidden" name="username" />
         <input type="hidden" name="password" />
-        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="dst" value="http://192.168.88.1/" />
         <input type="hidden" name="popup" value="true" />
     </form>
     <!--Mikrotik Login Form End -->
@@ -143,7 +143,7 @@
             var src = 'https://www.youtube.com/embed/' + video.source_id +
                 '?playlist=' + video.source_id +
                 '&loop=1&enablejsapi=1&rel=0&modestbranding=1' +
-                '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1';
+                '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=0';
             $('#advideo').attr('src', src);
         }
 
@@ -247,6 +247,7 @@
                 $('#sendin').submit();
             } else {
                 subscribe();
+                connect();
             }
             return false;
         }
