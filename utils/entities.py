@@ -57,11 +57,13 @@ class Media():
         }
 
 class Subscriber():
-    def __init__(self, id, phone, session_hour, created_at, client, hotspot, status=False):
+    def __init__(self, id, phone, session_hour, created_at, client, hotspot, device, ip_address, status=False):
         self.id = id
         self.phone = phone
         self.session_hour = session_hour
         self.created_at = created_at
         self.client = client
         self.hotspot = hotspot
+        self.device = device
+        self.ip_address = ip_address
         self.status = 'Connected' if status else 'Disconnected'

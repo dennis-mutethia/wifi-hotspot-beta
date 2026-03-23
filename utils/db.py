@@ -280,7 +280,7 @@ class Db():
         #id, type, source_id, client_id, hotspot_id)
         self.ensure_connection()        
         query = """  
-        SELECT subscribers.id, subscribers.phone, subscribers.session_hour, subscribers.created_at, clients.name, hotspots.name, 
+        SELECT subscribers.id, subscribers.phone, subscribers.session_hour, subscribers.created_at, clients.name, hotspots.name, subscribers.device, subscribers.ip_address,
             (DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') = subscribers.session_hour) AS connected            
         FROM subscribers 
         INNER JOIN hotspots ON hotspots.id = subscribers.hotspot_id
@@ -302,23 +302,23 @@ class Db():
                     
                 subscribers = []
                 for datum in data:                
-                    subscribers.append(Subscriber(datum[0], datum[1], datum[2], datum[3], datum[4], datum[5], datum[6]))
+                    subscribers.append(Subscriber(datum[0], datum[1], datum[2], datum[3], datum[4], datum[5], datum[6], datum[7], datum[8]))
 
                 return subscribers 
         except Exception as e:
             raise e   
         
-    def add_subscriber(self, phone, hotspot_id, client_id):
+    def add_subscriber(self, phone, hotspot_id, client_id, device=None, ip_address=None):
         self.ensure_connection()            
         query = """
-        INSERT INTO subscribers(phone, hotspot_id, client_id, session_hour, created_at) 
-        VALUES(%s, %s, %s, DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi'), CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
+        INSERT INTO subscribers(phone, hotspot_id, client_id, device, ip_address, session_hour, created_at) 
+        VALUES(%s, %s, %s, %s, %s, DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi'), CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
         ON CONFLICT (phone, session_hour, hotspot_id)
         DO NOTHING 
         RETURNING id
         """
 
-        params = (phone, hotspot_id, client_id)
+        params = (phone, hotspot_id, client_id, device, ip_address)
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
@@ -330,7 +330,7 @@ class Db():
             self.conn.rollback()
             raise e   
          
-            
+          
     def get_connection_counts_per_hotspot(self):  
         self.ensure_connection()        
         query = """

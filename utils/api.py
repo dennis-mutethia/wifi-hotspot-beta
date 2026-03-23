@@ -25,7 +25,12 @@ def subscribe(db):
         phone = request.form['phone']
         hotspot_id = int(request.form['hotspot_id'])
         hotspot = db.get_hotspots(id=hotspot_id)[0]
-        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id)  
+        
+        # Get device info
+        user_agent = request.headers.get('User-Agent')
+        ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
+        
+        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=user_agent, ip_address=ip_address)
 
         return jsonify({
             "subscriber_id": subscriber_id,

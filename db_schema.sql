@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS subscribers (
   session_hour TIMESTAMP NOT NULL,
   client_id INT,
   hotspot_id INT NOT NULL,
+  device TEXT,
+  ip_address TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (phone, session_hour, hotspot_id)
 );
