@@ -32,12 +32,24 @@ Rate Limit (rx/tx) = 1M/1M
 /ip hotspot walled-garden 
 add action=allow disabled=no dst-host=matrix-hotspot.vercel.app
 add action=allow disabled=no dst-host=i.postimg.cc
-add action=allow disabled=no dst-host=youtube.com
-add action=allow disabled=no dst-host=m.youtube.com
 
-/ip hotspot walled-garden  
-add action=allow disabled=no dst-host=youtube.com
-add action=allow disabled=no dst-host=m.youtube.com
+##Youtube
+/ip hotspot walled-garden
+add action=allow dst-host=youtube.com
+add action=allow dst-host=*.youtube.com
+add action=allow dst-host=*.googlevideo.com
+add action=allow dst-host=*.ytimg.com
+add action=allow dst-host=*.ggpht.com
+add action=allow dst-host=*.gstatic.com
+add action=allow dst-host=*.googleapis.com
+add action=allow dst-host=*.google.com
+add action=allow dst-host=googlevideo.com
+add action=allow dst-host=ytimg.com
+
+#Google
+/ip hotspot walled-garden ip
+add action=accept dst-address=8.8.8.8 comment="Google DNS"
+add action=accept dst-address=8.8.4.4 comment="Google DNS"
 ```
 8. Enable hotspot & scheduler
 ```
