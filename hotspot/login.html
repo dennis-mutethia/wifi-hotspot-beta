@@ -52,7 +52,7 @@
                     <input type="number" class="form-control" id="adphone" placeholder="Phone No. e.g 07123456789" />
                     <h6 id="notice" class="text-center text-danger"></h6>
                     <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect();"
-                        disabled>Tap this Button once the Video is Done</button>
+                        disabled>Watch the Video First then Tap to Connect</button>
 
                     <!-- Sliding Images -->
                     <div class="slidingImage">
@@ -212,7 +212,7 @@
                     if (btn) {
                         btn.innerHTML = 'Connect';
                         btn.disabled = false;
-                        //connect();
+                        connect();
                     }
                 }, 30000);
             };

@@ -16,11 +16,13 @@ DNS Name = hotspot.matrixsys.wifi #Or your preferred name
 Login By #Check ONLY HTTP PAP
 DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Adult Content)
 ```
-5. Go to `IP > Hotspot > Users` and create a new user 
+5. Create 250 users
 ```
-server = server1
-name = Friend #or your preferred username
-password = TgdV84 #or your preferred password
+:local i 1
+:while ($i <= 250) do={ 
+/ip hotspot user add name="user-$i" password="TgdV84" 
+:set i ($i + 1) 
+}
 ```
 6. Go to `IP > Hotspot > User Profiles` and update
 ```
@@ -51,6 +53,16 @@ add action=allow dst-host=ytimg.com
 /ip hotspot walled-garden ip
 add action=accept dst-address=8.8.8.8 comment="Google DNS"
 add action=accept dst-address=8.8.4.4 comment="Google DNS"
+
+#Captive portal
+/ip hotspot walled-garden
+add action=allow dst-host=connectivitycheck.gstatic.com
+add action=allow dst-host=connectivitycheck.android.com
+add action=allow dst-host=captive.apple.com
+add action=allow dst-host=www.apple.com
+add action=allow dst-host=www.msftconnecttest.com
+add action=allow dst-host=detectportal.firefox.com
+add action=allow dst-host=*.gstatic.com
 ```
 8. Enable hotspot & scheduler
 ```
