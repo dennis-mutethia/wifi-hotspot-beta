@@ -18,7 +18,6 @@
                                 <th>Connected At</th>
                                 <th>Phone No.</th>
                                 <th>Device</th>
-                                <th>IP Address</th>
                                 <th>Hotspot</th>
                                 <th>Client</th>
                                 <th>Status</th>
@@ -30,7 +29,6 @@
                                 <td>{{ subscriber.created_at }}</td>
                                 <td>{{ subscriber.phone }}</td>
                                 <td>{{ subscriber.device }}</td>
-                                <td>{{ subscriber.ip_address }}</td>
                                 <td>{{ subscriber.hotspot }}</td>
                                 <td>{{ subscriber.client }}</td>
                                 <td style="color: {{ 'green' if subscriber.status == 'Connected' else 'red' }};">{{ subscriber.status }}</td>
