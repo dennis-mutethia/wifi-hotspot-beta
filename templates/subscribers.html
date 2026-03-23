@@ -17,9 +17,9 @@
                             <tr>
                                 <th>Connected At</th>
                                 <th>Phone No.</th>
-                                <th>Hotspot</th>
                                 <th>Device</th>
                                 <th>IP Address</th>
+                                <th>Hotspot</th>
                                 <th>Client</th>
                                 <th>Status</th>
                             </tr>
@@ -29,9 +29,9 @@
                             <tr>
                                 <td>{{ subscriber.created_at }}</td>
                                 <td>{{ subscriber.phone }}</td>
-                                <td>{{ subscriber.hotspot }}</td>
                                 <td>{{ subscriber.device }}</td>
                                 <td>{{ subscriber.ip_address }}</td>
+                                <td>{{ subscriber.hotspot }}</td>
                                 <td>{{ subscriber.client }}</td>
                                 <td>{{ subscriber.status }}</td>
                             </tr>
@@ -51,6 +51,7 @@
         // Add Row
         $('#add-row').DataTable({
             "pageLength": 5,
+            "sorting": [[0, "desc"]]
         });
     });
 </script>
