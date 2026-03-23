@@ -103,7 +103,7 @@
          */
 
         function fetchPortalData() {
-            $.getJSON(baseUrl + '/api/portal-data', { hotspot_id: hotspotId })
+            $.getJSON(baseUrl + '/api/portal-data/'+hotspotId)
                 .done(function (data) {
                     portalData = data;
                     renderPortal(data);

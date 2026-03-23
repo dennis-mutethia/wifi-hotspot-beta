@@ -14,9 +14,9 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # One year in seconds
 db = Db()
 
 # API Routes
-@app.route('/api/portal-data', methods=['GET'])
-def portalData():
-    return api.portal_data(db)
+@app.route('/api/portal-data/<hotspot_id>', methods=['GET'])
+def portalData(hotspot_id):
+    return api.portal_data(db, hotspot_id)
 
 @app.route('/api/subscribe', methods=['POST'])
 def subscribe():

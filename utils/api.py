@@ -4,11 +4,9 @@ from flask import request, jsonify
 def to_dict(obj):
     return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
 
-def portal_data(db): 
-    if request.method == 'GET':       
-        hotspot_id = int(request.args.get('hotspot_id', 0))
-        
-        hotspot = db.get_hotspots(id=hotspot_id)[0]
+def portal_data(db, hotspot_id): 
+    if request.method == 'GET':               
+        hotspot = db.get_hotspots(id=int(hotspot_id))[0]
         client = db.get_clients(id=hotspot.client_id)[0]
         media = db.get_media(client_id=client.id, hotspot_id=hotspot.id)
         
