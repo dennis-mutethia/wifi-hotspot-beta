@@ -24,7 +24,6 @@ def portalData(hotspot_id):
 def subscribe():
     return api.subscribe(db)
 
-
 # Web App Routes
 @app.route('/')
 def index():
