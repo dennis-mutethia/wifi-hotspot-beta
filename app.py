@@ -19,7 +19,7 @@ def portalData():
     return api.portal_data(db)
 
 @app.route('/api/subscribe', methods=['POST'])
-def portalData():
+def subscribe():
     return api.subscribe(db)
 
 
