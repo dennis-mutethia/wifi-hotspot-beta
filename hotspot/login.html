@@ -26,10 +26,10 @@
 
 <body>
     <!--Mikrotik Login Form Start -->
-    <form id="sendin" name="sendin" action="http://192.168.88.1/login" method="POST">
+    <form id="sendin" name="sendin" action="$(link-login-only)" method="POST">
         <input type="hidden" name="username" />
         <input type="hidden" name="password" />
-        <input type="hidden" name="dst" value="http://192.168.88.1/" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
         <input type="hidden" name="popup" value="true" />
     </form>
     <!--Mikrotik Login Form End -->
@@ -135,8 +135,8 @@
             renderSlides(images);
 
             // Restore saved phone
-            var saved = localStorage.getItem('userPhone');
-            if (saved) $('#adphone').val(saved);
+            // var saved = localStorage.getItem('userPhone');
+            // if (saved) $('#adphone').val(saved);
             $('#adphone').focus();
 
             // Video iframe
