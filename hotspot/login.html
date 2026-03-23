@@ -80,8 +80,8 @@
          * Portal state — populated after API fetch
          */
         const hotspotId = 1;
-        const baseUrl = 'http://localhost:5000';
-        //const baseUrl = 'https://matrix-hotspot.vercel.app'
+        //const baseUrl = 'http://localhost:5000';
+        const baseUrl = 'https://matrix-hotspot.vercel.app'
 
         var portalData = {};
         var isSubscribed = false;
@@ -89,21 +89,8 @@
         var slideCounter = 1;
         var slideInterval;
 
-        /**
-         * 1. Fetch all portal data from server
-         *    GET /api/portal-data?hotspot_id=<id>
-         *
-         *    Expected JSON shape:
-         *    {
-         *      client:  { name, background_color, foreground_color },
-         *      hotspot: { id, hotspot_username, hotspot_password },
-         *      video:   { source_id },
-         *      images:  [ { source_id }, ... ]
-         *    }
-         */
-
         function fetchPortalData() {
-            $.getJSON(baseUrl + '/api/portal-data/'+hotspotId)
+            $.getJSON(baseUrl + '/api/portal-data/' + hotspotId)
                 .done(function (data) {
                     portalData = data;
                     renderPortal(data);
@@ -144,13 +131,6 @@
                 '<br/> Powered by ' + client.name
             );
 
-            // Video iframe
-            var src = 'https://www.youtube.com/embed/' + video.source_id +
-                '?playlist=' + video.source_id +
-                '&loop=1&enablejsapi=1&rel=0&modestbranding=1' +
-                '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1';
-            $('#advideo').attr('src', src);
-
             // Slides
             renderSlides(images);
 
@@ -158,37 +138,53 @@
             var saved = localStorage.getItem('userPhone');
             if (saved) $('#adphone').val(saved);
             $('#adphone').focus();
+
+            // Video iframe
+            var src = 'https://www.youtube.com/embed/' + video.source_id +
+                '?playlist=' + video.source_id +
+                '&loop=1&enablejsapi=1&rel=0&modestbranding=1' +
+                '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1';
+            $('#advideo').attr('src', src);
         }
 
         /**
          * 3. Build image slider dynamically
          */
         function renderSlides(images) {
-            var $slides = $('#slides').empty();
-            var $nav = $('#nav-auto').empty();
+            var $slider = $('.slider').empty(); // clear everything inside .slider
 
+            // 1. Inject radio inputs directly into .slider first
             images.forEach(function (img, i) {
                 var idx = i + 1;
-
-                // Radio input
-                $slides.before(
+                $slider.append(
                     $('<input>', { type: 'radio', name: 'radio-btn', id: 'radio' + idx })
                 );
+            });
 
-                // Slide div
+            // 2. Build .slides div with slide children
+            var $slidesDiv = $('<div>').addClass('slides');
+            images.forEach(function (img, i) {
                 var $slide = $('<div>').addClass('slide' + (i === 0 ? ' first' : ''));
                 var $img = $('<img>').attr({
                     src: 'https://i.postimg.cc/' + img.source_id,
                     alt: '',
                     height: '320'
                 });
-                $slides.append($slide.append($img));
-
-                // Nav dot
-                $nav.append($('<div>').addClass('auto-btn' + idx));
+                $slidesDiv.append($slide.append($img));
             });
+            $slider.append($slidesDiv);
 
-            // Auto-slide
+            // 3. Build navigation-auto div
+            var $nav = $('<div>').addClass('navigation-auto');
+            images.forEach(function (img, i) {
+                $nav.append($('<div>').addClass('auto-btn' + (i + 1)));
+            });
+            $slider.append($nav);
+
+            // 4. Check first radio
+            document.getElementById('radio1').checked = true;
+
+            // 5. Auto-slide loop
             clearInterval(slideInterval);
             var total = images.length;
             slideCounter = 1;

@@ -16,7 +16,7 @@ def portal_data(db, hotspot_id):
         return jsonify({
             "client": client.to_dict(),
             "hotspot": hotspot.to_dict(),
-            "video": videos[0].to_dict() if videos else None,
+            "video": [v.to_dict() for v in random.sample(videos, min(1, len(images)))][0] if videos else None,
             "images": [i.to_dict() for i in random.sample(images, min(5, len(images)))]
         })
         
