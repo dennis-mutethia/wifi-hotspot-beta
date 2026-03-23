@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title id="title">FREE Wi-Fi</title>
+    <title id="title">Matrix Systems FREE Wi-Fi</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/logo.PNG">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/fontawesome-all.min.css" />
@@ -45,7 +45,7 @@
                 <div class="col-md-offset-3 col-md-6">
 
                     <!-- Video -->
-                    <iframe id="advideo" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div id="advideo"></div>
 
                     <h6 id="tagline" class="text-primary text-center"></h6>
 
@@ -67,7 +67,7 @@
                     <ul class="list-unstyled text-center">
                         <li>Call us on <a href="tel:0759697757">0759 69 77 57</a></li>
                         <br />
-                        <li class="text-muted"><a id="terms-link" href="#">Terms and Conditions</a> apply</li>
+                        <li class="text-muted"><a id="terms-link" href="terms.html">Terms and Conditions</a> apply</li>
                     </ul>
 
                 </div>
@@ -79,9 +79,9 @@
         /**
          * Portal state — populated after API fetch
          */
-        const hotspotId = 1
-        const baseUrl = 'http://localhost:5000'
-
+        const hotspotId = 1;
+        const baseUrl = 'http://localhost:5000';
+        //const baseUrl = 'https://matrix-hotspot.vercel.app'
 
         var portalData = {};
         var isSubscribed = false;
@@ -150,9 +150,6 @@
                 '&loop=1&enablejsapi=1&rel=0&modestbranding=1' +
                 '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1';
             $('#advideo').attr('src', src);
-
-            // Terms link
-            $('#terms-link').attr('href', '/terms?hotspot_id=' + hotspot.id);
 
             // Slides
             renderSlides(images);

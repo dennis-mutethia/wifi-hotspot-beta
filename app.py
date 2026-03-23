@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, url_for, request 
+from flask_cors import CORS
 
 #neon login = 
 from utils.db import Db
@@ -10,6 +11,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # One year in seconds
+CORS(app)
 
 db = Db()
 
