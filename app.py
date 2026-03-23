@@ -4,7 +4,7 @@ from flask import Flask, redirect, render_template, url_for, request
 
 #neon login = 
 from utils.db import Db
-from utils import routes
+from utils import api, routes
 
 load_dotenv()
 
@@ -13,15 +13,20 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000  # One year in seconds
 
 db = Db()
 
-# Routes
+# API Routes
+@app.route('/api/portal-data', methods=['GET'])
+def portalData():
+    return api.portal_data(db)
+
+@app.route('/api/subscribe', methods=['POST'])
+def portalData():
+    return api.subscribe(db)
+
+
+# Web App Routes
 @app.route('/')
 def index():
     return redirect(url_for('dashboard'))
-
-# Routes
-@app.route('/login-subscriber', methods=['GET'])
-def loginSubscriber():      
-    return routes.subscriber(db)
 
 @app.route('/add-subscriber', methods=['POST'])
 def addSubscriber():     
