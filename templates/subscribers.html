@@ -15,6 +15,7 @@
                     <table id="add-row" class="display table table-striped table-hover">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Connected At</th>
                                 <th>Phone No.</th>
                                 <th>Device</th>
@@ -26,6 +27,7 @@
                         <tbody>
                             {% for subscriber in subscribers %}
                             <tr>
+                                <td>{{ loop.index }}</td>
                                 <td>{{ subscriber.created_at }}</td>
                                 <td>{{ subscriber.phone }}</td>
                                 <td>{{ subscriber.device }}</td>
