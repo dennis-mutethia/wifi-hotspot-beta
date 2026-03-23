@@ -29,13 +29,13 @@ Rate Limit (rx/tx) = 1M/1M
 ```
 7. Add Walled Garden for Backend & Media Access (allows access without login). Open Terminal and
 ```
+#Backend
 /ip hotspot walled-garden 
-add action=allow disabled=no dst-host=matrix-hotspot.vercel.app
-add action=allow disabled=no dst-host=i.postimg.cc
+add action=allow dst-host=matrix-hotspot.vercel.app
+add action=allow dst-host=i.postimg.cc
 
-##Youtube
+#Youtube
 /ip hotspot walled-garden
-add action=allow dst-host=youtube.com
 add action=allow dst-host=*.youtube.com
 add action=allow dst-host=*.googlevideo.com
 add action=allow dst-host=*.ytimg.com
@@ -43,6 +43,7 @@ add action=allow dst-host=*.ggpht.com
 add action=allow dst-host=*.gstatic.com
 add action=allow dst-host=*.googleapis.com
 add action=allow dst-host=*.google.com
+add action=allow dst-host=youtube.com
 add action=allow dst-host=googlevideo.com
 add action=allow dst-host=ytimg.com
 
