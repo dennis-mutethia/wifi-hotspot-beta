@@ -79,18 +79,21 @@
 
 
 <!-- Modal -->
-<div class="modal fade modal-xl" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <form method="POST">
                 <input id="editMediaId" name="editMediaId" type="hidden">
                 <div class="modal-header no-bd">
                     <h5 class="modal-title">
                         <span id="action_label" class="fw-mediumbold">
-                            Add New</span>
+                            Add New</span> &nbsp; 
                         <span class="fw-light">
-                            <a class="btn btn-success btn-border btn-round btn-xs" href="https://postimages.org/" target="_blank">PostImg Image</a> or 
-                            <a class="btn btn-danger btn-border btn-round btn-xs" href="https://www.youtube.com/" target="_blank">Youtube Video</a>
+                            <a class="btn btn-danger btn-border btn-round btn-xs" href="https://www.youtube.com/" target="_blank">Youtube Video</a> &nbsp; or &nbsp;
+                            <a class="btn btn-success btn-border btn-round btn-xs" href="https://postimages.org/" target="_blank">PostImg Image</a>
+                            <br /> <br />
+                            YOUTUBE VIDEO EXAMPLE: <code>https://www.youtube.com/watch?v=MaZLKAx6Ne0</code> <br />
+                            POSTIMG IMAGE EXAMPLE: <code>https://i.postimg.cc/cLnn3wnX/6.jpg</code>
                         </span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -101,9 +104,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
-                                <label>Youtube Video or PostImg URL</label>
+                                <label>PostImg Image or Youtube Video Link</label>
                                 <input id="url" name="url" type="text" class="form-control"
-                                    placeholder="https://www.youtube.com/watch?v=MaZLKAx6Ne0 or <br /> /n https://i.postimg.cc/cLnn3wnX/6.jpg" required>
+                                    placeholder="https://i.postimg.cc/xxx  or  https://www.youtube.com/watch?v=xxx" required>
                             </div>
                         </div>
                         <div class="col-md-6">
