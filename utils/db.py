@@ -294,7 +294,9 @@ class Db():
         if client_id:
             query = f'{query} AND hotspots.client_id=%s'
             params.append(client_id)
-                
+        
+        query = f"{query} ORDER BY subscribers.created_at DESC"
+              
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(query, tuple(params))
