@@ -106,7 +106,6 @@
         */
         function renderPortal(d) {
             var client = d.client;
-            var hotspot = d.hotspot;
             var video = d.video;
             var images = d.images;
 
@@ -221,16 +220,19 @@
         /**
         * 5. Subscribe — POST phone number
         */
-        function subscribe() {
+        function subscribe(connectAfter = false) {
             var phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 $('#notice').html('');
                 $.post(baseUrl + '/api/subscribe', {
                     phone: '254' + phone.slice(-9),
-                    hotspot_id: portalData.hotspot ? portalData.hotspot.id : ''
-                }, function () {
-                    localStorage.setItem('userPhone', phone);
+                    hotspot_id: hotspotId
+                }, function (data) {
+                    console.log(data)
+                    $('input[name="username"]').val(data.username);
+                    $('input[name="password"]').val(data.password);
                     isSubscribed = true;
+                    if (connectAfter) $('#sendin').submit();
                 });
             } else {
                 $('#notice').html('Enter Valid Phone Number');
@@ -241,13 +243,10 @@
         * 6. Connect — POST login credentials to hotspot
         */
         function connect() {
-            if (isSubscribed) {
-                $('input[name="username"]').val(portalData.hotspot.hotspot_username);
-                $('input[name="password"]').val(portalData.hotspot.hotspot_password);
+            if (isSubscribed) {                
                 $('#sendin').submit();
             } else {
-                subscribe();
-                connect();
+                subscribe(true);
             }
             return false;
         }

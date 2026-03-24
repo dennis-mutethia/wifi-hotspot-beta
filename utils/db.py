@@ -314,7 +314,8 @@ class Db():
         INSERT INTO subscribers(phone, hotspot_id, client_id, device, session_hour, created_at) 
         VALUES(%s, %s, %s, %s, DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi'), CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi')
         ON CONFLICT (phone, session_hour, hotspot_id)
-        DO NOTHING 
+        DO UPDATE SET 
+            device = EXCLUDED.device
         RETURNING id
         """
 

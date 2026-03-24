@@ -21,7 +21,7 @@ DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Ad
 :local i 1
 :while ($i <= 250) do={ 
 /ip hotspot user add name="user-$i" password="TgdV84" 
-:set i ($i + 1) 
+:set $i ($i + 1) 
 }
 ```
 6. Go to `IP > Hotspot > User Profiles` and update
