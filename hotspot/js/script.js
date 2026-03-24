@@ -43,7 +43,7 @@ function renderPortal(d) {
         .css({ 'background-color': client.background_color, 'color': client.foreground_color });
 
     // Favicon
-    $('link[rel="icon"]').attr('href', 'images/logo.PNG');
+    $('link[rel="icon"]').attr('href', 'img/logo.PNG');
 
     // Page title
     document.title = client.name + ' FREE Wi-Fi';

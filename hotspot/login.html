@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title id="title">Matrix Systems FREE Wi-Fi</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logo.PNG">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/logo.PNG">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="css/common.css" />
@@ -51,8 +51,10 @@
 
                     <input type="number" class="form-control" id="adphone" placeholder="Phone No. e.g 07123456789" />
                     <h6 id="notice" class="text-center text-danger"></h6>
-                    <button id="adconnectbutton" type="button" class="btn btn-success btn-block" onclick="connect();"
-                        disabled>Watch the Video First then Tap to Connect</button>
+                    <button id="adconnectbutton" type="button" class="btn btn-default btn-block" onclick="connect();"
+                        style="color: black;" disabled>Watch the Video First then Tap to Connect!</button>
+
+                    <br />
 
                     <!--Sliding Picture Start-->
                     <div class="slidingImage">
@@ -166,7 +168,7 @@
                 .css({ 'background-color': client.background_color, 'color': client.foreground_color });
 
             // Favicon
-            $('link[rel="icon"]').attr('href', 'images/logo.PNG');
+            $('link[rel="icon"]').attr('href', 'img/logo.PNG');
 
             // Page title
             document.title = client.name + ' FREE Wi-Fi';
@@ -196,11 +198,11 @@
         /**
         * 3. Populate slider images dynamically
         */
-        function renderSlides(images){
+        function renderSlides(images) {
             images.forEach(function (img, i) {
                 var idx = i + 1;
                 let src = 'https://i.postimg.cc/' + img.source_id
-                $('#img'+idx).attr('src', src);
+                $('#img' + idx).attr('src', src);
             });
 
         }
@@ -218,12 +220,10 @@
             document.onclick = function () {
                 if (player.isMuted()) player.unMute();
                 setTimeout(function () {
-                    var btn = document.getElementById('adconnectbutton');
-                    if (btn) {
-                        btn.innerHTML = 'Connect';
-                        btn.disabled = false;
-                        connect();
-                    }
+                    $('#adconnectbutton').html('Connect');
+                    $('#adconnectbutton').removeClass('btn-default').addClass('btn-success');
+                    $('#adconnectbutton').prop('disabled', false);
+                    connect();
                 }, 30000);
             };
         }
@@ -239,9 +239,13 @@
                     phone: '254' + phone.slice(-9),
                     hotspot_id: hotspotId
                 }, function (data) {
-                    console.log(data)
                     $('input[name="username"]').val(data.username);
                     $('input[name="password"]').val(data.password);
+
+                    $('#adconnectbutton').html('Connect');
+                    $('#adconnectbutton').removeClass('btn-default').addClass('btn-success');
+                    $('#adconnectbutton').prop('disabled', false);
+
                     isSubscribed = true;
                     if (connectAfter) $('#sendin').submit();
                 });
@@ -254,7 +258,7 @@
         * 6. Connect — POST login credentials to hotspot
         */
         function connect() {
-            if (isSubscribed) {                
+            if (isSubscribed) {
                 $('#sendin').submit();
             } else {
                 subscribe(true);
@@ -263,7 +267,9 @@
         }
 
         // Subscribe on each keyup
-        $('#adphone').on('keyup', function () { subscribe(); });
+        $('#adphone').on('keyup', function () { 
+            if (!isSubscribed) subscribe(); 
+        });
 
         // Bootstrap
         $(document).ready(function () { fetchPortalData(); });

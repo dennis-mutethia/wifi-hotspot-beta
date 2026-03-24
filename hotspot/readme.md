@@ -26,7 +26,6 @@ DNS Servers = `208.67.220.123` and `208.67.222.123` - Family Shield (To block Ad
 ```
 6. Go to `IP > Hotspot > User Profiles` and update
 ```
-Shared Users = 254
 Rate Limit (rx/tx) = 1M/1M
 ```
 7. Add Walled Garden for Backend & Media Access (allows access without login). Open Terminal and
