@@ -219,12 +219,10 @@
         function onPlayerReady(event) {
             document.onclick = function () {
                 if (player.isMuted()) player.unMute();
-                setTimeout(function () {
-                    $('#adconnectbutton').html('Connect');
-                    $('#adconnectbutton').removeClass('btn-default').addClass('btn-success');
-                    $('#adconnectbutton').prop('disabled', false);
-                    connect();
-                }, 30000);
+
+                if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                    player.playVideo();
+                }
             };
         }
 
@@ -268,14 +266,14 @@
 
         // Subscribe on each keyup
         $('#adphone').on('keyup', function () {
-            if (!isSubscribed) subscribe();
 
             if (player.isMuted()) player.unMute();
 
             if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
                 player.playVideo();
-                
             }
+            
+            if (!isSubscribed) subscribe();
         });
 
         // Bootstrap
