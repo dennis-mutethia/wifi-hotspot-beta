@@ -217,13 +217,11 @@
         }
 
         function onPlayerReady(event) {
-            document.onclick = function () {
-                if (player.isMuted()) player.unMute();
+            if (player.isMuted()) player.unMute();
 
-                if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
-                    player.playVideo();
-                }
-            };
+            if (player.getPlayerState() != YT.PlayerState.PLAYING) {
+                player.playVideo();
+            }
         }
 
         /**
@@ -237,6 +235,8 @@
                     phone: '254' + phone.slice(-9),
                     hotspot_id: hotspotId
                 }, function (data) {
+                    isSubscribed = true;
+
                     $('input[name="username"]').val(data.username);
                     $('input[name="password"]').val(data.password);
 
@@ -244,7 +244,6 @@
                     $('#adconnectbutton').removeClass('btn-default').addClass('btn-success');
                     $('#adconnectbutton').prop('disabled', false);
 
-                    isSubscribed = true;
                     if (connectAfter) $('#sendin').submit();
                 });
             } else {
@@ -269,10 +268,10 @@
 
             if (player.isMuted()) player.unMute();
 
-            if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+            if (player.getPlayerState() != YT.PlayerState.PLAYING) {
                 player.playVideo();
             }
-            
+
             if (!isSubscribed) subscribe();
         });
 
