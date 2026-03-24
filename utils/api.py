@@ -34,6 +34,6 @@ def subscribe(db):
         subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=device)
 
         return jsonify({
-            "username": subscriber_id % 251,
+            "username": f"user-{subscriber_id % 251}",
             "password": "TgdV84"
         })
