@@ -66,192 +66,229 @@
         </div>
 
         <div class="col-md-3">
-            <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Total Connections Today</div>
-                    <div class="row py-3">
-                        <div class="col-md-12 d-flex flex-column justify-content-around">
-                            <div>
-                                <h6 class="fw-bold text-uppercase text-success op-8">Total Connections Today
-                                </h6>
-                                <h3 class="fw-bold">{{ total_connections_today }}</h3>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-uppercase text-warning op-8">Unique Devices Today</h6>
-                                <h3 class="fw-bold">{{ unique_connections_today }}</h3>
-                            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Today WiFi Users</div>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="d-flex">
+                        <div class="flex-1 pt-1 ml-2">
+                            <h6 class="fw-bold mb-1">Total Connections Today</h6>
+                            <small class="text-muted">No. of Youtube Videos Views</small>
+                        </div>
+                        <div class="d-flex ml-auto align-items-center">
+                            <h3 class="text-info fw-bold">{{ total_connections_today }}</h3>
+                        </div>
+                    </div>
+                    <div class="separator-dashed"></div>
+                    <div class="d-flex">
+                        <div class="flex-1 pt-1 ml-2">
+                            <h6 class="fw-bold mb-1">Unique Users Today</h6>
+                            <small class="text-muted">Unique Phone Nos.</small>
+                        </div>
+                        <div class="d-flex ml-auto align-items-center">
+                            <h3 class="text-info fw-bold">{{ unique_connections_today }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">Hotspot Users Statistics Per Day</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="min-height: 375px">
+                            <canvas id="subscribersPerDayChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card full-height">
+                    <div class="card-header">
+                        <div class="card-title">Latest Connections</div>
+                    </div>
+                    <div class="card-body">
+                        <ol class="activity-feed">
+                            {% for con in latest_connections %}
+                            <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
+                                <time class="date" datetime="9-25">{{ con.datetime }}</time>
+                                <span class="text">{{ con.phone }} [<small class="text-primary">{{ con.hotspot }}
+                                        Hotspot]</small></span>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">Today Hotspot Users Hourly Statistics</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="min-height: 375px">
+                            <canvas id="subscribersPerHourChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-5">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Hotspot Users Statistics Per Day</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="min-height: 375px">
-                        <canvas id="subscribersPerDayChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card full-height">
-                <div class="card-header">
-                    <div class="card-title">Latest Connections</div>
-                </div>
-                <div class="card-body">
-                    <ol class="activity-feed">
-                        {% for con in latest_connections %}
-                        <li class="feed-item feed-item-{{ 'success' if con.active else 'warning' }}">
-                            <time class="date" datetime="9-25">{{ con.datetime }}</time>
-                            <span class="text">{{ con.phone }} [<small class="text-primary">{{ con.hotspot }}
-                                    Hotspot]</small></span>
-                        </li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Today Hotspot Users Hourly Statistics</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="min-height: 375px">
-                        <canvas id="subscribersPerHourChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 
-</div>
+    <script>
+        Circles.create({
+            id: 'circles-1',
+            radius: 64,
+            value: 100,
+            maxValue: 100,
+            width: 7,
+            text: '{{ total_connections }}',
+            colors: ['white', 'orange'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
-<script>
-    Circles.create({
-        id: 'circles-1',
-        radius: 64,
-        value: 100,
-        maxValue: 100,
-        width: 7,
-        text: '{{ total_connections }}',
-        colors: ['white', 'orange'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
+        Circles.create({
+            id: 'circles-2',
+            radius: 64,
+            value: 100,
+            maxValue: 100,
+            width: 7,
+            text: '{{ active_connections }}',
+            colors: ['white', 'green'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
-    Circles.create({
-        id: 'circles-2',
-        radius: 64,
-        value: 100,
-        maxValue: 100,
-        width: 7,
-        text: '{{ active_connections }}',
-        colors: ['white', 'green'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
+        Circles.create({
+            id: 'circles-3',
+            radius: 64,
+            value: 100,
+            maxValue: 100,
+            width: 7,
+            text: '{{ all_hotspots | length }}',
+            colors: ['white', 'blue'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
-    Circles.create({
-        id: 'circles-3',
-        radius: 64,
-        value: 100,
-        maxValue: 100,
-        width: 7,
-        text: '{{ all_hotspots | length }}',
-        colors: ['white', 'blue'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
-
-    // Function to generate a random color in rgba format
-    function getRandomColor() {
-        const r = Math.floor(Math.random() * 255);
-        const g = Math.floor(Math.random() * 255);
-        const b = Math.floor(Math.random() * 255);
-        const a = 0.7; // Set alpha for transparency
-        return `rgba(${r}, ${g}, ${b}, ${a})`;
-    }
-
-    // Generate a random color for each segment
-    function getRandomColorsArray(numColors) {
-        let colors = [];
-        for (let i = 0; i < numColors; i++) {
-            colors.push(getRandomColor());
+        // Function to generate a random color in rgba format
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            const a = 0.7; // Set alpha for transparency
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
-        return colors;
-    }
 
-    // Get hotspots data from Jinja variable
-    const hotspotsConnections = {{ hotspots_connections | tojson }};
-
-    // Extract labels and data from hotspots array
-    const hotspotsLabels = hotspotsConnections.map(hotspot => hotspot.name);
-    const hotspotsData = hotspotsConnections.map(hotspot => hotspot.count);
-
-    const connectionsPerhotspotChart = document.getElementById('connectionsPerhotspotChart');
-    new Chart(connectionsPerhotspotChart, {
-        type: 'pie',
-        data: {
-            labels: hotspotsLabels,
-            datasets: [{
-                label: 'Connections/Users Per hotspot',
-                data: hotspotsData,
-                backgroundColor: getRandomColorsArray(hotspotsData.length)
-            }]
-        },
-        options: {
-            legend: {
-                display: true,
+        // Generate a random color for each segment
+        function getRandomColorsArray(numColors) {
+            let colors = [];
+            for (let i = 0; i < numColors; i++) {
+                colors.push(getRandomColor());
             }
+            return colors;
         }
-    });
 
-    // Get hotspots data from Jinja variable
-    const connectionsPerDay = {{ connections_per_day | tojson }};
+        // Get hotspots data from Jinja variable
+        const hotspotsConnections = {{ hotspots_connections | tojson }};
 
-    // Extract labels and data from hotspots array
-    const connectionsPerDayLabels = connectionsPerDay.map(hotspot => hotspot.date);
-    const connectionsPerDayData = connectionsPerDay.map(hotspot => hotspot.count);
+        // Extract labels and data from hotspots array
+        const hotspotsLabels = hotspotsConnections.map(hotspot => hotspot.name);
+        const hotspotsData = hotspotsConnections.map(hotspot => hotspot.count);
 
-    const subscribersPerDayChart = document.getElementById('subscribersPerDayChart');
-    new Chart(subscribersPerDayChart, {
-        type: 'line',
-        data: {
-            labels: connectionsPerDayLabels,
-            datasets: [{
-                label: 'Hotspot Users',
-                data: connectionsPerDayData,
-                backgroundColor: 'lime',
-                fill: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            legend: {
-                display: true,
+        const connectionsPerhotspotChart = document.getElementById('connectionsPerhotspotChart');
+        new Chart(connectionsPerhotspotChart, {
+            type: 'pie',
+            data: {
+                labels: hotspotsLabels,
+                datasets: [{
+                    label: 'Connections/Users Per hotspot',
+                    data: hotspotsData,
+                    backgroundColor: getRandomColorsArray(hotspotsData.length)
+                }]
+            },
+            options: {
+                legend: {
+                    display: true,
+                }
             }
-        }
-    });
-</script>
+        });
 
-{% endblock %}
+        // Get hotspots data from Jinja variable
+        const connectionsPerDay = {{ connections_per_day | tojson }};
+
+        // Extract labels and data from hotspots array
+        const connectionsPerDayLabels = connectionsPerDay.map(hotspot => hotspot.date);
+        const connectionsPerDayData = connectionsPerDay.map(hotspot => hotspot.count);
+
+        const subscribersPerDayChart = document.getElementById('subscribersPerDayChart');
+        new Chart(subscribersPerDayChart, {
+            type: 'line',
+            data: {
+                labels: connectionsPerDayLabels,
+                datasets: [{
+                    label: 'Hotspot Users',
+                    data: connectionsPerDayData,
+                    backgroundColor: 'lime',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: true,
+                }
+            }
+        });
+
+
+        // Get hotspots data from Jinja variable
+        const connectionsPerHour = {{ connections_per_hour | tojson }};
+
+        // Extract labels and data from hotspots array
+        const connectionsPerHourLabels = connectionsPerHour.map(hotspot => hotspot.hour);
+        const connectionsPerHourData = connectionsPerHour.map(hotspot => hotspot.count);
+
+        const subscribersPerHourChart = document.getElementById('subscribersPerHourChart');
+        new Chart(subscribersPerHourChart, {
+            type: 'bar',
+            data: {
+                labels: connectionsPerHourLabels,
+                datasets: [{
+                    label: 'Hotspot Users',
+                    data: connectionsPerHourData,
+                    backgroundColor: 'orange',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: true,
+                }
+            }
+        });
+
+    </script>
+
+    {% endblock %}

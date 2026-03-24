@@ -37,12 +37,13 @@ def dashboard(db):
     total_connections_today = db.get_total_connections(today=True)
     unique_connections_today = db.get_unique_connections(today=True)
     connections_per_day = db.get_connections_per_day()
+    connections_per_hour = db.get_connections_per_hour()
     latest_connections = db.get_latest_connections()
     return render_template('dashboard.html', page='dashboard',
                            total_connections=total_connections, active_connections=active_connections, 
                            all_hotspots=all_hotspots, hotspots_connections=hotspots_connections,
                            total_connections_today=total_connections_today,unique_connections_today=unique_connections_today,
-                           connections_per_day=connections_per_day, latest_connections=latest_connections)
+                           connections_per_day=connections_per_day, latest_connections=latest_connections, connections_per_hour=connections_per_hour)
     
 def clients(db): 
     if request.method == 'POST':   
@@ -72,15 +73,13 @@ def hotspots(db):
         action = request.form['action'] 
         if action in ['add', 'edit']:
             hotspot_name = request.form['hotspotName']
-            hotspot_username = request.form['hotspotUsername']
-            hotspot_password = request.form['hotspotPassword']
             client_id = request.form['clientId']      
             if action == 'add':
-                added_hotspot_id = db.update_hotspot(None, hotspot_name, hotspot_username, hotspot_password, client_id)
+                added_hotspot_id = db.update_hotspot(None, hotspot_name, client_id)
                 
             elif action == 'edit':
                 edit_hotspot_id = int(request.form['editHotspotId'])
-                updated_hotspot_id = db.update_hotspot(edit_hotspot_id, hotspot_name, hotspot_username, hotspot_password, client_id)
+                updated_hotspot_id = db.update_hotspot(edit_hotspot_id, hotspot_name, client_id)
         
         elif action =='remove':
             remove_hotspot_id = int(request.form['removeHotspotId'])

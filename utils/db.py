@@ -115,7 +115,7 @@ class Db():
             FROM subscribers 
             GROUP BY hotspot_id
         )
-        SELECT hotspots.id, hotspots.name, hotspot_username, hotspot_password, clients.id, clients.name, subscribers.count
+        SELECT hotspots.id, hotspots.name, clients.id, clients.name, subscribers.count
         FROM hotspots 
         INNER JOIN clients ON clients.id = hotspots.client_id
         LEFT JOIN subscribers ON subscribers.hotspot_id = hotspots.id 
@@ -135,7 +135,7 @@ class Db():
                 data = cursor.fetchall()
                 hotspots = []
                 for datum in data:  
-                    hotspot = Hotspot(datum[0], datum[1], datum[2], datum[3], datum[4], datum[5], datum[6])
+                    hotspot = Hotspot(datum[0], datum[1], datum[2], datum[3], datum[4])
                     hotspots.append(hotspot)
                     
                 return hotspots
@@ -145,21 +145,19 @@ class Db():
             raise e     
                 
   
-    def update_hotspot(self, id, name, hotspot_username, hotspot_password, client_id):
+    def update_hotspot(self, id, name, client_id):
         self.ensure_connection()            
         
         query = f"""
-        INSERT INTO hotspots(name, hotspot_username, hotspot_password, client_id, created_at {',id' if id else ''}) 
-        VALUES(%s, %s, %s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi' {',%s' if id else ''})
+        INSERT INTO hotspots(name, client_id, created_at {',id' if id else ''}) 
+        VALUES(%s, %s, CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi' {',%s' if id else ''})
         ON CONFLICT (id)
         DO UPDATE SET 
             name = EXCLUDED.name, 
-            hotspot_username = EXCLUDED.hotspot_username, 
-            hotspot_password = EXCLUDED.hotspot_password, 
             client_id = EXCLUDED.client_id
         RETURNING id
         """
-        params = [name, hotspot_username, hotspot_password, client_id]
+        params = [name, client_id]
         if id:
             params.append(id)
                     
@@ -464,6 +462,35 @@ class Db():
                 for datum in data:  
                     sub = {
                         'date' : datum[0],
+                        'count' : datum[1]
+                    }                  
+                    subs.append(sub)
+
+                return subs 
+        except Exception as e:
+            self.conn.rollback()
+            raise e   
+        
+    def get_connections_per_hour(self):  
+        self.ensure_connection()        
+        query = """SELECT 
+            TO_CHAR(created_at, 'HH12 AM') AS hour,
+            COUNT(*) AS count 
+        FROM subscribers
+        WHERE DATE(created_at) = CURRENT_DATE
+        GROUP BY TO_CHAR(created_at, 'HH12 AM'), EXTRACT(HOUR FROM created_at)
+        ORDER BY EXTRACT(HOUR FROM created_at)
+        """
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query,)
+                data = cursor.fetchall()
+                                    
+                subs = []
+                for datum in data:  
+                    sub = {
+                        'hour' : datum[0],
                         'count' : datum[1]
                     }                  
                     subs.append(sub)

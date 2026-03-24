@@ -42,20 +42,6 @@
                                                     class="form-control" placeholder="Hotspot Name" required>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group form-group-default">
-                                                <label>Username</label>
-                                                <input id="hotspotUsername" name="hotspotUsername" type="text"
-                                                    class="form-control" placeholder="Hotspot User" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 pr-0">
-                                            <div class="form-group form-group-default">
-                                                <label>Password</label>
-                                                <input id="hotspotPassword" name="hotspotPassword" type="text"
-                                                    class="form-control" placeholder="Hotspot User Password" required>
-                                            </div>
-                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Select Client Name</label>
@@ -115,9 +101,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Client</th>
+                                <th>Owner</th>
                                 <th>Subscribers</th>
                                 <th class="text-center" style="width: 10%">Action</th>
                             </tr>
@@ -127,15 +111,13 @@
                             <tr>
                                 <td>{{ hotspot.id }}</td>
                                 <td>{{ hotspot.name }}</td>
-                                <td>{{ hotspot.hotspot_username }}</td>
-                                <td>{{ hotspot.hotspot_password }}</td>
                                 <td>{{ hotspot.client_name }}</td>
                                 <td>{{ hotspot.subscribers }}</td>
                                 <td>
                                     <div class="form-button-action">
                                         <button type="button" title="Edit this Hotspot" data-toggle="modal"
                                             data-target="#addModal"
-                                            onclick="edit({{ hotspot.id }}, '{{ hotspot.name }}', '{{ hotspot.hotspot_username }}', '{{ hotspot.hotspot_password }}', '{{ hotspot.client_id }}')"
+                                            onclick="edit({{ hotspot.id }}, '{{ hotspot.name }}', '{{ hotspot.client_id }}')"
                                             class="btn btn-link btn-primary btn-lg"
                                             data-original-title="Edit this Hotspot">
                                             <i class="fa fa-edit"></i>
@@ -172,18 +154,14 @@
         $('#action_label').html('Add New');
         $('#editHotspotId').val(null);
         $('#hotspotName').val(null);
-        $('#hotspotUsername').val(null);
-        $('#hotspotPassword').val(null);
         $('#clientId').val(1);
         $('#addButton').val('add');
     }
 
-    function edit(id, name, hotspotUsername, hotspotPassword, clientId) {
+    function edit(id, name, clientId) {
         $('#action_label').html('Edit');
         $('#editHotspotId').val(id);
         $('#hotspotName').val(name);
-        $('#hotspotUsername').val(hotspotUsername);
-        $('#hotspotPassword').val(hotspotPassword);
         $('#clientId').val(clientId);
         $('#addButton').val('edit');
     }

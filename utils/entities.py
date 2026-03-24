@@ -19,11 +19,9 @@ class Client():
         }
 
 class Hotspot():
-    def __init__(self, id, name, hotspot_username, hotspot_password, client_id, client_name, subscribers):
+    def __init__(self, id, name, client_id, client_name, subscribers):
         self.id = id
         self.name = name
-        self.hotspot_username = hotspot_username
-        self.hotspot_password = hotspot_password
         self.client_id = client_id
         self.client_name = client_name
         self.subscribers = subscribers     
@@ -32,8 +30,6 @@ class Hotspot():
         return {
             'id': self.id,
             'name': self.name,
-            'hotspot_username': self.hotspot_username,
-            'hotspot_password': self.hotspot_password,
             'client_id': self.client_id,
             'client_name': self.client_name,
             'subscribers': self.subscribers
