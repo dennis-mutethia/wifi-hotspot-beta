@@ -1,4 +1,4 @@
-import random
+import random, re
 from flask import request, jsonify
 
 def to_dict(obj):
@@ -31,10 +31,9 @@ def subscribe(db):
         match = re.search(r'\(([^)]+)\)', user_agent)
         device = match.group(1) if match else None
         
-        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=user_agent)
+        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=device)
 
         return jsonify({
-            "subscriber_id": subscriber_id,
-            "phone": phone,
-            "hotspot_id": hotspot_id
+            "username": subscriber_id % 251,
+            "password": "TgdV84"
         })
