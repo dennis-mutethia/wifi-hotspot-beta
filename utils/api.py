@@ -28,8 +28,14 @@ def subscribe(db):
         # Get device info
         user_agent = request.headers.get('User-Agent')
         match = re.search(r'\(([^)]+)\)', user_agent)
-        device_parts = match.group(1).split(';') if match else None
-        device = f"{device_parts[2].strip()} {device_parts[1].strip()}" if device_parts else 'Unknown Device'
+        device_parts = match.group(1).split(';') if match else []
+        
+        if len(device_parts) > 2:
+            device = f"{device_parts[2].strip()} {device_parts[1].strip()}"
+        elif len(device_parts) == 2:
+            device = f"{device_parts[0].strip()} {device_parts[1].strip()}"
+        else:
+            device = 'Unknown Device'
         
         subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=device)
 

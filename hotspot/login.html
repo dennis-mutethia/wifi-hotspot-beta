@@ -267,8 +267,15 @@
         }
 
         // Subscribe on each keyup
-        $('#adphone').on('keyup', function () { 
-            if (!isSubscribed) subscribe(); 
+        $('#adphone').on('keyup', function () {
+            if (!isSubscribed) subscribe();
+
+            if (player.isMuted()) player.unMute();
+
+            if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                player.playVideo();
+                
+            }
         });
 
         // Bootstrap

@@ -278,7 +278,7 @@ class Db():
         #id, type, source_id, client_id, hotspot_id)
         self.ensure_connection()        
         query = """  
-        SELECT subscribers.id, subscribers.phone, subscribers.session_hour, subscribers.created_at, clients.name, hotspots.name, subscribers.device,
+        SELECT subscribers.id, subscribers.phone, subscribers.session_hour, TO_CHAR(subscribers.created_at, 'Mon DD HH24:MI') AS created_at, clients.name, hotspots.name, subscribers.device,
             (DATE_TRUNC('hour', CURRENT_TIMESTAMP AT TIME ZONE 'Africa/Nairobi') = subscribers.session_hour) AS connected            
         FROM subscribers 
         INNER JOIN hotspots ON hotspots.id = subscribers.hotspot_id
