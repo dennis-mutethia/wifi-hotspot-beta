@@ -3,7 +3,7 @@ html {
 }
 
 .header {
-    background-color: red;
+    background-color: white;
     color: white;
     position: sticky;
     top: 0;
@@ -16,9 +16,11 @@ html {
     /* Align text at the bottom */
     height: 80px;
     /* Set height for the header */
-   
+
+    /* Letter spacing — simplest, works on any font */
     font-family: Georgia, serif;
-    
+    font-weight: bolder;
+
 }
 
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title id="title">Matrix Systems FREE Wi-Fi</title>
+    <title id="title">Matrix Systems Wi-Fi</title>
     <link rel="icon" type="image/png" sizes="16x16" href="img/logo.PNG">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/fontawesome-all.min.css" />
@@ -125,7 +125,8 @@
     </div>
     <!-- <script src="js/script.js"></script> -->
     <script>
-        const hotspotId = 5;
+        const hotspotId = 6;
+
         //const baseUrl = 'http://localhost:5000';
         const baseUrl = 'https://matrix-hotspot.vercel.app'
 
@@ -159,23 +160,23 @@
             var images = d.images;
 
             //Title
-            $('#title').html(client.name + ' FREE WiFi');
+            $('#title').html(client.name + ' Wi-Fi');
 
             // Header
             $('#header').css('background-color', client.background_color);
             $('#header-title')
-                .text(client.name + ' FREE Wi-Fi')
+                .text(client.name + ' Wi-Fi')
                 .css({ 'background-color': client.background_color, 'color': client.foreground_color });
 
             // Favicon
             $('link[rel="icon"]').attr('href', 'img/logo.PNG');
 
             // Page title
-            document.title = client.name + ' FREE Wi-Fi';
+            document.title = client.name + ' Wi-Fi';
 
             // Tagline
             $('#tagline').html(
-                'Enter Your Valid Phone Number Below and Enjoy Super Fast Free WIFI' +
+                'Enter Your Valid Phone Number Below and Enjoy Super Fast WIFI' +
                 '<br /> Powered by ' + client.name
             );
 
