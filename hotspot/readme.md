@@ -48,12 +48,12 @@ add action=allow dst-host=youtube.com
 add action=allow dst-host=googlevideo.com
 add action=allow dst-host=ytimg.com
 
-#Google
+#Google DNS
 /ip hotspot walled-garden ip
 add action=accept dst-address=8.8.8.8 comment="Google DNS"
 add action=accept dst-address=8.8.4.4 comment="Google DNS"
 
-#Captive portal
+#Captive portal (optional)
 /ip hotspot walled-garden
 add action=allow dst-host=connectivitycheck.gstatic.com
 add action=allow dst-host=connectivitycheck.android.com
@@ -61,13 +61,10 @@ add action=allow dst-host=captive.apple.com
 add action=allow dst-host=www.apple.com
 add action=allow dst-host=www.msftconnecttest.com
 add action=allow dst-host=detectportal.firefox.com
-add action=allow dst-host=*.gstatic.com
 ```
 8. Enable hotspot & scheduler
 ```
-system device-mode
-print
-update scheduler=yes hotspot=yes
+/system device-mode update scheduler=yes hotspot=yes
 ```
 9. Schedule Hourly Reboot
 ```
@@ -78,4 +75,8 @@ update scheduler=yes hotspot=yes
 Double click the DHCP SERVER and update
 Check Always Broadcast
 Check Add ARP for Leases
+```
+1. Go to `IP > DNS`
+```
+Check Allow Remote Requests
 ```
