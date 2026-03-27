@@ -56,6 +56,10 @@ def hotspots():
 def gallery(): 
     return routes.gallery(db)
 
+@app.route('/system-users', methods=['GET', 'POST'])
+def system_users(): 
+    return routes.system_users(db)
+
 @app.route('/subscribers', methods=['GET', 'POST'])
 def subscribers(): 
     return routes.subscribers(db)

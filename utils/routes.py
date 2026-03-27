@@ -1,6 +1,9 @@
-import random
+import hashlib, random
 from flask import render_template, request, jsonify
 
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
 def subscriber(db): 
     if request.method == 'GET':       
         hotspot_id = int(request.args.get('hotspot_id', 0))
@@ -131,3 +134,26 @@ def gallery(db):
     hotspots = db.get_hotspots()
     clients = db.get_clients() 
     return render_template('gallery.html', page='gallery', hotspots=hotspots, clients=clients, images=images, videos=videos, hotspot_id=hotspot_id)
+
+    
+def system_users(db): 
+    if request.method == 'POST':   
+        action = request.form['action'] 
+        if action in ['add', 'edit']:
+            name = request.form['systemUserName'].upper()
+            phone = request.form['phone']
+            client_id = request.form['clientId'] 
+            if action == 'add':
+                added_system_user_id = db.update_system_user(None, name, phone, client_id, password=hash_password(phone))
+                
+            elif action == 'edit':
+                edit_system_user_id = int(request.form['editSystemUserId'])                
+                updated_system_user_id = db.update_system_user(edit_system_user_id, name, phone, client_id)
+        
+        elif action =='remove':
+            remove_system_user_id = int(request.form['removeSystemUserId'])
+            db.remove_system_user(remove_system_user_id)
+
+    system_users = db.get_system_users()
+    clients = db.get_clients() 
+    return render_template('system-users.html', page='system_users', system_users=system_users, clients=clients)

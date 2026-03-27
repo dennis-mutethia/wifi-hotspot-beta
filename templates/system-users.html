@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-inner">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">System Users</h4>
+                    <button class="btn btn-success btn-round ml-auto btn-sm" data-toggle="modal" data-target="#addModal"
+                        onclick="add()">
+                        <i class="fa fa-plus"></i>
+                        Add System User
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Modal -->
+                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form method="POST">
+                                <input id="editSystemUserId" name="editSystemUserId" type="hidden">
+                                <div class="modal-header no-bd">
+                                    <h5 class="modal-title">
+                                        <span id="action_label" class="fw-mediumbold">
+                                            Add New</span>
+                                        <span class="fw-light">
+                                            System User
+                                        </span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Name</label>
+                                                <input id="systemUserName" name="systemUserName" type="text"
+                                                    class="form-control" placeholder="System User Name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Phone No.</label>
+                                                <input id="phone" name="phone" type="text" class="form-control"
+                                                    placeholder="Phone Number" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Select Client Name</label>
+                                                <select id="clientId" name="clientId" class="form-control">
+                                                    {% for client in clients %}
+                                                    <option value="{{ client.id }}">{{ client.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer no-bd">
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="submit" id="addButton" name="action" value="add"
+                                        class="btn btn-success btn-sm">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form method="POST">
+                                <input id="removeSystemUserId" name="removeSystemUserId" type="hidden">
+                                <div class="modal-header no-bd">
+                                    <h5 class="modal-title">
+                                        <span class="fw-mediumbold">
+                                            Are you sure you want to Remove </span>
+                                        <span class="fw-light" id="removeSystemUserName">
+
+                                        </span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Click Confirm Remove to Completely Remove this System User.</p>
+                                    <small class="text-danger">THIS ACTION IS NOT REVERSIBLE</small>
+                                </div>
+                                <div class="modal-footer no-bd">
+                                    <button type="button" class="btn btn-warning btn-sm"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="submit" id="removeButton" name="action" value="remove"
+                                        class="btn btn-danger btn-sm">Confirm Remove</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Phone No.</th>
+                                <th>Client</th>
+                                <th class="text-center" style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for system_user in system_users %}
+                            <tr>
+                                <td>{{ loop.index }}.</td>
+                                <td>{{ system_user.name }}</td>
+                                <td>{{ system_user.phone }}</td>
+                                <td>
+                                    {% for client in clients %}
+                                    {% if client.id == system_user.client_id %}
+                                    {{ client.name }}
+                                    {% endif %}
+                                    {% endfor %}
+                                <td>
+                                    <div class="form-button-action">
+                                        <button type="button" title="Edit this System User" data-toggle="modal"
+                                            data-target="#addModal"
+                                            onclick="edit({{ system_user.id }}, '{{ system_user.name }}', '{{ system_user.phone }}', '{{ system_user.client_id }}')"
+                                            class="btn btn-link btn-primary btn-lg"
+                                            data-original-title="Edit this System User">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="button" title="Remove this System User" data-toggle="modal"
+                                            data-target="#removeModal"
+                                            onclick="remove({{ system_user.id }}, '{{ system_user.name }}')"
+                                            class="btn btn-link btn-danger"
+                                            data-original-title="Remove this System User">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Add Row
+        $('#add-row').DataTable({
+            "pageLength": 5,
+        });
+    });
+
+    function add() {
+        $('#action_label').html('Add New');
+        $('#editSystemUserId').val(null);
+        $('#systemUserName').val(null);
+        $('#phone').val(null);
+        $('#clientId').val(1);
+        $('#addButton').val('add');
+    }
+
+    function edit(id, name, phone, clientId) {
+        $('#action_label').html('Edit');
+        $('#editSystemUserId').val(id);
+        $('#systemUserName').val(name);
+        $('#phone').val(phone);
+        $('#clientId').val(clientId);
+        $('#addButton').val('edit');
+    }
+
+    function remove(id, name) {
+        $('#removeSystemUsertId').val(id);
+        $('#removeSystemUsertName').html(name);
+    }
+</script>
+
+{% endblock %}

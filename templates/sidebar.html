@@ -25,13 +25,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#edit">
-                                    <span class="link-collapse">Edit Profile</span>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="#settings">
-                                    <span class="link-collapse">Settings</span>
+                                    <span class="link-collapse">Logout</span>
                                 </a>
                             </li>
                         </ul>
@@ -69,18 +64,18 @@
                         <p>Subscribers</p>
                     </a>
                 </li>                   
-                <li class="nav-item {{ 'active' if page=='users' }}">
-                    <a href="#users">
+                <li class="nav-item {{ 'active' if page=='system_users' }}">
+                    <a href="{{ url_for('system_users') }}">
                         <i class="fas fa-users"></i>
                         <p>System Users</p>
                     </a>
                 </li>              
-                <li class="nav-item {{ 'active' if page=='settings' }}">
+                <!-- <li class="nav-item {{ 'active' if page=='settings' }}">
                     <a href="#base">
                         <i class="fas fa-cogs"></i>
                         <p>Settings</p>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

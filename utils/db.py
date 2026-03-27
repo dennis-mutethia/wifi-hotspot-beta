@@ -1,7 +1,7 @@
 import os, psycopg2
 from dotenv import load_dotenv
 
-from utils.entities import Client, Hotspot, Media, Subscriber
+from utils.entities import Client, Hotspot, Media, Subscriber, SystemUsers
     
 class Db():
     
@@ -499,3 +499,87 @@ class Db():
             self.conn.rollback()
             raise e   
             
+                  
+    def get_system_users(self, client_id=None, phone=None, password=None):  
+        self.ensure_connection()        
+        query = """
+        SELECT id, name, phone, client_id
+        FROM system_users
+        WHERE 1=1
+        """
+        params = []
+        if client_id:
+            query = f'{query} AND client_id=%s'
+            params.append(client_id)
+        if phone:
+            query = f'{query} AND phone=%s'
+            params.append(phone)
+        if password:
+            query = f'{query} AND password=%s'
+            params.append(password)
+                
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                data = cursor.fetchall()
+                    
+                system_users = []
+                for datum in data:                    
+                    system_users.append(SystemUsers(datum[0], datum[1], datum[2], datum[3]))
+
+                return system_users
+             
+        except Exception as e:
+            raise e   
+        
+        
+    def update_system_user(self, id, name, phone, client_id, password=None):
+        self.ensure_connection()    
+        query = f"""
+        INSERT INTO system_users(name, phone, password, client_id {',id' if id else ''}) 
+        VALUES(%s, %s, %s, %s {',%s' if id else ''})
+        """
+        params = [name, phone, password, client_id]
+        if id:
+            query = f"""{query}
+            ON CONFLICT (id)
+            DO UPDATE SET 
+                name = EXCLUDED.name, 
+                phone = EXCLUDED.phone, 
+                { 'password = EXCLUDED.password,' if password else '' } 
+                client_id = EXCLUDED.client_id     
+            """
+            params.append(id)
+        else:
+            query = f"""{query}
+            ON CONFLICT (phone)
+            DO NOTHING
+            """
+        query = f"{query} RETURNING id"            
+                    
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                self.conn.commit()
+                rows= cursor.fetchone()
+                return rows[0] if rows else 0
+        except Exception as e:
+            self.conn.rollback()
+            raise e    
+        
+        
+    def remove_system_user(self, id):
+        self.ensure_connection()    
+        query = """
+        DELETE FROM system_users
+        WHERE id = %s
+        """
+        params = [id]
+        
+        try:
+            with self.conn.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e     

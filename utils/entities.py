@@ -62,3 +62,32 @@ class Subscriber():
         self.hotspot = hotspot
         self.device = device
         self.status = 'Connected' if status else 'Disconnected'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'phone': self.phone,
+            'session_hour': self.session_hour,
+            'created_at': self.created_at,
+            'client': self.client,
+            'hotspot': self.hotspot,
+            'device': self.device,
+            'status': self.status
+        }
+
+class SystemUsers():
+    def __init__(self, id, name, phone, client_id):
+        self.id = id
+        self.name = name
+        self.phone = phone
+        self.client_id = client_id
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'phone': self.phone,
+            'client_id': self.client_id
+        }
+    
+
