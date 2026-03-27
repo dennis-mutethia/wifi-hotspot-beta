@@ -190,7 +190,6 @@ class Db():
         
                     
     def get_media(self, type=None, client_id=None, hotspot_id=None):  
-        #id, type, source_id, client_id, hotspot_id)
         self.ensure_connection()        
         query = """
         SELECT id, type, source_id, client_id, hotspot_id

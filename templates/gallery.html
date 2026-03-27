@@ -7,7 +7,20 @@
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h4 class="card-title">Gallery</h4>
-                    <button class="btn btn-success btn-round ml-auto  btn-sm" data-toggle="modal" data-target="#addModal"
+
+                    <form method="GET" class="ml-auto mr-3">
+                        <div class="form-group form-group-default">
+                            <label>Filter By WiFi Location - {{ hotspot_id }}</label>
+                            <select name="hotspotId" class="form-control" onchange="this.form.submit()">
+                                <option value="">All Locations</option>
+                                {% for hotspot in hotspots %}
+                                <option value="{{ hotspot.id }}" {{ 'selected' if hotspot_id == hotspot.id }} >{{ hotspot.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+
+                    <button class="btn btn-success btn-round ml-auto btn-sm" data-toggle="modal" data-target="#addModal"
                         onclick="add()">
                         <i class="fa fa-plus"></i>
                         Add Image/Video
@@ -25,6 +38,8 @@
                             aria-controls="pills-videos" aria-selected="true">Videos</a>
                     </li>
                 </ul>
+
+
                 <div class="tab-content mt-2 mb-3" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-images" role="tabpanel"
                         aria-labelledby="pills-images-tab">
@@ -41,14 +56,23 @@
                                         <div class="h1 m-0">
                                             <img src="https://i.postimg.cc/{{ image.source_id }}" alt="" width="100%">
                                         </div>
+                                        <div class="h1 m-0">
+                                            <h6 class="text-left text-bold">
+                                                WIFI LOCATION:
+                                                {% for hotspot in hotspots %}
+                                                {% if hotspot.id == image.hotspot_id %}
+                                                {{ hotspot.name }}
+                                                {% endif %}
+                                                {% endfor %}
+                                            </h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-videos" role="tabpanel"
-                        aria-labelledby="pills-videos-tab">
+                    <div class="tab-pane fade" id="pills-videos" role="tabpanel" aria-labelledby="pills-videos-tab">
                         <div class="row">
                             {% for video in videos %}
                             <div class="col-6 col-sm-4 col-lg-3">
@@ -87,10 +111,12 @@
                 <div class="modal-header no-bd">
                     <h5 class="modal-title">
                         <span id="action_label" class="fw-mediumbold">
-                            Add New</span> &nbsp; 
+                            Add New</span> &nbsp;
                         <span class="fw-light">
-                            <a class="btn btn-danger btn-border btn-round btn-xs" href="https://www.youtube.com/" target="_blank">Youtube Video</a> &nbsp; or &nbsp;
-                            <a class="btn btn-success btn-border btn-round btn-xs" href="https://postimages.org/" target="_blank">PostImg Image</a>
+                            <a class="btn btn-danger btn-border btn-round btn-xs" href="https://www.youtube.com/"
+                                target="_blank">Youtube Video</a> &nbsp; or &nbsp;
+                            <a class="btn btn-success btn-border btn-round btn-xs" href="https://postimages.org/"
+                                target="_blank">PostImg Image</a>
                             <br /> <br />
                             YOUTUBE VIDEO EXAMPLE: <code>https://www.youtube.com/watch?v=MaZLKAx6Ne0</code> <br />
                             POSTIMG IMAGE EXAMPLE: <code>https://i.postimg.cc/cLnn3wnX/6.jpg</code>
@@ -106,7 +132,8 @@
                             <div class="form-group form-group-default">
                                 <label>PostImg Image or Youtube Video Link</label>
                                 <input id="url" name="url" type="text" class="form-control"
-                                    placeholder="https://i.postimg.cc/xxx  or  https://www.youtube.com/watch?v=xxx" required>
+                                    placeholder="https://i.postimg.cc/xxx  or  https://www.youtube.com/watch?v=xxx"
+                                    required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -133,7 +160,8 @@
                 </div>
                 <div class="modal-footer no-bd">
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
-                    <button type="submit" id="addButton" name="action" value="add" class="btn btn-success btn-sm">Save</button>
+                    <button type="submit" id="addButton" name="action" value="add"
+                        class="btn btn-success btn-sm">Save</button>
                 </div>
             </form>
         </div>

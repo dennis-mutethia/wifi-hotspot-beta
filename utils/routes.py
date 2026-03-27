@@ -120,10 +120,14 @@ def gallery(db):
         elif action =='remove':
             remove_media_id = int(request.form['removeMediaId'])
             db.remove_media(remove_media_id)
-            
-    media = db.get_media() #Youtube videos or images uploaded at https://postimages.org/
+    
+    
+    hotspot_id = request.args.get('hotspotId', None)
+    hotspot_id = int(hotspot_id) if hotspot_id else None
+                
+    media = db.get_media(hotspot_id=hotspot_id)
     images = [image for image in media if image.type == 'image']
     videos = [video for video in media if video.type == 'video']
     hotspots = db.get_hotspots()
     clients = db.get_clients() 
-    return render_template('gallery.html', page='gallery', hotspots=hotspots, clients=clients, images=images, videos=videos)
+    return render_template('gallery.html', page='gallery', hotspots=hotspots, clients=clients, images=images, videos=videos, hotspot_id=hotspot_id)
