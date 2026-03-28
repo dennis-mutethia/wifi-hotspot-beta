@@ -20,9 +20,9 @@ db = Db()
 def portalData(hotspot_id):
     return api.portal_data(db, hotspot_id)
 
-@app.route('/api/subscribe', methods=['POST'])
-def subscribe():
-    return api.subscribe(db)
+@app.route('/api/subscribe/<hotspot_id>', methods=['POST'])
+def subscribe(hotspot_id):
+    return api.subscribe(db, hotspot_id)
 
 # Web App Routes
 @app.route('/')

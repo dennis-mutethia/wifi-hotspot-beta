@@ -232,9 +232,8 @@
             var phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 $('#notice').html('');
-                $.post(baseUrl + '/api/subscribe', {
-                    phone: '254' + phone.slice(-9),
-                    hotspot_id: hotspotId
+                $.post(baseUrl + '/api/subscribe/'+ hotspotId, {
+                    phone: '254' + phone.slice(-9)
                 }, function (data) {
                     isSubscribed = true;
 

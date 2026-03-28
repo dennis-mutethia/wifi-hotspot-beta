@@ -19,27 +19,21 @@ def portal_data(db, hotspot_id):
             "images": [i.to_dict() for i in random.sample(images, min(5, len(images)))]
         })
         
-def subscribe(db): 
+def subscribe(db, hotspot_id): 
     if request.method == 'POST':   
         phone = request.form['phone']
-        hotspot_id = int(request.form['hotspot_id'])
-        hotspot = db.get_hotspots(id=hotspot_id)[0]
+        hotspot = db.get_hotspots(id=int(hotspot_id))[0]
         
         # Get device info
         user_agent = request.headers.get('User-Agent')
         match = re.search(r'\(([^)]+)\)', user_agent)
         device_parts = match.group(1).split(';') if match else []
         
-        if len(device_parts) > 2:
-            device = f"{device_parts[2].strip()} {device_parts[1].strip()}"
-        elif len(device_parts) == 2:
-            device = f"{device_parts[0].strip()} {device_parts[1].strip()}"
-        else:
-            device = 'Unknown Device'
-        
+        device = f"{device_parts[0].strip()} {device_parts[1].strip()}" if len(device_parts) == 2 else f"{device_parts[2].strip()} {device_parts[1].strip()}" if len(device_parts) > 2 else 'Unknown Device'
+                
         subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id, device=device)
 
         return jsonify({
-            "username": f"user-{subscriber_id % 251}",
+            "username": f"user-{subscriber_id % 249}",
             "password": "TgdV84"
         })
