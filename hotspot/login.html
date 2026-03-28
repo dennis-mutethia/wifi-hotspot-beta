@@ -49,9 +49,9 @@
 
                     <h6 id="tagline" class="text-primary text-center"></h6>
 
-                    <input type="number" class="form-control" id="adphone" placeholder="Phone No. e.g 07123456789" />
+                    <input type="number" class="form-control" id="adphone" placeholder="Phone No. e.g 0712345678" />
                     <h6 id="notice" class="text-center text-danger"></h6>
-                    <button id="adconnectbutton" type="button" class="btn btn-default btn-block" onclick="connect();"
+                    <button id="adconnectbtn" type="button" class="btn btn-default btn-block"
                         style="color: black;" disabled>Watch the Video First then Tap to Connect!</button>
 
                     <br />
@@ -123,94 +123,19 @@
             </div>
         </div>
     </div>
-    <!-- <script src="js/script.js"></script> -->
+
     <script>
-        const hotspotId = 6;
+        const hotspotId = 1;
 
         //const baseUrl = 'http://localhost:5000';
         const baseUrl = 'https://matrix-hotspot.vercel.app'
 
-        /**
-        * Portal state — populated after API fetch
-        */
-        var portalData = {};
         var isSubscribed = false;
         var player;
-        var slideCounter = 1;
-        var slideInterval;
-
-        function fetchPortalData() {
-            $.getJSON(baseUrl + '/api/portal-data/' + hotspotId)
-                .done(function (data) {
-                    portalData = data;
-                    renderPortal(data);
-                })
-                .fail(function (xhr) {
-                    $('#notice').html('Failed to load portal. Please refresh.');
-                    console.error('Portal data fetch failed', xhr);
-                });
-        }
-
+        
         /**
-        * 2. Render everything once data arrives
-        */
-        function renderPortal(d) {
-            var client = d.client;
-            var video = d.video;
-            var images = d.images;
-
-            //Title
-            $('#title').html(client.name + ' Wi-Fi');
-
-            // Header
-            $('#header').css('background-color', client.background_color);
-            $('#header-title')
-                .text(client.name + ' Wi-Fi')
-                .css({ 'background-color': client.background_color, 'color': client.foreground_color });
-
-            // Favicon
-            $('link[rel="icon"]').attr('href', 'img/logo.PNG');
-
-            // Page title
-            document.title = client.name + ' Wi-Fi';
-
-            // Tagline
-            $('#tagline').html(
-                'Enter Your Valid Phone Number Below and Enjoy Super Fast WIFI' +
-                '<br /> Powered by ' + client.name
-            );
-
-            // Slides
-            renderSlides(images);
-
-            // Restore saved phone
-            // var saved = localStorage.getItem('userPhone');
-            // if (saved) $('#adphone').val(saved);
-            $('#adphone').focus();
-
-            // Video iframe
-            var src = 'https://www.youtube.com/embed/' + video.source_id +
-                '?playlist=' + video.source_id +
-                '&loop=1&enablejsapi=1&rel=0&modestbranding=1' +
-                '&showinfo=0&controls=0&disablekb=1&autoplay=1&mute=1';
-            $('#advideo').attr('src', src);
-        }
-
-        /**
-        * 3. Populate slider images dynamically
-        */
-        function renderSlides(images) {
-            images.forEach(function (img, i) {
-                var idx = i + 1;
-                let src = 'https://i.postimg.cc/' + img.source_id
-                $('#img' + idx).attr('src', src);
-            });
-
-        }
-
-        /**
-        * 4. YouTube Player API
-        */
+        * Pre-load Youtube API
+        */        
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('advideo', {
                 events: { onReady: onPlayerReady }
@@ -225,6 +150,89 @@
             }
         }
 
+        
+        /**
+        * Once DOM is ready: Fetch Portal Data and populate dynamic content
+        */      
+
+        $(document).ready(function () {
+            //Fetch portal data from API 
+            $.getJSON(baseUrl + '/api/portal-data/' + hotspotId)
+                .done(function (data) {
+                    renderPortal(data);
+                })
+                .fail(function (xhr) {
+                    $('#notice').html('Failed to load portal. Please refresh.');
+                    console.error('Portal data fetch failed', xhr);
+                });
+        
+        });
+
+        /**
+        * 2. Render everything once data arrives
+        */
+        function renderPortal(data) {
+            var client = data.client;
+            var video = data.video;
+            var images = data.images;
+
+            //Title
+            $('#title').html(client.name + ' Wi-Fi');
+
+            // Page title
+            document.title = client.name + ' Wi-Fi';
+
+            // Header
+            $('#header').css('background-color', client.background_color);
+            $('#header-title')
+                .text(client.name + ' Wi-Fi')
+                .css({ 'background-color': client.background_color, 'color': client.foreground_color });
+
+            // Tagline
+            $('#tagline').html(
+                'Enter Your Valid Phone Number Below and Enjoy Super Fast WIFI' +
+                '<br /> Powered by ' + client.name
+            );
+
+            // Focus on the input
+            $('#adphone').focus();
+
+            // Slides
+            renderSlides(images);
+
+            // Video iframe
+            renderVideo(video)
+        }
+
+        /**
+        * 3. Populate slider images dynamically
+        */
+        function renderSlides(images) {
+            images.forEach(function (img, i) {
+                var idx = i + 1;
+                let src = 'https://i.postimg.cc/' + img.source_id
+                $('#img' + idx).attr('src', src);
+            });
+
+        }        
+
+        /**
+        * 4. Populate Video dynamically 
+        */
+        function renderVideo(video) {
+            var src = 'https://www.youtube.com/embed/' + video.source_id +
+                '?loop=1' +
+                '&enablejsapi=1' +
+                '&rel=0' +
+                '&modestbranding=1' +
+                '&showinfo=0' +
+                '&controls=0' +
+                '&disablekb=1' +
+                '&autoplay=1' +
+                '&mute=1';
+            $('#advideo').attr('src', src);
+        }
+
         /**
         * 5. Subscribe — POST phone number
         */
@@ -232,7 +240,7 @@
             var phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 $('#notice').html('');
-                $.post(baseUrl + '/api/subscribe/'+ hotspotId, {
+                $.post(baseUrl + '/api/subscribe/' + hotspotId, {
                     phone: '254' + phone.slice(-9)
                 }, function (data) {
                     isSubscribed = true;
@@ -240,9 +248,9 @@
                     $('input[name="username"]').val(data.username);
                     $('input[name="password"]').val(data.password);
 
-                    $('#adconnectbutton').html('Connect');
-                    $('#adconnectbutton').removeClass('btn-default').addClass('btn-success');
-                    $('#adconnectbutton').prop('disabled', false);
+                    $('#adconnectbtn').html('Connect');
+                    $('#adconnectbtn').removeClass('btn-default').addClass('btn-success');
+                    $('#adconnectbtn').prop('disabled', false);
 
                     if (connectAfter) $('#sendin').submit();
                 });
@@ -252,16 +260,15 @@
         }
 
         /**
-        * 6. Connect — POST login credentials to hotspot
+        * 6. Connect — POST login credentials to mikrtik
         */
-        function connect() {
+        $('#adconnectbtn').on('click', function () {
             if (isSubscribed) {
                 $('#sendin').submit();
             } else {
                 subscribe(true);
             }
-            return false;
-        }
+         });
 
         // Subscribe on each keyup
         $('#adphone').on('keyup', function () {
@@ -275,8 +282,6 @@
             if (!isSubscribed) subscribe();
         });
 
-        // Bootstrap
-        $(document).ready(function () { fetchPortalData(); });
     </script>
 </body>
 

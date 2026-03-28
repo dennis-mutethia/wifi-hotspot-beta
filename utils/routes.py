@@ -4,34 +4,7 @@ from flask import render_template, request, jsonify
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
     
-def subscriber(db): 
-    if request.method == 'GET':       
-        hotspot_id = int(request.args.get('hotspot_id', 0))
-        link_login_only = request.args.get('link_login_only', 'http://192.168.88.1')
-        
-        hotspot = db.get_hotspots(id=hotspot_id)[0]
-        client = db.get_clients(id=hotspot.client_id)[0]
-        media = db.get_media(client_id=client.id, hotspot_id=hotspot.id) or db.get_videos(client_id=client.id) #Youtube videos or images uploaded at https://postimages.org/
-        images = [image for image in media if image.type == 'image']
-        videos = [video for video in media if video.type == 'video']
-        return render_template('login-subscriber.html', hotspot=hotspot, client=client, link_login_only=link_login_only,
-                            video=random.sample(videos, min(1, len(videos)))[0], 
-                            images=random.sample(images, min(5, len(images))))
-        
-    elif request.method == 'POST':   
-        phone = request.form['phone']
-        hotspot_id = int(request.form['hotspot_id'])
-        hotspot = db.get_hotspots(id=hotspot_id)[0]
-        subscriber_id = db.add_subscriber(phone, hotspot_id, hotspot.client_id)  
-
-        return jsonify(
-                {
-                    "subscriber_id": subscriber_id,
-                    "phone": phone,
-                    "hotspot_id": hotspot_id
-                }
-            ) 
-    
+   
 def dashboard(db): 
     total_connections = db.get_total_connections()
     active_connections = db.get_total_connections(active=True)
@@ -47,6 +20,7 @@ def dashboard(db):
                            all_hotspots=all_hotspots, hotspots_connections=hotspots_connections,
                            total_connections_today=total_connections_today,unique_connections_today=unique_connections_today,
                            connections_per_day=connections_per_day, latest_connections=latest_connections, connections_per_hour=connections_per_hour)
+    
     
 def clients(db): 
     if request.method == 'POST':   
