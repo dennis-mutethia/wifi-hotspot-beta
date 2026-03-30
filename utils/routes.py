@@ -285,16 +285,17 @@ def gallery():
         if request.method == 'POST':
             action = request.form['action']
             if action in ['add', 'edit']:
-                source = request.form['source']
+                link = request.form['source'] #https://www.youtube.com/watch?v=MaZLKAx6Ne0                
                 client_id = UUID(request.form['clientId'])
                 hotspot_id = UUID(request.form['hotspotId'])
 
-                if 'youtube' in source:
+                if 'youtube' in link:
                     media_type = 'video'
-                    source = source
-                elif 'postimg' in source:
+                    video_id_match = re.search(r'(?:v=|youtu\.be/)([a-zA-Z0-9_-]{11})', link)
+                    source = f"https://www.youtube.com/embed/{video_id_match.group(1)}"
+                elif 'postimg' in link:
                     media_type = 'image'
-                    source = source
+                    source = link
                 else:
                     return jsonify({"error": "Unsupported URL"}), 400
 
