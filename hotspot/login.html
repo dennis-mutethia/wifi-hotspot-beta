@@ -127,8 +127,8 @@
     <script>
         const hotspotId = '0f8b16a4-a7b1-4344-9e18-9917014fc179';
 
-        //const baseUrl = 'http://localhost:5000';
-        const baseUrl = 'https://matrix-hotspot.vercel.app'
+        //const baseUrl = `http://localhost:5000/${hotspotId}`;
+        const baseUrl = `https://matrix-hotspot.vercel.app/${hotspotId}`
 
         var isSubscribed = false;
         var player;
@@ -157,7 +157,7 @@
 
         $(document).ready(function () {
             //Fetch portal data from API 
-            $.getJSON(baseUrl + '/api/portal-data/' + hotspotId)
+            $.getJSON(`${baseUrl}/api/portal-data`)
                 .done(function (data) {
                     renderPortal(data);
                 })
@@ -240,7 +240,7 @@
             var phone = $('#adphone').val().trim();
             if (phone.length === 10) {
                 $('#notice').html('');
-                $.post(baseUrl + '/api/subscribe/' + hotspotId, {
+                $.post(`${baseUrl}/api/subscribe`, {
                     phone: '254' + phone.slice(-9)
                 }, function (data) {
                     isSubscribed = true;

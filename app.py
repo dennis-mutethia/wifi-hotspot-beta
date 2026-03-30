@@ -27,11 +27,11 @@ with app.app_context():
     init_db()
  
 # API Routes
-@app.route('/api/portal-data/<hotspot_id>', methods=['GET'])
+@app.route('/<hotspot_id>/api/portal-data', methods=['GET'])
 def portalData(hotspot_id):
     return api.portal_data(hotspot_id)
  
-@app.route('/api/subscribe/<hotspot_id>', methods=['POST'])
+@app.route('/<hotspot_id>/api/subscribe', methods=['POST'])
 def subscribe(hotspot_id):
     return api.subscribe(hotspot_id)
 
