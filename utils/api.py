@@ -5,7 +5,7 @@ from sqlalchemy import inspect, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlmodel import select
 from uuid import NAMESPACE_DNS, UUID, uuid5
-
+from zoneinfo import ZoneInfo
 
 from utils.database import get_session
 from utils.models import Clients, Hotspots, Media, Subscribers
@@ -86,7 +86,8 @@ def subscribe(hotspot_id):
         else:
             device = 'Unknown Device'
         
-        session_hour = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+        session_hour = datetime.now(ZoneInfo("Africa/Nairobi")).replace(minute=0, second=0, microsecond=0, tzinfo=None)
+        
         subscriber_id = uuid5(NAMESPACE_DNS, f'{phone}-{session_hour}-{hotspot_id}')
         
         stmt = insert(Subscribers).values(
@@ -96,7 +97,8 @@ def subscribe(hotspot_id):
             session_hour=session_hour,
             client_id=hotspot.client_id,
             hotspot_id=hotspot_id,
-            device=device
+            device=device,
+            created_at=datetime.now(ZoneInfo("Africa/Nairobi")).replace(tzinfo=None)
         ).on_conflict_do_nothing(index_elements=['id'])
 
         session.execute(stmt)
