@@ -182,7 +182,7 @@
             value: 100,
             maxValue: 100,
             width: 7,
-            text: '{{ all_hotspots | length }}',
+            text: '{{ all_hotspots }}',
             colors: ['white', 'blue'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -210,7 +210,7 @@
         }
 
         // Get hotspots data from Jinja variable
-        const hotspotsConnections = {{ hotspots_connections | tojson }};
+        const hotspotsConnections = {{ hotspot_connections | tojson }};
 
         // Extract labels and data from hotspots array
         const hotspotsLabels = hotspotsConnections.map(hotspot => hotspot.name);

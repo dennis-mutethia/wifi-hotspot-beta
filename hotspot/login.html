@@ -125,7 +125,7 @@
     </div>
 
     <script>
-        const hotspotId = 1;
+        const hotspotId = '0f8b16a4-a7b1-4344-9e18-9917014fc179';
 
         //const baseUrl = 'http://localhost:5000';
         const baseUrl = 'https://matrix-hotspot.vercel.app'
@@ -210,7 +210,7 @@
         function renderSlides(images) {
             images.forEach(function (img, i) {
                 var idx = i + 1;
-                let src = 'https://i.postimg.cc/' + img.source_id
+                let src = img.source
                 $('#img' + idx).attr('src', src);
             });
 
@@ -220,7 +220,7 @@
         * 4. Populate Video dynamically 
         */
         function renderVideo(video) {
-            var src = 'https://www.youtube.com/embed/' + video.source_id +
+            var src = video.source +
                 '?loop=1' +
                 '&enablejsapi=1' +
                 '&rel=0' +

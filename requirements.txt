@@ -1,7 +1,10 @@
-python-dotenv
-psycopg2-binary
-Flask
+flask
 flask-cors
-google-api-python-client
+flask-jwt-extended
+psycopg2-binary
+python-dotenv
 RouterOS-api
+sqlalchemy
+sqlmodel
 user-agents
+uvicorn

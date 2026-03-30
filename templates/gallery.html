@@ -131,7 +131,7 @@
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>PostImg Image or Youtube Video Link</label>
-                                <input id="url" name="url" type="text" class="form-control"
+                                <input id="source" name="source" type="text" class="form-control"
                                     placeholder="https://i.postimg.cc/xxx  or  https://www.youtube.com/watch?v=xxx"
                                     required>
                             </div>
@@ -139,7 +139,7 @@
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
                                 <label>Select Client Name</label>
-                                <select id="clientId" name="clientId" class="form-control">
+                                <select id="clientId" name="clientId" class="form-control" required>
                                     {% for client in clients %}
                                     <option value="{{ client.id }}">{{ client.name }}</option>
                                     {% endfor %}
@@ -149,7 +149,7 @@
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
                                 <label>Select Hotspot</label>
-                                <select id="hotspotId" name="hotspotId" class="form-control">
+                                <select id="hotspotId" name="hotspotId" class="form-control" required>
                                     {% for hotspot in hotspots %}
                                     <option value="{{ hotspot.id }}">{{ hotspot.name }}</option>
                                     {% endfor %}
@@ -212,16 +212,16 @@
     function add() {
         $('#action_label').html('Add New');
         $('#editMediaId').val(null);
-        $('#url').val(null);
+        $('#source').val(null);
         $('#clientId').val(1);
         $('#hotspotId').val(1);
         $('#addButton').val('add');
     }
 
-    function edit(id, url, clientId, hotspotId) {
+    function edit(id, source, clientId, hotspotId) {
         $('#action_label').html('Edit');
         $('#editMediaId').val(id);
-        $('#url').val(url);
+        $('#source').val(source);
         $('#clientId').val(clientId);
         $('#hotspotId').val(hotspotId);
         $('#addButton').val('edit');

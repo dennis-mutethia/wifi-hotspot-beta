@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
-                    <h4 class="card-title">Hotspots</h4>
+                    <h4 class="card-title">WiFi Hotspots</h4>
                     <button class="btn btn-success btn-round ml-auto btn-sm" data-toggle="modal" data-target="#addModal"
                         onclick="add()">
                         <i class="fa fa-plus"></i>
@@ -26,7 +26,7 @@
                                         <span id="action_label" class="fw-mediumbold">
                                             Add New</span>
                                         <span class="fw-light">
-                                            Hotspot
+                                            WiFi Hotspot
                                         </span>
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -37,7 +37,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group form-group-default">
-                                                <label>Name</label>
+                                                <label>HOTSPOT LOCATION</label>
                                                 <input id="hotspotName" name="hotspotName" type="text"
                                                     class="form-control" placeholder="Hotspot Name" required>
                                             </div>
@@ -45,7 +45,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Select Client Name</label>
-                                                <select id="clientId" name="clientId" class="form-control">
+                                                <select id="clientId" name="clientId" class="form-control" required>
                                                     {% for client in clients %}
                                                     <option value="{{ client.id }}">{{ client.name }}</option>
                                                     {% endfor %}
@@ -99,8 +99,9 @@
                     <table id="add-row" class="display table table-striped table-hover">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Id</th>
-                                <th>Name</th>
+                                <th>Location</th>
                                 <th>Owner</th>
                                 <th>Subscribers</th>
                                 <th class="text-center" style="width: 10%">Action</th>
@@ -109,22 +110,29 @@
                         <tbody>
                             {% for hotspot in hotspots %}
                             <tr>
+                                <td>{{ loop.index }}.</td>
                                 <td>{{ hotspot.id }}</td>
                                 <td>{{ hotspot.name }}</td>
-                                <td>{{ hotspot.client_name }}</td>
+                                <td>
+                                    {% for client in clients %}
+                                    {%if client.id == hotspot.client_id %}
+                                    {{ client.name }}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ hotspot.subscribers }}</td>
                                 <td>
                                     <div class="form-button-action">
                                         <button type="button" title="Edit this Hotspot" data-toggle="modal"
                                             data-target="#addModal"
-                                            onclick="edit({{ hotspot.id }}, '{{ hotspot.name }}', '{{ hotspot.client_id }}')"
+                                            onclick="edit('{{ hotspot.id }}', '{{ hotspot.name }}', '{{ hotspot.client_id }}')"
                                             class="btn btn-link btn-primary btn-lg"
                                             data-original-title="Edit this Hotspot">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                         <button type="button" title="Remove this Hotspot" data-toggle="modal"
                                             data-target="#removeModal"
-                                            onclick="remove({{ hotspot.id }}, '{{ hotspot.name }}')"
+                                            onclick="remove('{{ hotspot.id }}', '{{ hotspot.name }}')"
                                             class="btn btn-link btn-danger" data-original-title="Remove this Hotspot">
                                             <i class="fa fa-times"></i>
                                         </button>

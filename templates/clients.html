@@ -109,6 +109,7 @@
                     <table id="add-row" class="display table table-striped table-hover">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Hotspots</th>
@@ -120,6 +121,7 @@
                         <tbody>
                             {% for client in clients %}
                             <tr>
+                                <td>{{ loop.index }}.</td>
                                 <td>{{ client.name }}</td>
                                 <td>{{ client.phone }}</td>
                                 <td>{{ client.hotspots }}</td>
