@@ -54,7 +54,7 @@
                                                 data-target="#removeModal"></a>
                                         </div>
                                         <div class="h1 m-0">
-                                            <img src="https://i.postimg.cc/{{ image.source_id }}" alt="" width="100%">
+                                            <img src="{{ image.source }}" alt="" width="100%">
                                         </div>
                                         <div class="h1 m-0">
                                             <h6 class="text-left text-bold">
@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="h1 m-0">
                                             <iframe
-                                                src="https://www.youtube.com/embed/{{ video.source_id }}?playlist={{ video.source_id }}&loop=1&enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1"
+                                                src="{{ video.source }}?loop=1&enablejsapi=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1"
                                                 allow="autoplay; encrypted-media" allowfullscreen width="100%">
                                             </iframe>
                                         </div>
