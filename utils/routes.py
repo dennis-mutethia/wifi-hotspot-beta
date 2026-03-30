@@ -7,6 +7,7 @@ from sqlalchemy import inspect, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlmodel import select, func
 from uuid import NAMESPACE_DNS, UUID, uuid5
+from zoneinfo import ZoneInfo
 
 from utils.database import get_session
 from utils.models import Clients, Hotspots, Media, Subscribers, System_Users
@@ -243,7 +244,10 @@ def hotspots():
         #hotspots = session.execute(select(Hotspots).order_by(Hotspots.name)).scalars().all()
         
         rows = session.execute(
-            select(Hotspots, func.count(Subscribers.id).label("subscribers"))
+            select(
+                Hotspots, 
+                func.count(Subscribers.id).label("subscribers")
+            )
             .join(Subscribers, Hotspots.id == Subscribers.hotspot_id, isouter=True)
             .group_by(Hotspots.id)
             .order_by(Hotspots.name)
@@ -269,9 +273,30 @@ def hotspots():
 def subscribers():
     session = get_session()
     try:
-        subscribers = session.execute(
-            select(Subscribers).order_by(Subscribers.created_at.desc())
-        ).scalars().all()
+        rows = session.execute(
+            select(
+                Subscribers,
+                Hotspots.name.label("hotspot_name"),
+                Clients.name.label("client_name")
+            )
+            .join(Hotspots, Hotspots.id == Subscribers.hotspot_id)
+            .join(Clients, Clients.id == Hotspots.client_id)            
+            .order_by(Subscribers.created_at.desc())
+        ).all()
+        
+        
+        subscribers = [
+            {
+                "created_at": s.created_at,
+                "phone": s.phone,
+                "device": s.device,
+                "hotspot_name": hotspot_name,
+                "client_name": client_name,
+                "status": 'Connected' if s.session_hour == datetime.now(ZoneInfo("Africa/Nairobi")).replace(minute=0, second=0, microsecond=0, tzinfo=None) else 'Disconnected'
+            }
+            for s, hotspot_name, client_name in rows
+        ]
+        
     except Exception as e:
         logger.error(f"Error in subscribers: {e}")
         subscribers = []
