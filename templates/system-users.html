@@ -131,14 +131,14 @@
                                     <div class="form-button-action">
                                         <button type="button" title="Edit this System User" data-toggle="modal"
                                             data-target="#addModal"
-                                            onclick="edit({{ system_user.id }}, '{{ system_user.name }}', '{{ system_user.phone }}', '{{ system_user.client_id }}')"
+                                            onclick="edit('{{ system_user.id }}', '{{ system_user.name }}', '{{ system_user.phone }}', '{{ system_user.client_id }}')"
                                             class="btn btn-link btn-primary btn-lg"
                                             data-original-title="Edit this System User">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                         <button type="button" title="Remove this System User" data-toggle="modal"
                                             data-target="#removeModal"
-                                            onclick="remove({{ system_user.id }}, '{{ system_user.name }}')"
+                                            onclick="remove('{{ system_user.id }}', '{{ system_user.name }}')"
                                             class="btn btn-link btn-danger"
                                             data-original-title="Remove this System User">
                                             <i class="fa fa-times"></i>
