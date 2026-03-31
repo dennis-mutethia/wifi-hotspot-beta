@@ -35,10 +35,10 @@ def portalData(hotspot_id):
 def subscribe(hotspot_id):
     return api.subscribe(hotspot_id)
 
-# # Web App Routes
-# @app.route('/')
-# def index():
-#     return redirect(url_for('dashboard'))
+# Web App Routes
+@app.route('/')
+def index():
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard(): 
