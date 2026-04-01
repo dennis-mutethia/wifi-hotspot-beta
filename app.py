@@ -3,7 +3,13 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, url_for, request 
 from flask_cors import CORS
 
-from utils import api, routes
+from utils.routes.api import API
+from utils.routes.dashboard import DashboardRoute
+from utils.routes.clients import ClientsRoute
+from utils.routes.gallery import GalleryRoute
+from utils.routes.hotspots import HotspotsRoute
+from utils.routes.subscribers import SubscribersRoute
+from utils.routes.system_users import SystemUsersRoute
 from utils.database import init_db
 
 load_dotenv()
@@ -29,11 +35,12 @@ with app.app_context():
 # API Routes
 @app.route('/<hotspot_id>/api/portal-data', methods=['GET'])
 def portalData(hotspot_id):
-    return api.portal_data(hotspot_id)
+    return API().portal_data(hotspot_id)
  
 @app.route('/<hotspot_id>/api/subscribe', methods=['POST'])
 def subscribe(hotspot_id):
-    return api.subscribe(hotspot_id)
+    return API().subscribe(hotspot_id)
+
 
 # Web App Routes
 @app.route('/')
@@ -42,27 +49,27 @@ def index():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard(): 
-    return routes.dashboard()
+    return DashboardRoute()()
 
 @app.route('/clients', methods=['GET', 'POST'])
 def clients(): 
-    return routes.clients()
+    return ClientsRoute()()
 
 @app.route('/hotspots', methods=['GET', 'POST'])
 def hotspots(): 
-    return routes.hotspots()
+    return HotspotsRoute()()
 
 @app.route('/gallery', methods=['GET', 'POST'])
 def gallery(): 
-    return routes.gallery()
+    return GalleryRoute()()
 
 @app.route('/system-users', methods=['GET', 'POST'])
 def system_users(): 
-    return routes.system_users()
+    return SystemUsersRoute()()
 
 @app.route('/subscribers', methods=['GET', 'POST'])
 def subscribers(): 
-    return routes.subscribers()
+    return SubscribersRoute()()
 
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']
