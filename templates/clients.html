@@ -131,14 +131,14 @@
                                     <div class="form-button-action">
                                         <button type="button" title="Edit this Client" data-toggle="modal"
                                             data-target="#addClientModal"
-                                            onclick="editClient({{ client.id }}, '{{ client.name }}', '{{ client.phone }}', '{{ client.background_color }}', '{{ client.foreground_color }}')"
+                                            onclick="editClient('{{ client.id }}', '{{ client.name }}', '{{ client.phone }}', '{{ client.background_color }}', '{{ client.foreground_color }}')"
                                             class="btn btn-link btn-primary btn-lg"
                                             data-original-title="Edit this Client">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                         <button type="button" title="Remove this Client" data-toggle="modal"
                                             data-target="#removeClientModal"
-                                            onclick="removeClient({{ client.id }}, '{{ client.name }}')"
+                                            onclick="removeClient('{{ client.id }}', '{{ client.name }}')"
                                             class="btn btn-link btn-danger" data-original-title="Remove this Client">
                                             <i class="fa fa-times"></i>
                                         </button>
