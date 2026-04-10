@@ -71,6 +71,10 @@ def system_users():
 def subscribers(): 
     return SubscribersRoute()()
 
+@app.route('/pricing', methods=['GET'])
+def pricing(): 
+    return render_template('pricing.html', page='pricing')
+
 if __name__ == '__main__':
     debug_mode = os.getenv('IS_DEBUG', 'False') in ['True', 'T', 't', '1']
     app.run(debug=debug_mode)
